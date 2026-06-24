@@ -56,10 +56,19 @@ const INITIAL_USERS = {
     status: "Active",
     companyId: null
   },
-  // Client logged in via WDPHP
+  // Master Admin (WDPHP)
   "WDPHP": {
     code: "WDPHP",
-    name: "Thaigo (Mercadinho Bogados)",
+    name: "Thiago (Admin Master)",
+    role: "admin-master",
+    status: "Active",
+    companyId: null,
+    phone: "21964422488"
+  },
+  // Client Test for Clubbi
+  "CLI-CLUBBI": {
+    code: "CLI-CLUBBI",
+    name: "Mercadinho Bogados (Cliente)",
     role: "cliente",
     status: "Active",
     companyId: "clubbi",
@@ -1794,8 +1803,9 @@ export const initDb = () => {
     localStorage.removeItem("facilitadora_users");
     localStorage.removeItem("facilitadora_products");
   }
-  // FORCE UPDATE for 100 products
+  // FORCE UPDATE for 100 products and new users
   localStorage.removeItem("facilitadora_products");
+  localStorage.removeItem("facilitadora_users");
 
   if (!localStorage.getItem("facilitadora_companies")) {
     localStorage.setItem("facilitadora_companies", JSON.stringify(INITIAL_COMPANIES));
