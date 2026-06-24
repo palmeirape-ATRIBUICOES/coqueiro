@@ -10,7 +10,7 @@ import Admin from './components/Admin';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <WhitelabelProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
