@@ -2,33 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrders, saveOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
-import { ArrowLeft, CheckCircle, CreditCard, MapPin, Truck, Calendar } from 'lucide-react';
+import { ArrowLeft, CheckCircle, MapPin, Truck, Calendar, FileText, ShoppingBag } from 'lucide-react';
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { theme } = useWhitelabel();
+  const { company } = useWhitelabel();
 
-  const [merchant, setMerchant] = useState(null);
+  const [client, setClient] = useState(null);
   const [cart, setCart] = useState([]);
   const [address, setAddress] = useState('');
-  const [selectedTerm, setSelectedTerm] = useState('');
+  const [notes, setNotes] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
 
   useEffect(() => {
     // 1. Check Authentication
-    const storedMerchant = localStorage.getItem('clubbi_active_merchant');
-    if (!storedMerchant) {
+    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    if (!storedUser) {
       navigate('/login');
       return;
     }
-    const m = JSON.parse(storedMerchant);
-    setMerchant(m);
-    setAddress(m.address);
-    setSelectedTerm(m.paymentTerms?.[0] || 'Pix à Vista');
+    const user = JSON.parse(storedUser);
+    if (user.role !== 'cliente') {
+      navigate('/admin');
+      return;
+    }
+    setClient(user);
+
+    // Load saved address or default to empty
+    const savedAddress = localStorage.getItem(`client_address_${user.code}`) || '';
+    setAddress(savedAddress);
+
+    // Load saved notes
+    const savedNotes = localStorage.getItem(`cart_notes_${user.code}`) || '';
+    setNotes(savedNotes);
 
     // 2. Load Cart
-    const storedCart = localStorage.getItem(`cart_${m.code}`);
+    const storedCart = localStorage.getItem(`cart_${user.code}`);
     if (storedCart) {
       const items = JSON.parse(storedCart);
       if (items.length === 0) {
@@ -41,50 +51,48 @@ export default function Checkout() {
     }
   }, [navigate]);
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.packagePrice * item.qty), 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
-    if (!merchant) return;
-
-    // Validate min order limit again
-    if (subtotal < merchant.minOrder) {
-      alert(`Erro: O valor mínimo do pedido (R$ ${merchant.minOrder}) não foi atingido.`);
-      return;
-    }
+    if (!client) return;
 
     const newOrderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
     const newOrder = {
       id: newOrderId,
-      merchantCode: merchant.code,
-      merchantName: merchant.name,
+      companyId: client.companyId,
+      clientCode: client.code,
+      clientName: client.name,
       date: new Date().toISOString(),
       items: cart.map(item => ({
         id: item.id,
         description: item.description,
         qty: item.qty,
         price: item.price,
-        packageQtd: item.packageQtd,
-        packagePrice: item.packagePrice
+        unit: item.unit
       })),
       total: parseFloat(subtotal.toFixed(2)),
-      paymentTerm: selectedTerm,
+      notes: notes,
       deliveryAddress: address,
-      status: 'Pending'
+      status: 'Recebido'
     };
 
     // Save order to mock database
     const allOrders = getOrders();
     saveOrders([newOrder, ...allOrders]);
 
-    // Clear cart for this merchant
-    localStorage.setItem(`cart_${merchant.code}`, '[]');
+    // Save address for future orders
+    localStorage.setItem(`client_address_${client.code}`, address);
+
+    // Clear cart and notes for this client
+    localStorage.setItem(`cart_${client.code}`, '[]');
+    localStorage.removeItem(`cart_notes_${client.code}`);
 
     setOrderId(newOrderId);
     setIsSuccess(true);
   };
 
-  if (!merchant || cart.length === 0) return null;
+  if (!client || cart.length === 0) return null;
 
   if (isSuccess) {
     return (
@@ -92,8 +100,8 @@ export default function Checkout() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 'calc(100vh - 40px)',
-        backgroundColor: '#f8fafc',
+        minHeight: 'calc(100vh - 80px)',
+        backgroundColor: 'var(--bg-color)',
         padding: '24px'
       }}>
         <div className="card" style={{
@@ -101,7 +109,9 @@ export default function Checkout() {
           maxWidth: '520px',
           textAlign: 'center',
           padding: '48px 32px',
-          animation: 'scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          boxShadow: 'var(--shadow-lg)',
+          borderColor: 'var(--border-color)',
+          backgroundColor: 'var(--card-bg)'
         }}>
           <div style={{
             display: 'inline-flex',
@@ -110,8 +120,8 @@ export default function Checkout() {
             width: '80px',
             height: '80px',
             borderRadius: '50%',
-            backgroundColor: `${theme.secondaryColor}15`,
-            color: theme.secondaryColor,
+            backgroundColor: `${company.primaryColor}15`,
+            color: company.primaryColor,
             marginBottom: '24px'
           }}>
             <CheckCircle size={48} />
@@ -119,41 +129,41 @@ export default function Checkout() {
 
           <h1 style={{
             fontFamily: "'Outfit', sans-serif",
-            fontSize: '32px',
+            fontSize: '30px',
             fontWeight: 800,
-            color: '#0f172a',
+            color: 'var(--text-primary)',
             marginBottom: '8px'
           }}>
-            Pedido Realizado!
+            Orçamento Enviado!
           </h1>
 
-          <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '24px' }}>
-            Seu pedido <strong>{orderId}</strong> foi encaminhado com sucesso para a distribuidora.
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+            Seu orçamento <strong>{orderId}</strong> foi encaminhado com sucesso para <strong>{company.name}</strong>.
           </p>
 
           <div style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
+            backgroundColor: 'var(--bg-color)',
+            border: '1px solid var(--border-color)',
             borderRadius: '12px',
             padding: '20px',
             textAlign: 'left',
             marginBottom: '32px'
           }}>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>
-              Resumo do Envio
+            <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '12px' }}>
+              Resumo da Solicitação
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#475569' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px', color: 'var(--text-secondary)' }}>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <MapPin size={16} style={{ color: theme.primaryColor, flexShrink: 0 }} />
-                <span>{address}</span>
+                <MapPin size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
+                <span>Endereço de Entrega: {address || 'Retirada na loja'}</span>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <CreditCard size={16} style={{ color: theme.primaryColor, flexShrink: 0 }} />
-                <span>Termo de Pagamento: <strong>{selectedTerm}</strong></span>
+                <FileText size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
+                <span>Tipo: <strong>Orçamento Comercial B2B</strong></span>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <Truck size={16} style={{ color: theme.primaryColor, flexShrink: 0 }} />
-                <span>Prazo de entrega: <strong>Dentro de 24 horas úteis</strong></span>
+                <Truck size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
+                <span>Próximo Passo: <strong>Nosso vendedor entrará em contato para alinhar a retirada/entrega.</strong></span>
               </div>
             </div>
           </div>
@@ -164,10 +174,14 @@ export default function Checkout() {
             style={{
               padding: '12px 32px',
               fontSize: '15px',
-              borderRadius: '10px'
+              borderRadius: '10px',
+              backgroundColor: company.primaryColor,
+              border: 'none',
+              color: 'white',
+              fontWeight: 700
             }}
           >
-            Voltar para a Loja
+            Voltar para o Catálogo
           </button>
         </div>
       </div>
@@ -175,7 +189,7 @@ export default function Checkout() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 16px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color)', padding: '40px 16px', color: 'var(--text-primary)' }}>
       <div className="container" style={{ maxWidth: '1000px' }}>
         
         {/* Back Button */}
@@ -186,21 +200,27 @@ export default function Checkout() {
             marginBottom: '24px',
             padding: '8px 16px',
             fontSize: '13px',
-            borderRadius: '8px'
+            borderRadius: '8px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-color)',
+            color: 'var(--text-secondary)'
           }}
         >
-          <ArrowLeft size={16} /> Voltar para a Loja
+          <ArrowLeft size={16} /> Voltar para o Catálogo
         </button>
 
         <h1 style={{
           fontFamily: "'Outfit', sans-serif",
           fontSize: '32px',
           fontWeight: 800,
-          color: '#0f172a',
+          color: 'var(--text-primary)',
           textAlign: 'left',
           marginBottom: '32px'
         }}>
-          Finalizar Compra
+          Enviar Orçamento
         </h1>
 
         <div style={{
@@ -213,73 +233,37 @@ export default function Checkout() {
           <form onSubmit={handlePlaceOrder} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
             {/* Delivery address card */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-                <MapPin size={20} style={{ color: theme.primaryColor }} />
+            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
+                <MapPin size={20} style={{ color: company.primaryColor }} />
                 Endereço de Entrega
               </h3>
               
               <div className="form-group">
-                <label className="form-label">Endereço Comercial</label>
+                <label className="form-label" style={{ fontWeight: 600 }}>Endereço Comercial</label>
                 <textarea
                   className="form-input"
                   rows={3}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Informe o endereço para entrega (ou deixe em branco caso vá retirar presencialmente)"
                   style={{ resize: 'none', height: '80px', fontFamily: 'inherit', paddingTop: '10px' }}
-                  required
                 />
               </div>
             </div>
 
-            {/* Payment term card */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-                <CreditCard size={20} style={{ color: theme.primaryColor }} />
-                Prazo & Pagamento (Faturamento B2B)
+            {/* Note about direct payment */}
+            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
+                <FileText size={20} style={{ color: company.primaryColor }} />
+                Condição de Faturamento & Pagamento
               </h3>
               
-              <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px', lineHeight: '1.4' }}>
-                Selecione a condição de faturamento permitida para o seu cadastro comercial.
+              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
+                Esta plataforma funciona estritamente como um <strong>Catálogo Digital de Orçamentos</strong>. 
+                Nenhum pagamento é processado online. Toda a negociação comercial, prazos de faturamento e 
+                recebimento de valores serão definidos diretamente com o vendedor no momento da entrega ou da retirada presencial na loja física.
               </p>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {merchant.paymentTerms?.map(term => (
-                  <label 
-                    key={term}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '14px 16px',
-                      borderRadius: '10px',
-                      border: `1.5px solid ${selectedTerm === term ? theme.primaryColor : '#e2e8f0'}`,
-                      backgroundColor: selectedTerm === term ? `${theme.primaryColor}05` : 'white',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name="paymentTerm"
-                      value={term}
-                      checked={selectedTerm === term}
-                      onChange={() => setSelectedTerm(term)}
-                      style={{
-                        accentColor: theme.primaryColor,
-                        width: '16px',
-                        height: '16px'
-                      }}
-                    />
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 600, color: '#1e293b' }}>{term}</span>
-                      <span style={{ fontSize: '11px', color: '#64748b' }}>
-                        {term.includes('Boleto') ? 'Faturamento via boleto bancário após entrega' : 'Pagamento imediato na entrega ou por código Pix'}
-                      </span>
-                    </div>
-                  </label>
-                ))}
-              </div>
             </div>
 
             {/* Confirm order button */}
@@ -290,17 +274,20 @@ export default function Checkout() {
                 padding: '16px',
                 fontSize: '16px',
                 borderRadius: '12px',
-                fontWeight: 700
+                fontWeight: 700,
+                backgroundColor: company.primaryColor,
+                border: 'none',
+                color: 'white'
               }}
             >
-              Confirmar e Enviar Pedido
+              Confirmar e Solicitar Orçamento
             </button>
           </form>
 
           {/* Order Summary Side */}
-          <div className="card" style={{ padding: '24px', textAlign: 'left', position: 'sticky', top: '110px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-              Resumo do Pedido
+          <div className="card" style={{ padding: '24px', textAlign: 'left', position: 'sticky', top: '110px', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
+              Resumo do Orçamento
             </h3>
 
             {/* Items scroll list */}
@@ -316,13 +303,13 @@ export default function Checkout() {
               {cart.map(item => (
                 <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '13px' }}>
                   <div style={{ flex: 1, paddingRight: '8px' }}>
-                    <div style={{ fontWeight: 600, color: '#1e293b' }}>{item.description}</div>
-                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
-                      {item.qty} cx • {item.packageQtd} un/cx
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.description}</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                      {item.qty} un • R$ {item.price.toFixed(2)} / {item.unit}
                     </div>
                   </div>
-                  <div style={{ fontWeight: 700, color: '#0f172a' }}>
-                    R$ {(item.packagePrice * item.qty).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                    R$ {(item.price * item.qty).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </div>
                 </div>
               ))}
@@ -330,50 +317,64 @@ export default function Checkout() {
 
             {/* Calculations block */}
             <div style={{
-              borderTop: '1px solid #e2e8f0',
+              borderTop: '1px solid var(--border-color)',
               paddingTop: '16px',
               display: 'flex',
               flexDirection: 'column',
               gap: '10px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#64748b' }}>
-                <span>Subtotal</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                <span>Subtotal Estimado</span>
                 <span>R$ {subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#64748b' }}>
-                <span>Frete (Entrega Expressa)</span>
-                <span style={{ color: theme.secondaryColor, fontWeight: 600 }}>Grátis</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                <span>Frete / Taxa de Retirada</span>
+                <span style={{ color: company.secondaryColor, fontWeight: 600 }}>A combinar</span>
               </div>
               
               <div style={{
-                borderTop: '1px solid #e2e8f0',
+                borderTop: '1px solid var(--border-color)',
                 paddingTop: '14px',
                 marginTop: '4px',
                 display: 'flex',
                 justifyContent: 'space-between',
                 fontSize: '16px',
                 fontWeight: 700,
-                color: '#0f172a'
+                color: 'var(--text-primary)'
               }}>
-                <span>Total a Pagar</span>
-                <span style={{ fontSize: '20px', fontWeight: 800, color: theme.primaryColor }}>
+                <span>Total Estimado</span>
+                <span style={{ fontSize: '20px', fontWeight: 800, color: company.primaryColor }}>
                   R$ {subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
 
+            {notes && (
+              <div style={{
+                marginTop: '16px',
+                backgroundColor: 'var(--bg-color)',
+                border: '1.5px solid var(--border-color)',
+                borderRadius: '8px',
+                padding: '12px',
+                fontSize: '12px',
+                color: 'var(--text-secondary)'
+              }}>
+                <strong>Observações:</strong> {notes}
+              </div>
+            )}
+
             <div style={{
               marginTop: '20px',
-              backgroundColor: '#ecfdf5',
+              backgroundColor: `${company.primaryColor}10`,
               borderRadius: '8px',
               padding: '12px',
               fontSize: '12px',
-              color: '#065f46',
+              color: 'var(--text-primary)',
               display: 'flex',
               gap: '8px'
             }}>
-              <Calendar size={16} style={{ flexShrink: 0 }} />
-              <span>Pedido com entrega programada para o próximo dia útil.</span>
+              <Calendar size={16} style={{ flexShrink: 0, color: company.primaryColor }} />
+              <span>O orçamento será analisado e respondido em horário comercial.</span>
             </div>
           </div>
         </div>

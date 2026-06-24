@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMerchants } from '../mockDb';
-import { useWhitelabel } from '../WhitelabelContext';
-import { ShoppingBag, HelpCircle } from 'lucide-react';
+import { getUsers } from '../mockDb';
+import { ShoppingCart } from 'lucide-react';
 
 export default function Login() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
-  const [merchants, setMerchants] = useState({});
   const navigate = useNavigate();
-  const { theme } = useWhitelabel();
 
   useEffect(() => {
-    // Load available merchants on mount
-    setMerchants(getMerchants());
-    
-    // If merchant already logged in, redirect to home
-    if (localStorage.getItem('clubbi_active_merchant')) {
-      navigate('/');
+    // If user is already logged in, redirect them
+    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user.role === 'cliente') {
+        navigate('/');
+      } else {
+        navigate('/admin');
+      }
     }
   }, [navigate]);
 
@@ -31,12 +31,26 @@ export default function Login() {
       return;
     }
 
-    if (merchants[cleanCode]) {
-      // Store active merchant in localStorage
-      localStorage.setItem('clubbi_active_merchant', JSON.stringify(merchants[cleanCode]));
-      navigate('/');
+    const users = getUsers();
+    const user = users[cleanCode];
+
+    if (user) {
+      if (user.status === 'Inactive') {
+        setError('Este acesso está inativo. Entre em contato com a gerência.');
+        return;
+      }
+
+      // Store authenticated user session
+      localStorage.setItem('clubbi_active_merchant', JSON.stringify(user));
+      
+      // Redirect based on role
+      if (user.role === 'cliente') {
+        navigate('/');
+      } else {
+        navigate('/admin');
+      }
     } else {
-      setError('Código não encontrado. Dica: Use o código "WDPHP" ou "TEST1".');
+      setError('Código de acesso incorreto. Verifique com a loja.');
     }
   };
 
@@ -45,66 +59,49 @@ export default function Login() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: 'calc(100vh - 40px)',
-      backgroundColor: '#f8fafc',
+      minHeight: '100vh',
+      backgroundColor: 'var(--bg-color)',
       padding: '24px'
     }}>
       <div className="card" style={{
         width: '100%',
-        maxWidth: '440px',
+        maxWidth: '420px',
         textAlign: 'center',
-        padding: '40px 32px',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)'
+        padding: '48px 36px',
+        boxShadow: 'var(--shadow-lg)'
       }}>
-        {/* Whitelabel Logo */}
-        {theme.logoType === 'image' && theme.logoUrl ? (
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '70px',
-            marginBottom: '24px'
-          }}>
-            <img 
-              src={theme.logoUrl} 
-              alt={theme.logoText} 
-              style={{ height: '100%', maxWidth: '240px', objectFit: 'contain' }} 
-            />
-          </div>
-        ) : (
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '64px',
-            height: '64px',
-            borderRadius: '20px',
-            backgroundColor: 'rgba(var(--primary-color), 0.1)',
-            color: theme.primaryColor,
-            marginBottom: '24px',
-            boxShadow: `0 8px 16px -4px ${theme.primaryColor}25`
-          }}>
-            <ShoppingBag size={32} style={{ color: theme.primaryColor }} />
-          </div>
-        )}
+        {/* Platform Logo */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '64px',
+          height: '64px',
+          borderRadius: '16px',
+          backgroundColor: 'rgba(2, 132, 199, 0.1)',
+          color: '#0284c7',
+          marginBottom: '24px'
+        }}>
+          <ShoppingCart size={32} />
+        </div>
 
         <h1 style={{
           fontFamily: "'Outfit', sans-serif",
-          fontSize: '28px',
-          fontWeight: 700,
-          color: '#0f172a',
+          fontSize: '26px',
+          fontWeight: 800,
+          color: 'var(--text-primary)',
           marginBottom: '8px',
           lineHeight: '1.2'
         }}>
-          {theme.title}
+          Mercado Online Facilitadora
         </h1>
 
         <p style={{
           fontSize: '14px',
-          color: '#64748b',
-          marginBottom: '32px'
+          color: 'var(--text-secondary)',
+          marginBottom: '36px'
         }}>
-          Insira seu código de acesso de 5 dígitos para entrar na loja e fazer pedidos.
+          Área de acesso comercial. Insira seu código para prosseguir.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -113,7 +110,7 @@ export default function Login() {
             <input
               type="text"
               className="form-input"
-              placeholder="Ex: WDPHP"
+              placeholder="•••••"
               maxLength={5}
               value={code}
               onChange={(e) => setCode(e.target.value)}
@@ -123,19 +120,21 @@ export default function Login() {
                 letterSpacing: '8px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
-                padding: '14px'
+                padding: '14px',
+                fontFamily: 'monospace'
               }}
               required
+              autoFocus
             />
           </div>
 
           {error && (
             <div style={{
-              backgroundColor: '#fef2f2',
-              border: '1px solid #fee2e2',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.2)',
               borderRadius: '8px',
               padding: '12px',
-              color: '#b91c1c',
+              color: 'var(--danger)',
               fontSize: '13px',
               fontWeight: 500,
               textAlign: 'left',
@@ -155,40 +154,16 @@ export default function Login() {
             style={{
               width: '100%',
               padding: '14px',
-              fontSize: '16px',
-              fontWeight: 600,
-              borderRadius: '12px'
+              fontSize: '15px',
+              fontWeight: 700,
+              borderRadius: '10px',
+              backgroundColor: '#0284c7',
+              color: 'white'
             }}
           >
-            Entrar na Loja
+            Entrar no Sistema
           </button>
         </form>
-
-        <div style={{
-          marginTop: '32px',
-          borderTop: '1px solid #e2e8f0',
-          paddingTop: '24px',
-          textAlign: 'left'
-        }}>
-          <h4 style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: '#475569',
-            marginBottom: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}>
-            <HelpCircle size={16} style={{ color: theme.primaryColor }} />
-            Precisa de ajuda para testar?
-          </h4>
-          <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>
-            Você pode digitar o código de acesso aprovado <strong>WDPHP</strong> ou o código alternativo <strong>TEST1</strong>.
-          </p>
-          <p style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5', marginTop: '6px' }}>
-            Para criar novos códigos, gerenciar produtos ou alterar o esquema de cores das marcas, acesse o <a href="/admin" style={{ color: theme.primaryColor, fontWeight: 600, textDecoration: 'underline' }}>Painel Admin</a>.
-          </p>
-        </div>
       </div>
     </div>
   );

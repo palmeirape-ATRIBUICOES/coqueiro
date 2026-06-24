@@ -1,75 +1,105 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getWhitelabels, getActiveWhitelabelId, setActiveWhitelabelId, saveWhitelabels } from './mockDb';
+import { getCompanies } from './mockDb';
+import { useTheme } from './ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 const WhitelabelContext = createContext();
 
 export const WhitelabelProvider = ({ children }) => {
-  const [activeId, setActiveId] = useState(getActiveWhitelabelId());
-  const [allThemes, setAllThemes] = useState(getWhitelabels());
-  const [currentTheme, setCurrentTheme] = useState(allThemes[activeId] || allThemes['clubbi']);
+  const { isDarkMode, toggleTheme } = useTheme();
+  const [companies, setCompanies] = useState(getCompanies());
+  const [activeCompanyId, setActiveCompanyId] = useState('coqueiro'); // Default demo company
+  const [currentCompany, setCurrentCompany] = useState(companies['coqueiro']);
 
+  // Dynamic branding resolution
   useEffect(() => {
-    // Save to local storage and update states
-    setActiveWhitelabelId(activeId);
-    const theme = allThemes[activeId] || allThemes['clubbi'];
-    setCurrentTheme(theme);
+    // Check if there is an authenticated user session
+    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user.companyId && companies[user.companyId]) {
+        // If the user belongs to a specific company, override the branding to match that company
+        setCurrentCompany(companies[user.companyId]);
+        setActiveCompanyId(user.companyId);
+        applyBranding(companies[user.companyId]);
+        return;
+      }
+    }
 
-    // Apply colors dynamically to document root
+    // Default or demo switcher fallback
+    const company = companies[activeCompanyId] || companies['coqueiro'];
+    setCurrentCompany(company);
+    applyBranding(company);
+  }, [activeCompanyId, companies]);
+
+  // Method to apply CSS variables and Browser Tab Title
+  const applyBranding = (company) => {
     const root = document.documentElement;
-    root.style.setProperty('--primary-color', theme.primaryColor);
-    root.style.setProperty('--secondary-color', theme.secondaryColor);
-    root.style.setProperty('--accent-color', theme.accentColor);
+    root.style.setProperty('--primary-color', company.primaryColor || '#0284c7');
+    root.style.setProperty('--secondary-color', company.secondaryColor || '#f59e0b');
+    root.style.setProperty('--accent-color', company.accentColor || '#ef4444');
+    document.title = company.title || company.name || "Mercado Online Facilitadora";
+  };
 
-    // Update document title
-    document.title = theme.title || "Loja";
-  }, [activeId, allThemes]);
-
-  const switchTheme = (id) => {
-    if (allThemes[id]) {
-      setActiveId(id);
+  const switchCompany = (id) => {
+    if (companies[id]) {
+      setActiveCompanyId(id);
     }
   };
 
-  const reloadThemes = () => {
-    const updated = getWhitelabels();
-    setAllThemes(updated);
-    if (updated[activeId]) {
-      setCurrentTheme(updated[activeId]);
+  const reloadBranding = () => {
+    const freshCompanies = getCompanies();
+    setCompanies(freshCompanies);
+    if (freshCompanies[activeCompanyId]) {
+      setCurrentCompany(freshCompanies[activeCompanyId]);
     }
   };
 
   return (
-    <WhitelabelContext.Provider value={{ 
-      theme: currentTheme, 
-      activeId, 
-      allThemes, 
-      switchTheme, 
-      reloadThemes 
+    <WhitelabelContext.Provider value={{
+      company: currentCompany,
+      activeCompanyId,
+      allCompanies: companies,
+      switchCompany,
+      reloadBranding
     }}>
-      {/* Brand Switcher Header Bar for SaaS demo purposes */}
-      <div className="skin-switcher-bar">
+      {/* SaaS Demo Header Bar (Only visible when printing is not active) */}
+      <div className="skin-switcher-bar print-hide">
         <div className="skin-switcher-title">
           <span>🚀</span>
-          <strong>SaaS DEMO:</strong>
-          <span>Customize ou altere marcas instantaneamente</span>
+          <strong>Mercado Online Facilitadora</strong>
+          <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: '8px' }}>
+            (Multi-Tenant B2B SaaS Demo)
+          </span>
         </div>
         <div className="skin-btn-group">
-          {Object.keys(allThemes).map(id => (
+          {Object.keys(companies).map(id => (
             <button 
               key={id}
-              onClick={() => switchTheme(id)}
-              className={`skin-btn ${activeId === id ? 'active' : ''}`}
+              onClick={() => switchCompany(id)}
+              className={`skin-btn ${activeCompanyId === id ? 'active' : ''}`}
               style={{
-                borderLeft: `4px solid ${allThemes[id].primaryColor}`
+                borderLeft: `4px solid ${companies[id].primaryColor}`
               }}
             >
-              {allThemes[id].name}
+              {companies[id].name}
             </button>
           ))}
+
+          {/* Light/Dark Mode toggle */}
+          <button 
+            onClick={toggleTheme} 
+            className="skin-btn"
+            style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: '#334155', border: 'none' }}
+          >
+            {isDarkMode ? <Sun size={14} style={{ color: '#fbbf24' }} /> : <Moon size={14} style={{ color: '#cbd5e1' }} />}
+            <span style={{ fontSize: '11px' }}>{isDarkMode ? 'Claro' : 'Escuro'}</span>
+          </button>
+          
           <a 
             href="/admin" 
             className="skin-btn"
-            style={{ backgroundColor: '#0f172a', borderLeft: '4px solid #f59e0b', color: '#fbbf24' }}
+            style={{ backgroundColor: '#0284c7', borderColor: '#0284c7', color: 'white' }}
           >
             ⚙️ Painel Admin
           </a>

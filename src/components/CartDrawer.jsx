@@ -1,24 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Trash2, ShoppingBag } from 'lucide-react';
+import { X, Trash2, Clipboard } from 'lucide-react';
 import { useWhitelabel } from '../WhitelabelContext';
 
 export default function CartDrawer({ isOpen, onClose, cart, updateQty, removeProduct, merchant }) {
   const navigate = useNavigate();
-  const { theme } = useWhitelabel();
+  const { company } = useWhitelabel();
+  const [notes, setNotes] = useState('');
+
+  // Load saved notes on mount/open
+  useEffect(() => {
+    if (isOpen && merchant) {
+      const savedNotes = localStorage.getItem(`cart_notes_${merchant.code}`) || '';
+      setNotes(savedNotes);
+    }
+  }, [isOpen, merchant]);
+
+  // Sync notes to localStorage
+  const handleNotesChange = (e) => {
+    setNotes(e.target.value);
+    if (merchant) {
+      localStorage.setItem(`cart_notes_${merchant.code}`, e.target.value);
+    }
+  };
 
   if (!isOpen) return null;
 
-  const minOrder = merchant?.minOrder || 300;
-  
   // Calculate subtotal
-  const subtotal = cart.reduce((sum, item) => sum + (item.packagePrice * item.qty), 0);
-  const progressPercent = Math.min(100, (subtotal / minOrder) * 100);
-  const remaining = Math.max(0, minOrder - subtotal);
-  const isMinMet = subtotal >= minOrder;
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
   const handleCheckoutClick = () => {
-    if (isMinMet) {
+    if (cart.length > 0) {
       onClose();
       navigate('/checkout');
     }
@@ -50,7 +62,8 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
         width: '100%',
         maxWidth: '460px',
         height: '100%',
-        backgroundColor: 'white',
+        backgroundColor: 'var(--card-bg)',
+        borderLeft: '1px solid var(--border-color)',
         boxShadow: '-10px 0 25px -5px rgba(0, 0, 0, 0.1)',
         display: 'flex',
         flexDirection: 'column',
@@ -59,25 +72,25 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
         {/* Header */}
         <div style={{
           padding: '20px 24px',
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <ShoppingBag size={22} style={{ color: theme.primaryColor }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a' }}>
-              Seu Carrinho
+            <Clipboard size={22} style={{ color: company.primaryColor }} />
+            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
+              Seu Orçamento
             </h3>
             <span style={{
-              backgroundColor: `${theme.primaryColor}15`,
-              color: theme.primaryColor,
+              backgroundColor: `${company.primaryColor}15`,
+              color: company.primaryColor,
               padding: '2px 8px',
               borderRadius: '999px',
               fontSize: '12px',
               fontWeight: 700
             }}>
-              {cart.reduce((sum, item) => sum + item.qty, 0)} {cart.reduce((sum, item) => sum + item.qty, 0) === 1 ? 'caixa' : 'caixas'}
+              {cart.reduce((sum, item) => sum + item.qty, 0)} {cart.reduce((sum, item) => sum + item.qty, 0) === 1 ? 'item' : 'itens'}
             </span>
           </div>
           <button 
@@ -86,69 +99,30 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              color: '#64748b',
+              color: 'var(--text-secondary)',
               padding: '4px',
               borderRadius: '50%'
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
           >
             <X size={20} />
           </button>
-        </div>
-
-        {/* Minimum Order Limit Message */}
-        <div style={{
-          padding: '20px 24px',
-          backgroundColor: '#f8fafc',
-          borderBottom: '1px solid #e2e8f0'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
-            <span style={{ color: isMinMet ? theme.secondaryColor : '#d97706' }}>
-              {isMinMet ? '🎉 Pedido mínimo atingido!' : `Faltam R$ ${remaining.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} para o pedido mínimo`}
-            </span>
-            <span style={{ color: '#0f172a' }}>
-              R$ {subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} / R$ {minOrder.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </span>
-          </div>
-          
-          {/* Progress Bar */}
-          <div style={{
-            width: '100%',
-            height: '8px',
-            backgroundColor: '#e2e8f0',
-            borderRadius: '999px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              backgroundColor: isMinMet ? theme.secondaryColor : theme.primaryColor,
-              borderRadius: '999px',
-              transition: 'width 0.3s ease, background-color 0.3s ease'
-            }} />
-          </div>
-          
-          <p style={{ fontSize: '11px', color: '#64748b', marginTop: '8px', lineHeight: '1.4' }}>
-            * Como esta é uma compra no atacado para {merchant?.name}, o distribuidor exige o valor mínimo de R$ {minOrder.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}.
-          </p>
         </div>
 
         {/* Cart Items List */}
         <div style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '20px 24px'
+          padding: '24px'
         }}>
           {cart.length === 0 ? (
             <div style={{
               textAlign: 'center',
               padding: '60px 0',
-              color: '#94a3b8'
+              color: 'var(--text-light)'
             }}>
-              <ShoppingBag size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
-              <p style={{ fontSize: '15px', fontWeight: 500 }}>Seu carrinho está vazio</p>
-              <p style={{ fontSize: '13px', marginTop: '4px' }}>Adicione caixas de produtos da nossa loja.</p>
+              <Clipboard size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
+              <p style={{ fontSize: '15px', fontWeight: 500 }}>Seu orçamento está vazio</p>
+              <p style={{ fontSize: '13px', marginTop: '4px' }}>Adicione produtos da nossa lista.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -157,36 +131,54 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                   display: 'flex',
                   gap: '14px',
                   paddingBottom: '16px',
-                  borderBottom: '1px solid #f1f5f9'
+                  borderBottom: '1px solid var(--border-color)'
                 }}>
                   {/* Product Image */}
-                  <img 
-                    src={item.imageUrl} 
-                    alt={item.description}
-                    style={{
+                  {item.imageUrl ? (
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.description}
+                      style={{
+                        width: '64px',
+                        height: '64px',
+                        objectFit: 'contain',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-color)',
+                        padding: '4px',
+                        backgroundColor: 'white'
+                      }}
+                    />
+                  ) : (
+                    <div style={{
                       width: '64px',
                       height: '64px',
-                      objectFit: 'contain',
                       borderRadius: '8px',
-                      border: '1px solid #e2e8f0',
-                      padding: '4px',
-                      backgroundColor: 'white'
-                    }}
-                  />
+                      border: '1px solid var(--border-color)',
+                      backgroundColor: 'var(--bg-color)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--text-light)',
+                      fontSize: '11px',
+                      fontWeight: 600
+                    }}>
+                      Sem Foto
+                    </div>
+                  )}
 
                   {/* Product Info */}
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <span style={{
                       fontSize: '14px',
                       fontWeight: 600,
-                      color: '#0f172a',
+                      color: 'var(--text-primary)',
                       lineHeight: '1.3',
                       marginBottom: '4px'
                     }}>
                       {item.description}
                     </span>
-                    <span style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px' }}>
-                      Cxs com {item.packageQtd} un • R$ {item.packagePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}/cx
+                    <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                      Marca: {item.brand} • Preço: R$ {item.price.toFixed(2)} / {item.unit}
                     </span>
 
                     {/* Quantity Controls & Price */}
@@ -199,7 +191,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        border: '1.5px solid #cbd5e1',
+                        border: '1.5px solid var(--border-color)',
                         borderRadius: '8px',
                         overflow: 'hidden',
                         height: '32px'
@@ -208,12 +200,12 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                           onClick={() => updateQty(item.id, -1)}
                           style={{
                             border: 'none',
-                            background: '#f8fafc',
+                            background: 'var(--bg-color)',
                             width: '28px',
                             height: '100%',
                             cursor: 'pointer',
                             fontWeight: 700,
-                            color: '#475569'
+                            color: 'var(--text-primary)'
                           }}
                         >-</button>
                         <span style={{
@@ -222,18 +214,18 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                           fontWeight: 700,
                           minWidth: '28px',
                           textAlign: 'center',
-                          color: '#0f172a'
+                          color: 'var(--text-primary)'
                         }}>{item.qty}</span>
                         <button 
                           onClick={() => updateQty(item.id, 1)}
                           style={{
                             border: 'none',
-                            background: '#f8fafc',
+                            background: 'var(--bg-color)',
                             width: '28px',
                             height: '100%',
                             cursor: 'pointer',
                             fontWeight: 700,
-                            color: '#475569'
+                            color: 'var(--text-primary)'
                           }}
                         >+</button>
                       </div>
@@ -243,9 +235,9 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                         <span style={{
                           fontSize: '15px',
                           fontWeight: 700,
-                          color: '#0f172a'
+                          color: 'var(--text-primary)'
                         }}>
-                          R$ {(item.packagePrice * item.qty).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                          R$ {(item.price * item.qty).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </span>
                       </div>
                     </div>
@@ -258,12 +250,10 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                       border: 'none',
                       background: 'none',
                       cursor: 'pointer',
-                      color: '#94a3b8',
+                      color: 'var(--text-light)',
                       padding: '4px',
                       alignSelf: 'flex-start'
                     }}
-                    onMouseEnter={(e) => e.target.style.color = '#ef4444'}
-                    onMouseLeave={(e) => e.target.style.color = '#94a3b8'}
                   >
                     <Trash2 size={16} />
                   </button>
@@ -273,45 +263,56 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
           )}
         </div>
 
-        {/* Footer */}
+        {/* Observations & Footer */}
         {cart.length > 0 && (
           <div style={{
             padding: '24px',
-            borderTop: '1px solid #e2e8f0',
-            boxShadow: '0 -4px 10px rgba(0, 0, 0, 0.03)'
+            borderTop: '1px solid var(--border-color)',
+            backgroundColor: 'var(--bg-color)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
           }}>
+            {/* Notes Field */}
+            <div className="form-group" style={{ margin: 0 }}>
+              <label className="form-label" style={{ fontSize: '13px', fontWeight: 600 }}>Observações / Instruções do Pedido</label>
+              <textarea 
+                className="form-input"
+                placeholder="Ex: bananas maduras, tomates bem vermelhos, etc..."
+                rows={2}
+                value={notes}
+                onChange={handleNotesChange}
+                style={{ resize: 'none', fontSize: '13px', border: '1.5px solid var(--border-color)' }}
+              />
+            </div>
+
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px'
+              alignItems: 'center'
             }}>
-              <span style={{ fontSize: '15px', fontWeight: 600, color: '#475569' }}>
-                Total Geral
+              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                Total Estimado
               </span>
-              <span style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>
+              <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)' }}>
                 R$ {subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </span>
             </div>
 
             <button
               onClick={handleCheckoutClick}
-              disabled={!isMinMet}
-              className={`btn btn-primary`}
+              className="btn btn-primary"
               style={{
                 width: '100%',
                 padding: '14px',
-                fontSize: '16px',
-                borderRadius: '12px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: isMinMet ? theme.primaryColor : '#cbd5e1',
-                color: isMinMet ? 'white' : '#94a3b8',
-                borderColor: 'transparent'
+                fontSize: '15px',
+                borderRadius: '10px',
+                backgroundColor: company.primaryColor,
+                color: 'white',
+                border: 'none'
               }}
             >
-              Ir para o Checkout
+              Fechar Orçamento
             </button>
           </div>
         )}

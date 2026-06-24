@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProducts } from '../mockDb';
+import { getProducts, getOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import CartDrawer from './CartDrawer';
-import { Search, ShoppingCart, LogOut, ChevronRight, User, Tag, HelpCircle } from 'lucide-react';
+import { Search, ShoppingCart, LogOut, ChevronRight, User, Tag, ClipboardList, ShoppingBag, MapPin, Calendar, Clock } from 'lucide-react';
 
 export default function Storefront() {
   const navigate = useNavigate();
-  const { theme } = useWhitelabel();
+  const { company } = useWhitelabel();
   
   const [merchant, setMerchant] = useState(null);
   const [products, setProducts] = useState([]);
@@ -16,47 +16,66 @@ export default function Storefront() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeBanner, setActiveBanner] = useState(0);
+  const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' or 'orders'
+  const [clientOrders, setClientOrders] = useState([]);
 
   useEffect(() => {
-    // 1. Authenticate Merchant
-    const storedMerchant = localStorage.getItem('clubbi_active_merchant');
-    if (!storedMerchant) {
+    // 1. Authenticate Client
+    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    if (!storedUser) {
       navigate('/login');
       return;
     }
-    const m = JSON.parse(storedMerchant);
-    setMerchant(m);
+    const user = JSON.parse(storedUser);
+    if (user.role !== 'cliente') {
+      navigate('/admin');
+      return;
+    }
+    setMerchant(user);
 
-    // 2. Load Products Catalog
-    setProducts(getProducts());
+    // 2. Load products filtered strictly by the client's linked company
+    const storeProducts = getProducts(user.companyId);
+    setProducts(storeProducts);
 
-    // 3. Load Cart from session (to preserve states if navigated back)
-    const storedCart = localStorage.getItem(`cart_${m.code}`);
+    // 3. Load past orders placed by this specific client
+    const allOrders = getOrders(user.companyId);
+    const filteredOrders = allOrders.filter(o => o.clientCode === user.code);
+    setClientOrders(filteredOrders);
+
+    // 4. Load active cart
+    const storedCart = localStorage.getItem(`cart_${user.code}`);
     if (storedCart) {
       setCart(JSON.parse(storedCart));
     }
   }, [navigate]);
 
-  // Sync cart to localStorage whenever it changes
+  // Sync cart
   useEffect(() => {
     if (merchant) {
       localStorage.setItem(`cart_${merchant.code}`, JSON.stringify(cart));
     }
   }, [cart, merchant]);
 
-  // Carousel timer
+  // Rotate banner timer
   useEffect(() => {
-    if (theme.banners && theme.banners.length > 1) {
+    if (company.banners && company.banners.length > 1) {
       const timer = setInterval(() => {
-        setActiveBanner(prev => (prev + 1) % theme.banners.length);
+        setActiveBanner(prev => (prev + 1) % company.banners.length);
       }, 5000);
       return () => clearInterval(timer);
     }
-  }, [theme.banners]);
+  }, [company.banners]);
 
   const handleLogout = () => {
     localStorage.removeItem('clubbi_active_merchant');
     navigate('/login');
+  };
+
+  const handleRefreshOrders = () => {
+    if (merchant) {
+      const allOrders = getOrders(merchant.companyId);
+      setClientOrders(allOrders.filter(o => o.clientCode === merchant.code));
+    }
   };
 
   // Cart operations
@@ -92,7 +111,7 @@ export default function Storefront() {
     return item ? item.qty : 0;
   };
 
-  // Filter Products
+  // Filter Catalog
   const filteredProducts = products.filter(p => {
     const matchesSearch = p.description.toLowerCase().includes(search.toLowerCase()) || 
                           p.category.toLowerCase().includes(search.toLowerCase());
@@ -100,30 +119,48 @@ export default function Storefront() {
     return matchesSearch && matchesCategory;
   });
 
-  // Extract unique categories
   const categories = ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
 
-  // Group products into lists for homepage layout when no search is active
-  const previouslyOrdered = products.slice(0, 6);
-  const bestSellers = products.slice(6, 12);
-  const restOfProducts = products.slice(12);
-
-  const cartTotal = cart.reduce((sum, item) => sum + (item.packagePrice * item.qty), 0);
+  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case 'Recebido': return 'badge-pending';
+      case 'Em Separação': return 'badge-shipping';
+      case 'Separado': return 'badge-active';
+      case 'Aguardando Retirada': return 'badge-delivered';
+      case 'Retirado': return 'badge-delivered';
+      case 'Cancelado': return 'badge-inactive';
+      default: return 'badge-pending';
+    }
+  };
+
+  const getStatusTranslation = (status) => {
+    switch (status) {
+      case 'Recebido': return 'Recebido';
+      case 'Em Separação': return 'Em Separação';
+      case 'Separado': return 'Separado';
+      case 'Aguardando Retirada': return 'Aguardando Retirada';
+      case 'Retirado': return 'Retirado';
+      case 'Cancelado': return 'Cancelado';
+      default: return status;
+    }
+  };
 
   if (!merchant) return null;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
       
-      {/* 1. Store Header */}
+      {/* 1. Header */}
       <header style={{
         position: 'sticky',
         top: 0,
-        backgroundColor: 'white',
-        borderBottom: '1px solid #e2e8f0',
+        backgroundColor: 'var(--card-bg)',
+        borderBottom: '1px solid var(--border-color)',
         zIndex: 100,
-        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+        boxShadow: 'var(--shadow-sm)'
       }}>
         <div className="container" style={{
           height: '76px',
@@ -132,16 +169,16 @@ export default function Storefront() {
           justifyContent: 'space-between',
           gap: '20px'
         }}>
-          {/* Logo */}
+          {/* Logo container */}
           <div 
-            onClick={() => { setSearch(''); setActiveCategory('Todos'); }}
+            onClick={() => { setSearch(''); setActiveCategory('Todos'); setActiveTab('catalog'); }}
             style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
           >
-            {theme.logoType === 'image' && theme.logoUrl ? (
-              <div style={{ display: 'flex', alignItems: 'center', height: '48px', padding: '4px 0' }}>
+            {company.logoType === 'image' && company.logoUrl ? (
+              <div style={{ display: 'flex', alignItems: 'center', height: '44px' }}>
                 <img 
-                  src={theme.logoUrl} 
-                  alt={theme.logoText} 
+                  src={company.logoUrl} 
+                  alt={company.name} 
                   style={{ height: '100%', maxWidth: '180px', objectFit: 'contain' }} 
                 />
               </div>
@@ -150,375 +187,481 @@ export default function Storefront() {
                 <div style={{
                   width: '40px',
                   height: '40px',
-                  borderRadius: '12px',
-                  backgroundColor: theme.primaryColor,
+                  borderRadius: '10px',
+                  backgroundColor: company.primaryColor,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
                   fontWeight: 800,
-                  fontSize: '20px',
-                  boxShadow: `0 4px 10px ${theme.primaryColor}30`
+                  fontSize: '18px'
                 }}>
-                  {theme.logoText.substring(0, 2).toUpperCase()}
+                  {(company.logoText || company.name).substring(0, 2).toUpperCase()}
                 </div>
                 <span style={{
                   fontFamily: "'Outfit', sans-serif",
-                  fontSize: '22px',
+                  fontSize: '20px',
                   fontWeight: 800,
-                  color: '#0f172a',
-                  letterSpacing: '-0.5px'
+                  color: 'var(--text-primary)'
                 }}>
-                  {theme.logoText}
+                  {company.logoText || company.name}
                 </span>
               </>
             )}
           </div>
 
-          {/* Search Box */}
-          <div style={{ flex: 1, maxWidth: '500px', position: 'relative' }}>
-            <input 
-              type="text"
-              placeholder="Buscar por produtos, marcas ou categorias..."
-              className="form-input"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                paddingLeft: '44px',
-                borderRadius: '999px',
-                backgroundColor: '#f1f5f9',
-                border: 'none',
-                height: '44px'
-              }}
-            />
-            <Search 
-              size={18} 
-              style={{
-                position: 'absolute',
-                left: '16px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#94a3b8'
-              }}
-            />
-          </div>
+          {/* Search Box (Only on catalog tab) */}
+          {activeTab === 'catalog' ? (
+            <div style={{ flex: 1, maxWidth: '440px', position: 'relative' }}>
+              <input 
+                type="text"
+                placeholder="Buscar produtos ou marcas..."
+                className="form-input"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  paddingLeft: '44px',
+                  borderRadius: '999px',
+                  border: '1.5px solid var(--border-color)',
+                  height: '42px'
+                }}
+              />
+              <Search 
+                size={16} 
+                style={{
+                  position: 'absolute',
+                  left: '16px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'var(--text-light)'
+                }}
+              />
+            </div>
+          ) : (
+            <div style={{ flex: 1 }} />
+          )}
 
-          {/* Actions & Profile */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* User info & Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             
-            {/* Merchant info block */}
+            {/* Tab Toggles */}
+            <div style={{
+              display: 'flex',
+              backgroundColor: 'var(--bg-color)',
+              padding: '4px',
+              borderRadius: '8px',
+              border: '1.5px solid var(--border-color)'
+            }}>
+              <button
+                onClick={() => setActiveTab('catalog')}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: activeTab === 'catalog' ? 'var(--card-bg)' : 'transparent',
+                  color: activeTab === 'catalog' ? company.primaryColor : 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <ShoppingBag size={14} /> Catálogo
+              </button>
+              <button
+                onClick={() => { setActiveTab('orders'); handleRefreshOrders(); }}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: activeTab === 'orders' ? 'var(--card-bg)' : 'transparent',
+                  color: activeTab === 'orders' ? company.primaryColor : 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <ClipboardList size={14} /> Meus Pedidos
+              </button>
+            </div>
+
+            {/* Profile */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
+              gap: '8px',
               padding: '6px 12px',
               borderRadius: '999px',
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              maxWidth: '220px'
+              backgroundColor: 'var(--bg-color)',
+              border: '1.5px solid var(--border-color)',
+              maxWidth: '180px'
             }}>
-              <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '50%',
-                backgroundColor: `${theme.primaryColor}15`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: theme.primaryColor
-              }}>
-                <User size={14} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', textAlign: 'left' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {merchant.name}
                 </span>
-                <span style={{ fontSize: '10px', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  Cod: {merchant.code}
+                <span style={{ fontSize: '9px', color: 'var(--text-secondary)' }}>
+                  Acesso: {merchant.code}
                 </span>
               </div>
             </div>
 
-            {/* Cart Button */}
+            {/* Cart Trigger */}
             <button 
               onClick={() => setIsCartOpen(true)}
               className="btn btn-outline"
               style={{
                 position: 'relative',
-                borderRadius: '999px',
-                height: '44px',
-                width: '44px',
+                borderRadius: '50%',
+                height: '42px',
+                width: '42px',
                 padding: 0,
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                backgroundColor: 'var(--card-bg)'
               }}
             >
-              <ShoppingCart size={20} />
+              <ShoppingCart size={18} />
               {cartCount > 0 && (
                 <span style={{
                   position: 'absolute',
                   top: '-4px',
                   right: '-4px',
-                  backgroundColor: theme.accentColor,
+                  backgroundColor: company.accentColor,
                   color: 'white',
                   borderRadius: '50%',
-                  minWidth: '20px',
-                  height: '20px',
-                  padding: '2px',
-                  fontSize: '11px',
+                  minWidth: '18px',
+                  height: '18px',
+                  fontSize: '10px',
                   fontWeight: 700,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  boxShadow: 'var(--shadow-sm)'
                 }}>
                   {cartCount}
                 </span>
               )}
             </button>
 
-            {/* Logout */}
+            {/* Exit */}
             <button 
               onClick={handleLogout}
               className="btn btn-outline"
-              title="Sair da Loja"
+              title="Sair"
               style={{
-                borderRadius: '999px',
-                height: '44px',
-                width: '44px',
+                borderRadius: '50%',
+                height: '42px',
+                width: '42px',
                 padding: 0,
-                color: '#ef4444'
+                color: 'var(--danger)',
+                backgroundColor: 'var(--card-bg)'
               }}
             >
-              <LogOut size={18} />
+              <LogOut size={16} />
             </button>
           </div>
         </div>
       </header>
 
-      {/* 2. Banner Slider (Only if no active search or category filter) */}
-      {search === '' && activeCategory === 'Todos' && theme.banners && theme.banners.length > 0 && (
-        <div style={{ position: 'relative', width: '100%', height: '320px', overflow: 'hidden', backgroundColor: '#e2e8f0' }}>
-          {theme.banners.map((url, idx) => (
+      {/* 2. Banner Slider (Only on catalog and when no filters active) */}
+      {activeTab === 'catalog' && search === '' && activeCategory === 'Todos' && company.banners && company.banners.length > 0 && (
+        <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', backgroundColor: 'var(--border-color)' }}>
+          {company.banners.map((url, idx) => (
             <div 
               key={idx}
               style={{
                 position: 'absolute',
                 inset: 0,
-                backgroundImage: `linear-gradient(to right, rgba(15, 23, 42, 0.6) 20%, transparent 60%), url(${url})`,
+                backgroundImage: `linear-gradient(to right, rgba(15, 23, 42, 0.7) 30%, transparent 80%), url(${url})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 opacity: idx === activeBanner ? 1 : 0,
-                transform: idx === activeBanner ? 'scale(1)' : 'scale(1.03)',
-                transition: 'opacity 0.8s ease, transform 0.8s ease',
+                transition: 'opacity 0.8s ease',
                 display: 'flex',
                 alignItems: 'center',
-                color: 'white',
-                padding: '0 64px'
+                padding: '0 48px'
               }}
             >
-              <div className="container" style={{ width: '100%', textAlign: 'left' }}>
-                <div style={{ maxWidth: '480px' }}>
+              <div className="container" style={{ width: '100%', textAlign: 'left', color: 'white' }}>
+                <div style={{ maxWidth: '440px' }}>
                   <span style={{
-                    backgroundColor: theme.secondaryColor,
-                    color: 'white',
-                    padding: '4px 12px',
+                    backgroundColor: company.secondaryColor,
+                    color: '#0f172a',
+                    padding: '4px 10px',
                     borderRadius: '999px',
-                    fontSize: '12px',
+                    fontSize: '11px',
                     fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
+                    textTransform: 'uppercase'
                   }}>
-                    Melhor Preço Garantido
+                    Catálogo Digital de Orçamentos
                   </span>
                   <h2 style={{
                     fontFamily: "'Outfit', sans-serif",
-                    fontSize: '38px',
+                    fontSize: '32px',
                     fontWeight: 800,
-                    color: 'white',
-                    marginTop: '12px',
-                    lineHeight: '1.2'
+                    marginTop: '8px',
+                    color: 'white'
                   }}>
-                    Abasteça seu comércio direto da distribuidora
+                    Faça seus pedidos e retire na loja
                   </h2>
-                  <p style={{ fontSize: '15px', color: '#e2e8f0', marginTop: '8px', lineHeight: '1.5' }}>
-                    Entregas rápidas em 24h, prazos especiais e pagamento facilitado no boleto. Faça seu pedido em 1-clique!
+                  <p style={{ fontSize: '13px', color: '#cbd5e1', marginTop: '6px' }}>
+                    Adicione os produtos ao carrinho e envie o orçamento direto para nossos vendedores. Rápido e prático!
                   </p>
-                  <button 
-                    onClick={() => {
-                      // Scroll to products
-                      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="btn btn-primary"
-                    style={{ marginTop: '20px', padding: '12px 24px', fontSize: '15px' }}
-                  >
-                    Ver Ofertas <ChevronRight size={16} />
-                  </button>
                 </div>
               </div>
             </div>
           ))}
-
-          {/* Dots */}
-          {theme.banners.length > 1 && (
-            <div style={{
-              position: 'absolute',
-              bottom: '16px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              gap: '8px'
-            }}>
-              {theme.banners.map((_, idx) => (
-                <div 
-                  key={idx}
-                  onClick={() => setActiveBanner(idx)}
-                  style={{
-                    width: idx === activeBanner ? '24px' : '8px',
-                    height: '8px',
-                    borderRadius: '999px',
-                    backgroundColor: idx === activeBanner ? theme.primaryColor : 'white',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                />
-              ))}
-            </div>
-          )}
         </div>
       )}
 
-      {/* Main Grid Area */}
-      <main className="container" id="catalog" style={{ flex: 1, padding: '32px 16px' }}>
+      {/* 3. Main content */}
+      <main className="container" style={{ flex: 1, padding: '24px 16px' }}>
         
-        {/* 3. Horizontal Categories Bar */}
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#334155', marginBottom: '14px', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Tag size={16} style={{ color: theme.primaryColor }} />
-            Filtrar por Categoria
-          </h3>
-          <div style={{
-            display: 'flex',
-            gap: '12px',
-            overflowX: 'auto',
-            paddingBottom: '8px',
-            scrollSnapType: 'x mandatory'
-          }}>
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`btn ${activeCategory === cat ? 'btn-primary' : 'btn-outline'}`}
-                style={{
-                  borderRadius: '999px',
-                  padding: '10px 20px',
-                  whiteSpace: 'nowrap',
-                  fontWeight: 600,
-                  fontSize: '13px',
-                  backgroundColor: activeCategory === cat ? theme.primaryColor : 'white',
-                  color: activeCategory === cat ? 'white' : '#475569',
-                  borderColor: activeCategory === cat ? theme.primaryColor : '#cbd5e1'
-                }}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 4. Products Rendering logic */}
-        {search !== '' || activeCategory !== 'Todos' ? (
-          // FILTERED GRID
+        {/* CATALOG VIEW */}
+        {activeTab === 'catalog' && (
           <div>
-            <h2 style={{ fontSize: '20px', fontWeight: 800, textAlign: 'left', marginBottom: '20px', color: '#0f172a' }}>
-              Resultados da busca ({filteredProducts.length})
+            {/* Category selection */}
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{
+                display: 'flex',
+                gap: '10px',
+                overflowX: 'auto',
+                paddingBottom: '8px'
+              }}>
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`btn ${activeCategory === cat ? 'btn-primary' : 'btn-outline'}`}
+                    style={{
+                      borderRadius: '999px',
+                      padding: '8px 16px',
+                      whiteSpace: 'nowrap',
+                      fontWeight: 600,
+                      fontSize: '12px',
+                      backgroundColor: activeCategory === cat ? company.primaryColor : 'var(--card-bg)',
+                      color: activeCategory === cat ? 'white' : 'var(--text-secondary)',
+                      borderColor: activeCategory === cat ? company.primaryColor : 'var(--border-color)'
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Products grid */}
+            <div>
+              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '20px', fontWeight: 800, textAlign: 'left', marginBottom: '20px', color: 'var(--text-primary)' }}>
+                {activeCategory === 'Todos' ? 'Nossos Produtos' : activeCategory} {search && `• Busca: "${search}"`}
+              </h2>
+
+              {filteredProducts.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 0', backgroundColor: 'var(--card-bg)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
+                  <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-secondary)' }}>Nenhum produto cadastrado nesta seção.</p>
+                </div>
+              ) : (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                  gap: '20px'
+                }}>
+                  {filteredProducts.map(p => {
+                    const qty = getProductCartQty(p.id);
+                    return (
+                      <div key={p.id} className="card" style={{
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        borderRadius: '12px',
+                        borderColor: 'var(--border-color)',
+                        backgroundColor: 'var(--card-bg)',
+                        textAlign: 'left'
+                      }}>
+                        <div>
+                          {/* Image */}
+                          <div style={{
+                            height: '130px',
+                            backgroundColor: '#fff',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '12px',
+                            padding: '6px',
+                            border: '1px solid var(--border-color)'
+                          }}>
+                            {p.imageUrl ? (
+                              <img src={p.imageUrl} alt={p.description} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                            ) : (
+                              <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Sem Foto</span>
+                            )}
+                          </div>
+
+                          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700 }}>
+                            {p.brand}
+                          </span>
+                          
+                          <h4 style={{
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            color: 'var(--text-primary)',
+                            lineHeight: '1.4',
+                            marginTop: '4px',
+                            height: '36px',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical'
+                          }}>
+                            {p.description}
+                          </h4>
+                        </div>
+
+                        <div style={{ marginTop: '12px' }}>
+                          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                            Código: {p.code} • {p.unit}
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
+                            <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>Preço unitário:</span>
+                            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>
+                              R$ {p.price.toFixed(2)}
+                            </span>
+                          </div>
+
+                          {/* Cart Add Button */}
+                          {qty === 0 ? (
+                            <button
+                              onClick={() => addToCart(p)}
+                              className="btn btn-outline"
+                              style={{
+                                width: '100%',
+                                padding: '8px',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                borderRadius: '8px',
+                                color: company.primaryColor,
+                                borderColor: company.primaryColor
+                              }}
+                            >
+                              Adicionar
+                            </button>
+                          ) : (
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              border: `2px solid ${company.primaryColor}`,
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              height: '34px'
+                            }}>
+                              <button 
+                                onClick={() => updateCartQty(p.id, -1)}
+                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: company.primaryColor, fontWeight: 700 }}
+                              >-</button>
+                              <span style={{ fontSize: '13px', fontWeight: 700, minWidth: '24px', textAlign: 'center' }}>{qty}</span>
+                              <button 
+                                onClick={() => updateCartQty(p.id, 1)}
+                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: company.primaryColor, fontWeight: 700 }}
+                              >+</button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ORDERS TRACKING VIEW */}
+        {activeTab === 'orders' && (
+          <div style={{ textAlign: 'left' }}>
+            <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '20px', fontWeight: 800, marginBottom: '20px', color: 'var(--text-primary)' }}>
+              Acompanhamento de Orçamentos
             </h2>
-            {filteredProducts.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '60px 0', backgroundColor: 'white', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <p style={{ fontSize: '16px', fontWeight: 600, color: '#64748b' }}>Nenhum produto encontrado</p>
-                <button 
-                  onClick={() => { setSearch(''); setActiveCategory('Todos'); }}
-                  className="btn btn-text"
-                  style={{ marginTop: '12px' }}
-                >
-                  Limpar filtros
-                </button>
+
+            {clientOrders.length === 0 ? (
+              <div className="card" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                Nenhum orçamento solicitado ainda. Adicione itens e finalize para enviar.
               </div>
             ) : (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                gap: '24px'
-              }}>
-                {filteredProducts.map(p => renderProductCard(p))}
-              </div>
-            )}
-          </div>
-        ) : (
-          // HOMEPAGE SECTIONS
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-            
-            {/* Section 1: Pedidos por você */}
-            {previouslyOrdered.length > 0 && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '22px', fontWeight: 800, color: '#0f172a', textAlign: 'left' }}>
-                    Produtos já pedidos por você
-                  </h2>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: theme.primaryColor, cursor: 'pointer' }}>
-                    Ver histórico
-                  </span>
-                </div>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                  gap: '24px'
-                }}>
-                  {previouslyOrdered.map(p => renderProductCard(p))}
-                </div>
-              </div>
-            )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {clientOrders.map(ord => (
+                  <div key={ord.id} className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+                      <div>
+                        <strong style={{ fontSize: '15px' }}>Código do Pedido: {ord.id}</strong>
+                        <div style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', gap: '12px', marginTop: '2px' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Calendar size={12} /> {new Date(ord.date).toLocaleDateString('pt-BR')}
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Clock size={12} /> {new Date(ord.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+                      <span className={`badge ${getStatusBadgeClass(ord.status)}`}>
+                        {getStatusTranslation(ord.status)}
+                      </span>
+                    </div>
 
-            {/* Section 2: Mais vendidos */}
-            {bestSellers.length > 0 && (
-              <div>
-                <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '22px', fontWeight: 800, color: '#0f172a', textAlign: 'left', marginBottom: '20px' }}>
-                  Mais Vendidos do Abastecimento
-                </h2>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                  gap: '24px'
-                }}>
-                  {bestSellers.map(p => renderProductCard(p))}
-                </div>
+                    {/* Items detail list */}
+                    <div style={{ fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {ord.items.map((item, idx) => (
+                        <div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: 'var(--text-secondary)' }}>
+                            • {item.description} ({item.qty} un)
+                          </span>
+                          <span style={{ fontWeight: 600 }}>
+                            R$ {(item.price * item.qty).toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {ord.notes && (
+                      <div style={{
+                        backgroundColor: 'var(--bg-color)',
+                        padding: '10px 14px',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        border: '1.5px solid var(--border-color)',
+                        color: 'var(--text-secondary)'
+                      }}>
+                        <strong>Observação:</strong> {ord.notes}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--border-color)' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>
+                        Retirada presencial na loja: <strong>{company.address}</strong>
+                      </span>
+                      <strong style={{ fontSize: '16px', color: company.primaryColor }}>
+                        Total: R$ {ord.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </strong>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
-
-            {/* Section 3: Catálogo Completo */}
-            {restOfProducts.length > 0 && (
-              <div>
-                <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '22px', fontWeight: 800, color: '#0f172a', textAlign: 'left', marginBottom: '20px' }}>
-                  Catálogo Completo
-                </h2>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-                  gap: '24px'
-                }}>
-                  {restOfProducts.map(p => renderProductCard(p))}
-                </div>
-              </div>
-            )}
-
           </div>
         )}
 
       </main>
 
-      {/* Floating footer for Minimum checkout status indicator */}
-      {cartCount > 0 && (
+      {/* Floating total footer */}
+      {activeTab === 'catalog' && cartCount > 0 && (
         <div style={{
           position: 'fixed',
           bottom: '24px',
@@ -537,23 +680,23 @@ export default function Storefront() {
         }}
         onClick={() => setIsCartOpen(true)}
         >
-          <span style={{ fontSize: '14px', fontWeight: 500 }}>
-            {cartCount} cxs no carrinho • <strong>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+          <span style={{ fontSize: '13px', fontWeight: 500 }}>
+            {cartCount} {cartCount === 1 ? 'item' : 'itens'} no carrinho • <strong>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
           </span>
           <span style={{
-            backgroundColor: cartTotal >= merchant.minOrder ? theme.secondaryColor : theme.primaryColor,
+            backgroundColor: company.primaryColor,
             color: 'white',
             padding: '4px 12px',
             borderRadius: '999px',
             fontSize: '12px',
             fontWeight: 700
           }}>
-            {cartTotal >= merchant.minOrder ? 'Finalizar Pedido' : 'Ver Carrinho'}
+            Ver Orçamento
           </span>
         </div>
       )}
 
-      {/* 5. Cart Drawer Integration */}
+      {/* Cart Drawer */}
       <CartDrawer 
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -565,180 +708,4 @@ export default function Storefront() {
 
     </div>
   );
-
-  // Card rendering helper
-  function renderProductCard(product) {
-    const qtyInCart = getProductCartQty(product.id);
-    
-    return (
-      <div key={product.id} className="card" style={{
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-        cursor: 'default'
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.05)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
-      }}
-      >
-        <div>
-          {/* Image Container */}
-          <div style={{
-            position: 'relative',
-            height: '160px',
-            width: '100%',
-            backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '12px',
-            padding: '8px'
-          }}>
-            <img 
-              src={product.imageUrl} 
-              alt={product.description}
-              style={{
-                maxHeight: '100%',
-                maxWidth: '100%',
-                objectFit: 'contain'
-              }}
-            />
-          </div>
-
-          {/* Supplier badge */}
-          <div style={{
-            display: 'inline-block',
-            fontSize: '10px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            color: '#64748b',
-            backgroundColor: '#f1f5f9',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            marginBottom: '8px',
-            textAlign: 'left'
-          }}>
-            {product.supplierName}
-          </div>
-
-          {/* Description */}
-          <h4 style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#1e293b',
-            lineHeight: '1.4',
-            marginBottom: '8px',
-            textAlign: 'left',
-            height: '40px',
-            overflow: 'hidden',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical'
-          }}>
-            {product.description}
-          </h4>
-        </div>
-
-        {/* Pricing & Cart controls */}
-        <div style={{ marginTop: '12px' }}>
-          {/* Packaging details */}
-          <div style={{
-            fontSize: '12px',
-            color: '#64748b',
-            textAlign: 'left',
-            marginBottom: '6px'
-          }}>
-            Cx com {product.packageQtd} un • R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}/un
-          </div>
-
-          {/* Price of box */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            marginBottom: '12px'
-          }}>
-            <span style={{ fontSize: '12px', color: '#94a3b8' }}>Preço Caixa:</span>
-            <span style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>
-              R$ {product.packagePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </span>
-          </div>
-
-          {/* Cart Control Toggle */}
-          {qtyInCart === 0 ? (
-            <button
-              onClick={() => addToCart(product)}
-              className="btn btn-outline"
-              style={{
-                width: '100%',
-                borderColor: theme.primaryColor,
-                color: theme.primaryColor,
-                fontSize: '13px',
-                fontWeight: 600,
-                borderRadius: '8px',
-                padding: '8px'
-              }}
-            >
-              Comprar Caixa
-            </button>
-          ) : (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              border: `2px solid ${theme.primaryColor}`,
-              borderRadius: '8px',
-              overflow: 'hidden',
-              height: '38px',
-              backgroundColor: 'white'
-            }}>
-              <button 
-                onClick={() => updateCartQty(product.id, -1)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  flex: 1,
-                  height: '100%',
-                  cursor: 'pointer',
-                  fontWeight: 700,
-                  fontSize: '16px',
-                  color: theme.primaryColor
-                }}
-              >-</button>
-              <span style={{
-                padding: '0 12px',
-                fontSize: '14px',
-                fontWeight: 800,
-                color: '#0f172a',
-                textAlign: 'center',
-                minWidth: '32px'
-              }}>{qtyInCart}</span>
-              <button 
-                onClick={() => updateCartQty(product.id, 1)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  flex: 1,
-                  height: '100%',
-                  cursor: 'pointer',
-                  fontWeight: 700,
-                  fontSize: '16px',
-                  color: theme.primaryColor
-                }}
-              >+</button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
 }
