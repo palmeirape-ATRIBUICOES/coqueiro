@@ -8,9 +8,11 @@ import Checkout from './components/Checkout';
 import Admin from './components/Admin';
 
 function App() {
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
+  
   return (
     <ThemeProvider>
-      <Router basename={import.meta.env.BASE_URL}>
+      <Router basename={basename}>
         <WhitelabelProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
