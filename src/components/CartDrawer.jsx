@@ -127,7 +127,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {cart.map((item) => (
-                <div key={item.id} style={{
+                <div key={item.cartItemId} style={{
                   display: 'flex',
                   gap: '14px',
                   paddingBottom: '16px',
@@ -197,7 +197,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                         height: '32px'
                       }}>
                         <button 
-                          onClick={() => updateQty(item.id, -1)}
+                          onClick={() => updateQty(item.cartItemId, -1)}
                           style={{
                             border: 'none',
                             background: 'var(--bg-color)',
@@ -217,7 +217,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                           color: 'var(--text-primary)'
                         }}>{item.qty}</span>
                         <button 
-                          onClick={() => updateQty(item.id, 1)}
+                          onClick={() => updateQty(item.cartItemId, 1)}
                           style={{
                             border: 'none',
                             background: 'var(--bg-color)',
@@ -245,7 +245,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
 
                   {/* Remove Button */}
                   <button 
-                    onClick={() => removeProduct(item.id)}
+                    onClick={() => removeProduct(item.cartItemId)}
                     style={{
                       border: 'none',
                       background: 'none',

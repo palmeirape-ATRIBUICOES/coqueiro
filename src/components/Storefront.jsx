@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getProducts, getOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import CartDrawer from './CartDrawer';
+import ProductCard from './ProductCard';
 import { Search, ShoppingCart, LogOut, ClipboardList, ShoppingBag, Calendar, Clock } from 'lucide-react';
 
 const categoryEmojiMap = {
@@ -111,21 +112,22 @@ export default function Storefront() {
   };
 
   // Cart operations
-  const addToCart = (product) => {
+  const addToCart = (product, variant, price, unit) => {
     setCart(prev => {
-      const exists = prev.find(item => item.id === product.id);
+      const cartItemId = `${product.id}-${variant}`;
+      const exists = prev.find(item => item.cartItemId === cartItemId);
       if (exists) {
-        return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item);
+        return prev.map(item => item.cartItemId === cartItemId ? { ...item, qty: item.qty + 1 } : item);
       } else {
-        return [...prev, { ...product, qty: 1 }];
+        return [...prev, { ...product, cartItemId, variant, price, unit, qty: 1 }];
       }
     });
   };
 
-  const updateCartQty = (productId, delta) => {
+  const updateCartQty = (cartItemId, delta) => {
     setCart(prev => {
       return prev.map(item => {
-        if (item.id === productId) {
+        if (item.cartItemId === cartItemId) {
           const newQty = item.qty + delta;
           return newQty > 0 ? { ...item, qty: newQty } : item;
         }
@@ -134,8 +136,8 @@ export default function Storefront() {
     });
   };
 
-  const removeProductFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item.id !== productId));
+  const removeProductFromCart = (cartItemId) => {
+    setCart(prev => prev.filter(item => item.cartItemId !== cartItemId));
   };
 
   const getProductCartQty = (productId) => {
@@ -608,156 +610,16 @@ export default function Storefront() {
                   gap: isMobile ? '12px' : '20px'
                 }}>
                   {filteredProducts.map(p => {
-                    const qty = getProductCartQty(p.id);
                     return (
-                      <div key={p.id} className="card" style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        border: '1px solid #e2e8f0',
-                        backgroundColor: '#ffffff',
-                        textAlign: 'left',
-                        boxShadow: 'none',
-                        position: 'relative',
-                        height: '100%',
-                        overflow: 'hidden'
-                      }}>
-                        {/* Discount Tag */}
-                        {p.packageItems && p.packageItems > 1 && (
-                          <div style={{
-                            position: 'absolute',
-                            top: '8px',
-                            left: '8px',
-                            backgroundColor: '#10b981',
-                            color: 'white',
-                            fontSize: '10px',
-                            fontWeight: 700,
-                            padding: '2px 6px',
-                            borderRadius: '4px',
-                            zIndex: 2
-                          }}>
-                            Atacado
-                          </div>
-                        )}
-
-                        <div style={{ padding: isMobile ? '8px' : '12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                          {/* Image */}
-                          <div style={{
-                            height: isMobile ? '120px' : '150px',
-                            backgroundColor: '#fff',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: '12px',
-                            width: '100%'
-                          }}>
-                            {p.imageUrl ? (
-                              <img src={p.imageUrl} alt={p.description} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
-                            ) : (
-                              <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>Sem Foto</span>
-                            )}
-                          </div>
-
-                          {/* Brand */}
-                          <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
-                            {p.brand}
-                          </span>
-                          
-                          {/* Description */}
-                          <h4 style={{
-                            fontSize: isMobile ? '13px' : '14px',
-                            fontWeight: 600,
-                            color: '#0f172a',
-                            lineHeight: '1.4',
-                            marginTop: '0',
-                            marginBottom: '4px',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            flex: 1
-                          }}>
-                            {p.description}
-                          </h4>
-                          
-                          {/* Packaging info */}
-                          <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '12px', fontWeight: 500 }}>
-                            {p.unit ? p.unit : 'Unidade'}
-                          </div>
-
-                          {/* Pricing details - Inverted Hierarchy for B2B */}
-                          <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto' }}>
-                            {p.packagePrice && p.packageItems && p.packageItems > 1 ? (
-                              <>
-                                <span style={{ fontSize: '11px', color: '#94a3b8' }}>
-                                  R$ {p.price.toFixed(2)}/un
-                                </span>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                                  <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                                    R$ {p.packagePrice.toFixed(2)}
-                                  </span>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <span style={{ fontSize: '11px', color: '#94a3b8' }}>Preço final</span>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                                  <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                                    R$ {p.price.toFixed(2)}
-                                  </span>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Full width Cart Actions attached to bottom */}
-                        <div style={{ width: '100%', borderTop: '1px solid #e2e8f0' }}>
-                          {qty === 0 ? (
-                            <button
-                              onClick={() => addToCart(p)}
-                              style={{
-                                width: '100%',
-                                padding: '10px',
-                                fontSize: '13px',
-                                fontWeight: 700,
-                                color: company.primaryColor,
-                                border: 'none',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '6px',
-                                backgroundColor: '#f8fafc',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.2s'
-                              }}
-                              onMouseOver={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-                              onMouseOut={(e) => e.target.style.backgroundColor = '#f8fafc'}
-                            >
-                              Adicionar
-                            </button>
-                          ) : (
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              backgroundColor: company.primaryColor,
-                              color: 'white',
-                              height: '38px',
-                              width: '100%'
-                            }}>
-                              <button 
-                                onClick={() => updateCartQty(p.id, -1)}
-                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
-                              >-</button>
-                              <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '30px', textAlign: 'center' }}>{qty}</span>
-                              <button 
-                                onClick={() => updateCartQty(p.id, 1)}
-                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
-                              >+</button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <ProductCard 
+                        key={p.id} 
+                        p={p} 
+                        company={company} 
+                        addToCart={addToCart} 
+                        updateCartQty={updateCartQty} 
+                        cart={cart} 
+                        isMobile={isMobile} 
+                      />
                     );
                   })}
                 </div>

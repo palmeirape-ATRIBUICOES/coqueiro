@@ -1,0 +1,680 @@
+[
+  {
+    "id": 325,
+    "is_ava": true,
+    "level": 0,
+    "name": "Saudáveis",
+    "order": 12,
+    "parent": null,
+    "slug": "saudaveis"
+  },
+  {
+    "id": 113,
+    "is_ava": true,
+    "level": 0,
+    "name": "Mercearia",
+    "order": 5,
+    "parent": null,
+    "slug": "mercearia"
+  },
+  {
+    "id": 287,
+    "is_ava": true,
+    "level": 0,
+    "name": "Bebidas Não Alcoólicas",
+    "order": 3,
+    "parent": null,
+    "slug": "bebidas-nao-alcoolicas"
+  },
+  {
+    "id": 305,
+    "is_ava": true,
+    "level": 0,
+    "name": "Bazar e Utilidades",
+    "order": 11,
+    "parent": null,
+    "slug": "bazar-e-utilidades"
+  },
+  {
+    "id": 299,
+    "is_ava": true,
+    "level": 0,
+    "name": "Laticínios",
+    "order": 6,
+    "parent": null,
+    "slug": "laticinios"
+  },
+  {
+    "id": 301,
+    "is_ava": true,
+    "level": 0,
+    "name": "Padaria e Matinais",
+    "order": 2,
+    "parent": null,
+    "slug": "padaria-e-matinais"
+  },
+  {
+    "id": 303,
+    "is_ava": true,
+    "level": 0,
+    "name": "Biscoitos, Salgadinhos e Doces",
+    "order": 1,
+    "parent": null,
+    "slug": "biscoitos-salgadinhos-e-doces"
+  },
+  {
+    "id": 306,
+    "is_ava": true,
+    "level": 0,
+    "name": "Higiene e Beleza",
+    "order": 9,
+    "parent": null,
+    "slug": "higiene-e-beleza"
+  },
+  {
+    "id": 318,
+    "is_ava": true,
+    "level": 0,
+    "name": "Bebidas Alcoólicas",
+    "order": 4,
+    "parent": null,
+    "slug": "bebidas-alcoolicas"
+  },
+  {
+    "id": 319,
+    "is_ava": false,
+    "level": 0,
+    "name": "Limpeza",
+    "order": 7,
+    "parent": null,
+    "slug": "limpeza"
+  },
+  {
+    "id": 323,
+    "is_ava": true,
+    "level": 1,
+    "name": "Achocolatados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 301,
+      "name": "Padaria e Matinais",
+      "parent": null,
+      "slug": "padaria-e-matinais"
+    },
+    "slug": "achocolatados"
+  },
+  {
+    "id": 93,
+    "is_ava": false,
+    "level": 1,
+    "name": "Limpeza",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 319,
+      "name": "Limpeza",
+      "parent": null,
+      "slug": "limpeza"
+    },
+    "slug": "limpeza"
+  },
+  {
+    "id": 101,
+    "is_ava": false,
+    "level": 1,
+    "name": "Leite",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 299,
+      "name": "Laticínios",
+      "parent": null,
+      "slug": "laticinios"
+    },
+    "slug": "leite"
+  },
+  {
+    "id": 324,
+    "is_ava": false,
+    "level": 1,
+    "name": "Óleos e Óleos Especiais",
+    "order": 30,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "oleos-e-oleos-especiais"
+  },
+  {
+    "id": 326,
+    "is_ava": true,
+    "level": 1,
+    "name": "Suplementos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 325,
+      "name": "Saudáveis",
+      "parent": null,
+      "slug": "saudaveis"
+    },
+    "slug": "suplementos"
+  },
+  {
+    "id": 13,
+    "is_ava": true,
+    "level": 1,
+    "name": "Águas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 287,
+      "name": "Bebidas Não Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-nao-alcoolicas"
+    },
+    "slug": "aguas"
+  },
+  {
+    "id": 14,
+    "is_ava": true,
+    "level": 1,
+    "name": "Bebidas Alcoólicas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 318,
+      "name": "Bebidas Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-alcoolicas"
+    },
+    "slug": "bebidas-alcoolicas"
+  },
+  {
+    "id": 15,
+    "is_ava": false,
+    "level": 1,
+    "name": "Cervejas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 318,
+      "name": "Bebidas Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-alcoolicas"
+    },
+    "slug": "cervejas"
+  },
+  {
+    "id": 17,
+    "is_ava": true,
+    "level": 1,
+    "name": "Energéticos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 287,
+      "name": "Bebidas Não Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-nao-alcoolicas"
+    },
+    "slug": "energeticos"
+  },
+  {
+    "id": 18,
+    "is_ava": false,
+    "level": 1,
+    "name": "Refrigerantes",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 287,
+      "name": "Bebidas Não Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-nao-alcoolicas"
+    },
+    "slug": "refrigerantes"
+  },
+  {
+    "id": 19,
+    "is_ava": false,
+    "level": 1,
+    "name": "Sucos E Refrescos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 287,
+      "name": "Bebidas Não Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-nao-alcoolicas"
+    },
+    "slug": "sucos-e-refrescos"
+  },
+  {
+    "id": 79,
+    "is_ava": true,
+    "level": 1,
+    "name": "Higiene Pessoal",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 306,
+      "name": "Higiene e Beleza",
+      "parent": null,
+      "slug": "higiene-e-beleza"
+    },
+    "slug": "higiene-pessoal"
+  },
+  {
+    "id": 175,
+    "is_ava": true,
+    "level": 1,
+    "name": "Cafés e Chás",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 301,
+      "name": "Padaria e Matinais",
+      "parent": null,
+      "slug": "padaria-e-matinais"
+    },
+    "slug": "cafes-e-chas"
+  },
+  {
+    "id": 114,
+    "is_ava": false,
+    "level": 1,
+    "name": "Azeites, Óleos Compostos e Vinagres",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "azeites-oleos-compostos-e-vinagres"
+  },
+  {
+    "id": 147,
+    "is_ava": true,
+    "level": 1,
+    "name": "Aveias e Cereais",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "aveias-e-cereais"
+  },
+  {
+    "id": 155,
+    "is_ava": true,
+    "level": 1,
+    "name": "Queijos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 299,
+      "name": "Laticínios",
+      "parent": null,
+      "slug": "laticinios"
+    },
+    "slug": "queijos"
+  },
+  {
+    "id": 157,
+    "is_ava": true,
+    "level": 1,
+    "name": "Iogurtes",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 299,
+      "name": "Laticínios",
+      "parent": null,
+      "slug": "laticinios"
+    },
+    "slug": "iogurtes"
+  },
+  {
+    "id": 167,
+    "is_ava": false,
+    "level": 1,
+    "name": "Limpeza de Roupa",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 319,
+      "name": "Limpeza",
+      "parent": null,
+      "slug": "limpeza"
+    },
+    "slug": "limpeza-de-roupa"
+  },
+  {
+    "id": 170,
+    "is_ava": true,
+    "level": 1,
+    "name": "Banheiro",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 319,
+      "name": "Limpeza",
+      "parent": null,
+      "slug": "limpeza"
+    },
+    "slug": "banheiro"
+  },
+  {
+    "id": 171,
+    "is_ava": false,
+    "level": 1,
+    "name": "Limpeza em Geral",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 319,
+      "name": "Limpeza",
+      "parent": null,
+      "slug": "limpeza"
+    },
+    "slug": "limpeza-em-geral"
+  },
+  {
+    "id": 172,
+    "is_ava": true,
+    "level": 1,
+    "name": "Frios e Fatiados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 301,
+      "name": "Padaria e Matinais",
+      "parent": null,
+      "slug": "padaria-e-matinais"
+    },
+    "slug": "frios-e-fatiados"
+  },
+  {
+    "id": 173,
+    "is_ava": true,
+    "level": 1,
+    "name": "Pães e Bolos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 301,
+      "name": "Padaria e Matinais",
+      "parent": null,
+      "slug": "padaria-e-matinais"
+    },
+    "slug": "paes-e-bolos"
+  },
+  {
+    "id": 184,
+    "is_ava": true,
+    "level": 1,
+    "name": "Balas e Chicletes",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 303,
+      "name": "Biscoitos, Salgadinhos e Doces",
+      "parent": null,
+      "slug": "biscoitos-salgadinhos-e-doces"
+    },
+    "slug": "balas-e-chicletes"
+  },
+  {
+    "id": 116,
+    "is_ava": true,
+    "level": 1,
+    "name": "Temperos e Condimentos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "temperos-e-condimentos"
+  },
+  {
+    "id": 110,
+    "is_ava": true,
+    "level": 1,
+    "name": "Conservas e Enlatados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "conservas-e-enlatados"
+  },
+  {
+    "id": 112,
+    "is_ava": true,
+    "level": 1,
+    "name": "Massas Secas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "massas-secas"
+  },
+  {
+    "id": 148,
+    "is_ava": false,
+    "level": 1,
+    "name": "Grãos e Farináceos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "graos-e-farinaceos"
+  },
+  {
+    "id": 149,
+    "is_ava": false,
+    "level": 1,
+    "name": "Açúcar e Adoçante",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "acucar-e-adocante"
+  },
+  {
+    "id": 150,
+    "is_ava": true,
+    "level": 1,
+    "name": "Geléias, Mel e Pastas diversas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "geleias-mel-e-pastas-diversas"
+  },
+  {
+    "id": 151,
+    "is_ava": true,
+    "level": 1,
+    "name": "Preparo de Sobremesas",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "preparo-de-sobremesas"
+  },
+  {
+    "id": 152,
+    "is_ava": false,
+    "level": 1,
+    "name": "Arroz e Feijão",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "arroz-e-feijao"
+  },
+  {
+    "id": 153,
+    "is_ava": false,
+    "level": 1,
+    "name": "Leites e Derivados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 299,
+      "name": "Laticínios",
+      "parent": null,
+      "slug": "laticinios"
+    },
+    "slug": "leites-e-derivados"
+  },
+  {
+    "id": 185,
+    "is_ava": true,
+    "level": 1,
+    "name": "Chocolates",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 303,
+      "name": "Biscoitos, Salgadinhos e Doces",
+      "parent": null,
+      "slug": "biscoitos-salgadinhos-e-doces"
+    },
+    "slug": "chocolates"
+  },
+  {
+    "id": 186,
+    "is_ava": true,
+    "level": 1,
+    "name": "Biscoitos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 303,
+      "name": "Biscoitos, Salgadinhos e Doces",
+      "parent": null,
+      "slug": "biscoitos-salgadinhos-e-doces"
+    },
+    "slug": "biscoitos"
+  },
+  {
+    "id": 188,
+    "is_ava": true,
+    "level": 1,
+    "name": "Outros Doces",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 303,
+      "name": "Biscoitos, Salgadinhos e Doces",
+      "parent": null,
+      "slug": "biscoitos-salgadinhos-e-doces"
+    },
+    "slug": "outros-doces"
+  },
+  {
+    "id": 209,
+    "is_ava": true,
+    "level": 1,
+    "name": "Molhos e Maioneses",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "molhos-e-maioneses"
+  },
+  {
+    "id": 210,
+    "is_ava": true,
+    "level": 1,
+    "name": "Molhos Atomatados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 113,
+      "name": "Mercearia",
+      "parent": null,
+      "slug": "mercearia"
+    },
+    "slug": "molhos-atomatados"
+  },
+  {
+    "id": 211,
+    "is_ava": true,
+    "level": 1,
+    "name": "Aperitivos e Salgadinhos",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 303,
+      "name": "Biscoitos, Salgadinhos e Doces",
+      "parent": null,
+      "slug": "biscoitos-salgadinhos-e-doces"
+    },
+    "slug": "aperitivos-e-salgadinhos"
+  },
+  {
+    "id": 215,
+    "is_ava": true,
+    "level": 1,
+    "name": "Bazar em Geral",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 305,
+      "name": "Bazar e Utilidades",
+      "parent": null,
+      "slug": "bazar-e-utilidades"
+    },
+    "slug": "bazar-em-geral"
+  },
+  {
+    "id": 316,
+    "is_ava": true,
+    "level": 1,
+    "name": "Vinhos e Destilados",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 318,
+      "name": "Bebidas Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-alcoolicas"
+    },
+    "slug": "vinhos-e-destilados"
+  },
+  {
+    "id": 321,
+    "is_ava": true,
+    "level": 1,
+    "name": "Derivados de Leite",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 299,
+      "name": "Laticínios",
+      "parent": null,
+      "slug": "laticinios"
+    },
+    "slug": "derivados-de-leite"
+  },
+  {
+    "id": 322,
+    "is_ava": true,
+    "level": 1,
+    "name": "Cervejas Premium",
+    "order": 9223372036854775807,
+    "parent": {
+      "id": 318,
+      "name": "Bebidas Alcoólicas",
+      "parent": null,
+      "slug": "bebidas-alcoolicas"
+    },
+    "slug": "cervejas-premium"
+  }
+]

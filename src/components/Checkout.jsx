@@ -267,7 +267,7 @@ export default function Checkout() {
               paddingRight: '4px'
             }}>
               {cart.map(item => (
-                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '13px' }}>
+                <div key={item.cartItemId || item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '13px' }}>
                   <div style={{ flex: 1, paddingRight: '8px' }}>
                     <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.description}</div>
                     <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>

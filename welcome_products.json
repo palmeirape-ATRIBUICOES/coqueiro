@@ -1,0 +1,519 @@
+{
+  "section": [
+    {
+      "name": "Mais vendidos",
+      "context": "bestsellers",
+      "link": {
+        "text": "Mais vendidos",
+        "href": "/products/best_sellers"
+      },
+      "order": 0,
+      "products": [
+        {
+          "id": "9171",
+          "ean": "7896024760357",
+          "package_ean": "37896024760358",
+          "description": "Biscoito Recheado Chocolate Piraquê Pacote 160g",
+          "category": {
+            "name": "Biscoitos",
+            "slug": "biscoitos",
+            "is_ava": true,
+            "parent": {
+              "name": "Biscoitos, Salgadinhos e Doces",
+              "slug": "biscoitos-salgadinhos-e-doces",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "9",
+              "supplier_id": "Ofertao-Clubbi-Box-Region",
+              "supplier_name": "Clubbi Box Regiao 1",
+              "price": 2.96,
+              "package_price": 85.5,
+              "supplier_type": "Ofertão",
+              "is_ofertao": true,
+              "datetime_to_expire": "2026-06-25T23:00:00",
+              "in_stock_quantity": 148733,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": 3,
+              "datetime_to_start": "2026-06-24T21:43:36.103900",
+              "unit_offer_id": 6348854,
+              "package_offer_id": 6348853,
+              "package_qtd": 30,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.96,
+          "package_price": 85.5,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760357",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760357"
+          },
+          "datetime_to_expire": "2026-06-25T23:00:00",
+          "package_number_of_items": 30,
+          "in_ofertao": true,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 6,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "3742",
+          "ean": "7896024760371",
+          "package_ean": "37896024760372",
+          "description": "Biscoito Recheado Limão Piraquê Pacote 160g",
+          "category": {
+            "name": "Biscoitos",
+            "slug": "biscoitos",
+            "is_ava": true,
+            "parent": {
+              "name": "Biscoitos, Salgadinhos e Doces",
+              "slug": "biscoitos-salgadinhos-e-doces",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "9",
+              "supplier_id": "Ofertao-Clubbi-Box-Region",
+              "supplier_name": "Clubbi Box Regiao 1",
+              "price": 2.96,
+              "package_price": 85.5,
+              "supplier_type": "Ofertão",
+              "is_ofertao": true,
+              "datetime_to_expire": "2026-06-25T23:00:00",
+              "in_stock_quantity": 69048,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": 3,
+              "datetime_to_start": "2026-06-24T21:40:23.535756",
+              "unit_offer_id": 6348848,
+              "package_offer_id": 6348847,
+              "package_qtd": 30,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.96,
+          "package_price": 85.5,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760371",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760371"
+          },
+          "datetime_to_expire": "2026-06-25T23:00:00",
+          "package_number_of_items": 30,
+          "in_ofertao": true,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 6,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "9172",
+          "ean": "7896024760364",
+          "package_ean": "37896024760365",
+          "description": "Biscoito Recheado Morango Piraquê Pacote 160g",
+          "category": {
+            "name": "Biscoitos",
+            "slug": "biscoitos",
+            "is_ava": true,
+            "parent": {
+              "name": "Biscoitos, Salgadinhos e Doces",
+              "slug": "biscoitos-salgadinhos-e-doces",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "9",
+              "supplier_id": "Ofertao-Clubbi-Box-Region",
+              "supplier_name": "Clubbi Box Regiao 1",
+              "price": 2.96,
+              "package_price": 85.5,
+              "supplier_type": "Ofertão",
+              "is_ofertao": true,
+              "datetime_to_expire": "2026-06-25T23:00:00",
+              "in_stock_quantity": 77283,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": 3,
+              "datetime_to_start": "2026-06-24T21:40:13.634951",
+              "unit_offer_id": 6348852,
+              "package_offer_id": 6348851,
+              "package_qtd": 30,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.96,
+          "package_price": 85.5,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760364",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760364"
+          },
+          "datetime_to_expire": "2026-06-25T23:00:00",
+          "package_number_of_items": 30,
+          "in_ofertao": true,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 6,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "97694",
+          "ean": "7896024761651",
+          "package_ean": "17896024761658",
+          "description": "Biscoito Maizena Piraquê Pacote 175g",
+          "category": {
+            "name": "Biscoitos",
+            "slug": "biscoitos",
+            "is_ava": true,
+            "parent": {
+              "name": "Biscoitos, Salgadinhos e Doces",
+              "slug": "biscoitos-salgadinhos-e-doces",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "23",
+              "supplier_id": "EstoqueClubbi-RJ-1",
+              "supplier_name": "Estoque Clubbi Tijuca",
+              "price": 2.96,
+              "package_price": 136.8,
+              "supplier_type": "Estoque",
+              "is_ofertao": false,
+              "datetime_to_expire": null,
+              "in_stock_quantity": 334399,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": null,
+              "datetime_to_start": "2026-06-24T21:41:12.757878",
+              "unit_offer_id": 6346421,
+              "package_offer_id": 6346420,
+              "package_qtd": 48,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.96,
+          "package_price": 136.8,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761651",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761651"
+          },
+          "datetime_to_expire": null,
+          "package_number_of_items": 48,
+          "in_ofertao": false,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 12,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "99429",
+          "ean": "7896024761439",
+          "package_ean": "17896024761436",
+          "description": "Biscoito Leite Maltado Original Piraquê Pacote 132g",
+          "category": {
+            "name": "Biscoitos",
+            "slug": "biscoitos",
+            "is_ava": true,
+            "parent": {
+              "name": "Biscoitos, Salgadinhos e Doces",
+              "slug": "biscoitos-salgadinhos-e-doces",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "23",
+              "supplier_id": "EstoqueClubbi-RJ-1",
+              "supplier_name": "Estoque Clubbi Tijuca",
+              "price": 2.8,
+              "package_price": 134.5,
+              "supplier_type": "Estoque",
+              "is_ofertao": false,
+              "datetime_to_expire": null,
+              "in_stock_quantity": 150013,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": null,
+              "datetime_to_start": "2026-06-24T21:40:54.823832",
+              "unit_offer_id": 6346423,
+              "package_offer_id": 6346422,
+              "package_qtd": 50,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.8,
+          "package_price": 134.5,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761439",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761439"
+          },
+          "datetime_to_expire": null,
+          "package_number_of_items": 50,
+          "in_ofertao": false,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 10,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "6144",
+          "ean": "7898080640222",
+          "package_ean": "7898080640246",
+          "description": "Creme De Leite Leve Italac Tetra Pack 200g",
+          "category": {
+            "name": "Derivados de Leite",
+            "slug": "derivados-de-leite",
+            "is_ava": true,
+            "parent": {
+              "name": "Laticínios",
+              "slug": "laticinios",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "23",
+              "supplier_id": "EstoqueClubbi-RJ-1",
+              "supplier_name": "Estoque Clubbi Tijuca",
+              "price": 2.65,
+              "package_price": 61.2,
+              "supplier_type": "Estoque",
+              "is_ofertao": false,
+              "datetime_to_expire": null,
+              "in_stock_quantity": 3762,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": null,
+              "datetime_to_start": "2026-06-24T21:24:02.988109",
+              "unit_offer_id": 6322015,
+              "package_offer_id": 6322014,
+              "package_qtd": 24,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.65,
+          "package_price": 61.2,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7898080640222",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7898080640222"
+          },
+          "datetime_to_expire": null,
+          "package_number_of_items": 24,
+          "in_ofertao": false,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 4,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "3778",
+          "ean": "7896028014494",
+          "package_ean": "17896028014491",
+          "description": "Leite De Coco Menina 200ml",
+          "category": {
+            "name": "Preparo de Sobremesas",
+            "slug": "preparo-de-sobremesas",
+            "is_ava": true,
+            "parent": {
+              "name": "Mercearia",
+              "slug": "mercearia",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "23",
+              "supplier_id": "EstoqueClubbi-RJ-1",
+              "supplier_name": "Estoque Clubbi Tijuca",
+              "price": 2.24,
+              "package_price": 51.6,
+              "supplier_type": "Estoque",
+              "is_ofertao": false,
+              "datetime_to_expire": null,
+              "in_stock_quantity": 16123,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": null,
+              "datetime_to_start": "2026-06-24T21:40:51.533067",
+              "unit_offer_id": 6345995,
+              "package_offer_id": 6345994,
+              "package_qtd": 24,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.24,
+          "package_price": 51.6,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896028014494",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896028014494"
+          },
+          "datetime_to_expire": null,
+          "package_number_of_items": 24,
+          "in_ofertao": false,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 12,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        },
+        {
+          "id": "1398",
+          "ean": "7891079000229",
+          "package_ean": "17891079000226",
+          "description": "Macarrão Instantâneo Galinha Caipira Nissin Miojo Lámen Pacote 85g",
+          "category": {
+            "name": "Massas Secas",
+            "slug": "massas-secas",
+            "is_ava": true,
+            "parent": {
+              "name": "Mercearia",
+              "slug": "mercearia",
+              "is_ava": false,
+              "parent": null
+            }
+          },
+          "supplier_prices": [
+            {
+              "id": "23",
+              "supplier_id": "EstoqueClubbi-RJ-1",
+              "supplier_name": "Estoque Clubbi Tijuca",
+              "price": 2.24,
+              "package_price": 107.5,
+              "supplier_type": "Estoque",
+              "is_ofertao": false,
+              "datetime_to_expire": null,
+              "in_stock_quantity": 26752,
+              "warehouse_id": "0421767c-47c3-4479-b40a-5002e0d1ee78",
+              "offer_type": null,
+              "datetime_to_start": "2026-06-24T20:18:07.355172",
+              "unit_offer_id": 6310756,
+              "package_offer_id": 6310755,
+              "package_qtd": 50,
+              "is_available": true,
+              "limit_quantity": null,
+              "available_quantity": null,
+              "limit_per_order": null,
+              "is_priority": true,
+              "external_sku": null,
+              "taxes": null,
+              "price_without_taxes": null,
+              "get_more_for_less": null
+            }
+          ],
+          "price": 2.24,
+          "package_price": 107.5,
+          "image_urls": {
+            "image120_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7891079000229",
+            "image300_px": "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7891079000229"
+          },
+          "datetime_to_expire": null,
+          "package_number_of_items": 50,
+          "in_ofertao": false,
+          "in_promotion": false,
+          "in_stock": true,
+          "limit_per_order": null,
+          "is_exclusive": null,
+          "product_expiration_date": null,
+          "multiple_unit_quantity": 10,
+          "discount": null,
+          "sponsored_info": null,
+          "is_near_expiry": false
+        }
+      ]
+    }
+  ]
+}
