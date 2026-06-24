@@ -329,29 +329,7 @@ export default function Storefront() {
               </span>
             </div>
 
-            {/* Delivery address badge */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: company.secondaryColor || '#ece6fc',
-              color: company.primaryColor || '#3e34d3',
-              borderRadius: '999px',
-              padding: '6px 14px',
-              fontSize: '12px',
-              fontWeight: 600,
-              maxWidth: '380px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}
-            title={merchant.address || 'Entrega'}
-            >
-              <span>📍</span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                Entregar em: {merchant.address || 'Endereço não cadastrado'}
-              </span>
-            </div>
+            
 
             {/* Search Box (Only on catalog tab) */}
             {activeTab === 'catalog' ? (
@@ -548,58 +526,36 @@ export default function Storefront() {
             {/* Category selection */}
             <div style={{ marginBottom: '24px' }}>
               {isMobile ? (
-                /* Mobile categories: circular scrollable list */
+                /* Mobile categories: text pills */
                 <div style={{
                   display: 'flex',
-                  gap: '16px',
+                  gap: '8px',
                   overflowX: 'auto',
-                  paddingBottom: '12px',
+                  paddingBottom: '8px',
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none'
                 }}>
                   {categories.map(cat => {
                     const isActive = activeCategory === cat;
                     return (
-                      <div
+                      <button
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: '6px',
-                          cursor: 'pointer',
-                          minWidth: '70px',
-                          textAlign: 'center'
+                          borderRadius: '4px',
+                          padding: '8px 16px',
+                          whiteSpace: 'nowrap',
+                          fontWeight: 600,
+                          fontSize: '13px',
+                          backgroundColor: isActive ? '#f1f5f9' : '#ffffff',
+                          color: isActive ? '#0f172a' : '#64748b',
+                          border: isActive ? '1px solid #cbd5e1' : '1px solid transparent',
+                          borderBottom: isActive ? `2px solid ${company.primaryColor}` : '1px solid transparent',
+                          cursor: 'pointer'
                         }}
                       >
-                        <div style={{
-                          width: '54px',
-                          height: '54px',
-                          borderRadius: '50%',
-                          backgroundColor: isActive ? company.primaryColor : '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '22px',
-                          boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
-                          border: isActive ? `2px solid ${company.primaryColor}` : '1px solid #e2e8f0',
-                          transition: 'transform 0.15s ease'
-                        }}>
-                          {getCategoryEmoji(cat)}
-                        </div>
-                        <span style={{
-                          fontSize: '10px',
-                          fontWeight: isActive ? 700 : 500,
-                          color: isActive ? company.primaryColor : '#475569',
-                          whiteSpace: 'nowrap',
-                          maxWidth: '75px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
-                          {cat}
-                        </span>
-                      </div>
+                        {cat}
+                      </button>
                     );
                   })}
                 </div>
@@ -607,7 +563,7 @@ export default function Storefront() {
                 /* Desktop categories: pills */
                 <div style={{
                   display: 'flex',
-                  gap: '10px',
+                  gap: '8px',
                   overflowX: 'auto',
                   paddingBottom: '8px'
                 }}>
@@ -615,19 +571,19 @@ export default function Storefront() {
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className={`btn ${activeCategory === cat ? 'btn-primary' : 'btn-outline'}`}
                       style={{
-                        borderRadius: '999px',
+                        borderRadius: '4px',
                         padding: '8px 16px',
                         whiteSpace: 'nowrap',
                         fontWeight: 600,
-                        fontSize: '12px',
-                        backgroundColor: activeCategory === cat ? company.primaryColor : '#ffffff',
-                        color: activeCategory === cat ? 'white' : 'var(--text-secondary)',
-                        borderColor: activeCategory === cat ? company.primaryColor : 'var(--border-color)'
+                        fontSize: '14px',
+                        backgroundColor: activeCategory === cat ? '#f1f5f9' : '#ffffff',
+                        color: activeCategory === cat ? '#0f172a' : '#64748b',
+                        border: activeCategory === cat ? '1px solid #cbd5e1' : '1px solid transparent',
+                        borderBottom: activeCategory === cat ? `2px solid ${company.primaryColor}` : '1px solid transparent',
+                        cursor: 'pointer'
                       }}
                     >
-                      <span style={{ marginRight: '6px' }}>{getCategoryEmoji(cat)}</span>
                       {cat}
                     </button>
                   ))}
@@ -655,16 +611,16 @@ export default function Storefront() {
                     const qty = getProductCartQty(p.id);
                     return (
                       <div key={p.id} className="card" style={{
-                        padding: isMobile ? '12px' : '16px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        borderRadius: '12px',
-                        border: '1px solid var(--border-color)',
+                        border: '1px solid #e2e8f0',
                         backgroundColor: '#ffffff',
                         textAlign: 'left',
                         boxShadow: 'none',
-                        position: 'relative'
+                        position: 'relative',
+                        height: '100%',
+                        overflow: 'hidden'
                       }}>
                         {/* Discount Tag */}
                         {p.packageItems && p.packageItems > 1 && (
@@ -674,7 +630,7 @@ export default function Storefront() {
                             left: '8px',
                             backgroundColor: '#10b981',
                             color: 'white',
-                            fontSize: '9px',
+                            fontSize: '10px',
                             fontWeight: 700,
                             padding: '2px 6px',
                             borderRadius: '4px',
@@ -684,18 +640,16 @@ export default function Storefront() {
                           </div>
                         )}
 
-                        <div>
+                        <div style={{ padding: isMobile ? '8px' : '12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                           {/* Image */}
                           <div style={{
-                            height: isMobile ? '100px' : '130px',
+                            height: isMobile ? '120px' : '150px',
                             backgroundColor: '#fff',
-                            borderRadius: '8px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            marginBottom: '10px',
-                            padding: '4px',
-                            border: '1px solid #f1f5f9'
+                            marginBottom: '12px',
+                            width: '100%'
                           }}>
                             {p.imageUrl ? (
                               <img src={p.imageUrl} alt={p.description} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
@@ -705,88 +659,100 @@ export default function Storefront() {
                           </div>
 
                           {/* Brand */}
-                          <span style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>
+                          <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
                             {p.brand}
                           </span>
                           
                           {/* Description */}
                           <h4 style={{
-                            fontSize: isMobile ? '12px' : '13px',
+                            fontSize: isMobile ? '13px' : '14px',
                             fontWeight: 600,
                             color: '#0f172a',
                             lineHeight: '1.4',
-                            marginTop: '2px',
-                            height: '36px',
+                            marginTop: '0',
+                            marginBottom: '4px',
                             overflow: 'hidden',
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical'
+                            WebkitBoxOrient: 'vertical',
+                            flex: 1
                           }}>
                             {p.description}
                           </h4>
-                        </div>
-
-                        <div style={{ marginTop: '10px' }}>
+                          
                           {/* Packaging info */}
-                          <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '6px', fontWeight: 500 }}>
+                          <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '12px', fontWeight: 500 }}>
                             {p.unit ? p.unit : 'Unidade'}
                           </div>
 
-                          {/* Pricing details */}
-                          <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
-                            <span style={{ fontSize: '10px', color: '#94a3b8' }}>Preço unitário:</span>
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                              <span style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 800, color: '#0f172a' }}>
-                                R$ {p.price.toFixed(2)}
-                              </span>
-                            </div>
-                            {p.packagePrice && p.packageItems && p.packageItems > 1 && (
-                              <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 600, marginTop: '2px' }}>
-                                Caixa: R$ {p.packagePrice.toFixed(2)}
-                              </span>
+                          {/* Pricing details - Inverted Hierarchy for B2B */}
+                          <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto' }}>
+                            {p.packagePrice && p.packageItems && p.packageItems > 1 ? (
+                              <>
+                                <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+                                  R$ {p.price.toFixed(2)}/un
+                                </span>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                                  <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
+                                    R$ {p.packagePrice.toFixed(2)}
+                                  </span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ fontSize: '11px', color: '#94a3b8' }}>Preço final</span>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                                  <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
+                                    R$ {p.price.toFixed(2)}
+                                  </span>
+                                </div>
+                              </>
                             )}
                           </div>
+                        </div>
 
-                          {/* Cart Add Button */}
+                        {/* Full width Cart Actions attached to bottom */}
+                        <div style={{ width: '100%', borderTop: '1px solid #e2e8f0' }}>
                           {qty === 0 ? (
                             <button
                               onClick={() => addToCart(p)}
-                              className="btn btn-outline"
                               style={{
                                 width: '100%',
-                                padding: '6px',
-                                fontSize: '11px',
+                                padding: '10px',
+                                fontSize: '13px',
                                 fontWeight: 700,
-                                borderRadius: '8px',
                                 color: company.primaryColor,
-                                borderColor: company.primaryColor,
+                                border: 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '4px',
-                                backgroundColor: '#ffffff',
-                                cursor: 'pointer'
+                                gap: '6px',
+                                backgroundColor: '#f8fafc',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.2s'
                               }}
+                              onMouseOver={(e) => e.target.style.backgroundColor = '#f1f5f9'}
+                              onMouseOut={(e) => e.target.style.backgroundColor = '#f8fafc'}
                             >
-                              <span>+</span> Adicionar
+                              Adicionar
                             </button>
                           ) : (
                             <div style={{
                               display: 'flex',
                               alignItems: 'center',
-                              border: `2px solid ${company.primaryColor}`,
-                              borderRadius: '8px',
-                              overflow: 'hidden',
-                              height: '30px'
+                              backgroundColor: company.primaryColor,
+                              color: 'white',
+                              height: '38px',
+                              width: '100%'
                             }}>
                               <button 
                                 onClick={() => updateCartQty(p.id, -1)}
-                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: company.primaryColor, fontWeight: 700 }}
+                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
                               >-</button>
-                              <span style={{ fontSize: '12px', fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>{qty}</span>
+                              <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '30px', textAlign: 'center' }}>{qty}</span>
                               <button 
                                 onClick={() => updateCartQty(p.id, 1)}
-                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: company.primaryColor, fontWeight: 700 }}
+                                style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
                               >+</button>
                             </div>
                           )}
@@ -860,9 +826,7 @@ export default function Storefront() {
                     )}
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '6px' }}>
-                      <span style={{ fontSize: '11px', color: 'var(--text-light)' }}>
-                        Retirada presencial na loja: <strong>{company.address}</strong>
-                      </span>
+                      
                       <strong style={{ fontSize: '15px', color: company.primaryColor }}>
                         Total: R$ {ord.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </strong>

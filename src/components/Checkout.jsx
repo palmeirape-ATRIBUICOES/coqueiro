@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrders, saveOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
-import { ArrowLeft, CheckCircle, MapPin, Truck, Calendar, FileText, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, CheckCircle, FileText, Calendar, ShoppingBag } from 'lucide-react';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -10,7 +10,6 @@ export default function Checkout() {
 
   const [client, setClient] = useState(null);
   const [cart, setCart] = useState([]);
-  const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
@@ -28,10 +27,6 @@ export default function Checkout() {
       return;
     }
     setClient(user);
-
-    // Load saved address or default to user address
-    const savedAddress = localStorage.getItem(`client_address_${user.code}`) || user.address || '';
-    setAddress(savedAddress);
 
     // Load saved notes
     const savedNotes = localStorage.getItem(`cart_notes_${user.code}`) || '';
@@ -73,16 +68,12 @@ export default function Checkout() {
       })),
       total: parseFloat(subtotal.toFixed(2)),
       notes: notes,
-      deliveryAddress: address,
       status: 'Recebido'
     };
 
     // Save order to mock database
     const allOrders = getOrders();
     saveOrders([newOrder, ...allOrders]);
-
-    // Save address for future orders
-    localStorage.setItem(`client_address_${client.code}`, address);
 
     // Clear cart and notes for this client
     localStorage.setItem(`cart_${client.code}`, '[]');
@@ -134,11 +125,11 @@ export default function Checkout() {
             color: 'var(--text-primary)',
             marginBottom: '8px'
           }}>
-            Orçamento Enviado!
+            Pedido Enviado!
           </h1>
 
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Seu orçamento <strong>{orderId}</strong> foi encaminhado com sucesso para <strong>{company.name}</strong>.
+            Seu pedido <strong>{orderId}</strong> foi encaminhado com sucesso para <strong>{company.name}</strong>.
           </p>
 
           <div style={{
@@ -154,16 +145,12 @@ export default function Checkout() {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px', color: 'var(--text-secondary)' }}>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <MapPin size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
-                <span>Endereço de Entrega: {address || 'Retirada na loja'}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
                 <FileText size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
-                <span>Tipo: <strong>Orçamento Comercial B2B</strong></span>
+                <span>Tipo: <strong>Pedido Comercial B2B</strong></span>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <Truck size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
-                <span>Próximo Passo: <strong>Nosso vendedor entrará em contato para alinhar a retirada/entrega.</strong></span>
+                <CheckCircle size={16} style={{ color: company.primaryColor, flexShrink: 0 }} />
+                <span>Próximo Passo: <strong>Nosso time entrará em contato para alinhar a liberação.</strong></span>
               </div>
             </div>
           </div>
@@ -220,7 +207,7 @@ export default function Checkout() {
           textAlign: 'left',
           marginBottom: '32px'
         }}>
-          Enviar Orçamento
+          Finalizar Pedido
         </h1>
 
         <div style={{
@@ -232,26 +219,6 @@ export default function Checkout() {
           {/* Form Side */}
           <form onSubmit={handlePlaceOrder} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
-            {/* Delivery address card */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
-                <MapPin size={20} style={{ color: company.primaryColor }} />
-                Endereço de Entrega
-              </h3>
-              
-              <div className="form-group">
-                <label className="form-label" style={{ fontWeight: 600 }}>Endereço Comercial</label>
-                <textarea
-                  className="form-input"
-                  rows={3}
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Informe o endereço para entrega (ou deixe em branco caso vá retirar presencialmente)"
-                  style={{ resize: 'none', height: '80px', fontFamily: 'inherit', paddingTop: '10px' }}
-                />
-              </div>
-            </div>
-
             {/* Note about direct payment */}
             <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
               <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
@@ -260,9 +227,8 @@ export default function Checkout() {
               </h3>
               
               <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                Esta plataforma funciona estritamente como um <strong>Catálogo Digital de Orçamentos</strong>. 
                 Nenhum pagamento é processado online. Toda a negociação comercial, prazos de faturamento e 
-                recebimento de valores serão definidos diretamente com o vendedor no momento da entrega ou da retirada presencial na loja física.
+                recebimento de valores serão definidos diretamente pela nossa equipe comercial após a conclusão do pedido.
               </p>
             </div>
 
@@ -280,14 +246,14 @@ export default function Checkout() {
                 color: 'white'
               }}
             >
-              Confirmar e Solicitar Orçamento
+              Confirmar Pedido
             </button>
           </form>
 
           {/* Order Summary Side */}
           <div className="card" style={{ padding: '24px', textAlign: 'left', position: 'sticky', top: '110px', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
             <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
-              Resumo do Orçamento
+              Resumo do Pedido
             </h3>
 
             {/* Items scroll list */}
@@ -323,18 +289,7 @@ export default function Checkout() {
               flexDirection: 'column',
               gap: '10px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                <span>Subtotal Estimado</span>
-                <span>R$ {subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                <span>Frete / Taxa de Retirada</span>
-                <span style={{ color: company.secondaryColor, fontWeight: 600 }}>A combinar</span>
-              </div>
-              
               <div style={{
-                borderTop: '1px solid var(--border-color)',
-                paddingTop: '14px',
                 marginTop: '4px',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -374,7 +329,7 @@ export default function Checkout() {
               gap: '8px'
             }}>
               <Calendar size={16} style={{ flexShrink: 0, color: company.primaryColor }} />
-              <span>O orçamento será analisado e respondido em horário comercial.</span>
+              <span>O pedido será analisado e processado em horário comercial.</span>
             </div>
           </div>
         </div>
