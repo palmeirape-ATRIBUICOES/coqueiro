@@ -75,6 +75,15 @@ const INITIAL_USERS = {
     phone: "21964422488",
     address: "R. Cap. Edmundo Soares, 18 - K11 - Caonze, Nova Iguaçu - RJ, 26250-240"
   },
+  "CLUBB": {
+    code: "CLUBB",
+    name: "Mercadinho Bogados (Cliente)",
+    role: "cliente",
+    status: "Active",
+    companyId: "clubbi",
+    phone: "21964422488",
+    address: "R. Cap. Edmundo Soares, 18 - K11 - Caonze, Nova Iguaçu - RJ, 26250-240"
+  },
   // Store Admin - Casa Coqueiro
   "ADM01": {
     code: "ADM01",

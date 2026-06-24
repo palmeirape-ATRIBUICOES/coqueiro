@@ -26,8 +26,8 @@ export default function Login() {
     setError('');
 
     const cleanCode = code.trim().toUpperCase();
-    if (cleanCode.length !== 5) {
-      setError('O código de acesso deve conter exatamente 5 caracteres.');
+    if (cleanCode.length === 0) {
+      setError('Informe o código de acesso.');
       return;
     }
 
@@ -111,7 +111,6 @@ export default function Login() {
               type="text"
               className="form-input"
               placeholder="•••••"
-              maxLength={5}
               value={code}
               onChange={(e) => setCode(e.target.value)}
               style={{
