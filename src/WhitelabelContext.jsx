@@ -63,48 +63,7 @@ export const WhitelabelProvider = ({ children }) => {
       switchCompany,
       reloadBranding
     }}>
-      {/* SaaS Demo Header Bar (Only visible when printing is not active) */}
-      <div className="skin-switcher-bar print-hide">
-        <div className="skin-switcher-title">
-          <span>🚀</span>
-          <strong>Mercado Online Facilitadora</strong>
-          <span style={{ fontSize: '11px', color: '#94a3b8', marginLeft: '8px' }}>
-            (Multi-Tenant B2B SaaS Demo)
-          </span>
-        </div>
-        <div className="skin-btn-group">
-          {Object.keys(companies).map(id => (
-            <button 
-              key={id}
-              onClick={() => switchCompany(id)}
-              className={`skin-btn ${activeCompanyId === id ? 'active' : ''}`}
-              style={{
-                borderLeft: `4px solid ${companies[id].primaryColor}`
-              }}
-            >
-              {companies[id].name}
-            </button>
-          ))}
 
-          {/* Light/Dark Mode toggle */}
-          <button 
-            onClick={toggleTheme} 
-            className="skin-btn"
-            style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: '#334155', border: 'none' }}
-          >
-            {isDarkMode ? <Sun size={14} style={{ color: '#fbbf24' }} /> : <Moon size={14} style={{ color: '#cbd5e1' }} />}
-            <span style={{ fontSize: '11px' }}>{isDarkMode ? 'Claro' : 'Escuro'}</span>
-          </button>
-          
-          <a 
-            href="/admin" 
-            className="skin-btn"
-            style={{ backgroundColor: '#0284c7', borderColor: '#0284c7', color: 'white' }}
-          >
-            ⚙️ Painel Admin
-          </a>
-        </div>
-      </div>
       {children}
     </WhitelabelContext.Provider>
   );

@@ -29,8 +29,8 @@ export default function Checkout() {
     }
     setClient(user);
 
-    // Load saved address or default to empty
-    const savedAddress = localStorage.getItem(`client_address_${user.code}`) || '';
+    // Load saved address or default to user address
+    const savedAddress = localStorage.getItem(`client_address_${user.code}`) || user.address || '';
     setAddress(savedAddress);
 
     // Load saved notes
