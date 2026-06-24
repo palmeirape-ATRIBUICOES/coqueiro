@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './ThemeContext';
 import { WhitelabelProvider } from './WhitelabelContext';
 import Login from './components/Login';
@@ -8,11 +8,9 @@ import Checkout from './components/Checkout';
 import Admin from './components/Admin';
 
 function App() {
-  const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
-  
   return (
     <ThemeProvider>
-      <Router basename={basename}>
+      <Router>
         <WhitelabelProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
