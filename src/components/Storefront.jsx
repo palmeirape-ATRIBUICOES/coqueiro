@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProducts, getOrders } from '../mockDb';
+import { getProducts, getOrders, syncFromCloud } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import CartDrawer from './CartDrawer';
 import ProductCard from './ProductCard';
@@ -73,14 +73,17 @@ export default function Storefront() {
     }
     setMerchant(user);
 
-    // 2. Load products filtered strictly by the client's linked company
-    const storeProducts = getProducts(user.companyId);
-    setProducts(storeProducts);
+    // 2. Load products filtered strictly by the client's linked company (offline cache first)
+    setProducts(getProducts(user.companyId));
 
-    // 3. Load past orders placed by this specific client
-    const allOrders = getOrders(user.companyId);
-    const filteredOrders = allOrders.filter(o => o.clientCode === user.code);
-    setClientOrders(filteredOrders);
+    // 3. Load past orders placed by this specific client (offline cache first)
+    setClientOrders(getOrders(user.companyId).filter(o => o.clientCode === user.code));
+
+    // 3.1. Sync from Firebase in background and reload state
+    syncFromCloud().then(() => {
+      setProducts(getProducts(user.companyId));
+      setClientOrders(getOrders(user.companyId).filter(o => o.clientCode === user.code));
+    });
 
     // 4. Load active cart
     const storedCart = localStorage.getItem(`cart_${user.code}`);

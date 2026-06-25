@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../mockDb';
+import { getUsers, syncFromCloud } from '../mockDb';
 import { ShoppingCart } from 'lucide-react';
 
 export default function Login() {
@@ -40,7 +40,7 @@ export default function Login() {
     }
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -48,6 +48,12 @@ export default function Login() {
     if (cleanCode.length === 0) {
       setError('Informe o código de acesso.');
       return;
+    }
+
+    try {
+      await syncFromCloud();
+    } catch (err) {
+      console.error("Firebase sync error:", err);
     }
 
     const users = getUsers();

@@ -4640,6 +4640,46 @@ export const initDb = () => {
   }
 };
 
+// Firebase cloud sync helpers
+const getFirebaseUrl = () => {
+  const url = localStorage.getItem("firebase_db_url");
+  if (!url) return null;
+  return url.trim().replace(/\/+$/, "");
+};
+
+const syncToCloud = async (key, data) => {
+  const baseUrl = getFirebaseUrl();
+  if (!baseUrl) return;
+  try {
+    await fetch(`${baseUrl}/${key}.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch (e) {
+    console.error(`Error syncing ${key} to Firebase:`, e);
+  }
+};
+
+export const syncFromCloud = async () => {
+  const baseUrl = getFirebaseUrl();
+  if (!baseUrl) return;
+  try {
+    const keys = ["companies", "users", "products", "orders"];
+    for (const key of keys) {
+      const res = await fetch(`${baseUrl}/${key}.json`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          localStorage.setItem(`facilitadora_${key}`, JSON.stringify(data));
+        }
+      }
+    }
+  } catch (e) {
+    console.error("Error fetching from Firebase:", e);
+  }
+};
+
 // Companies Methods
 export const getCompanies = () => {
   initDb();
@@ -4648,6 +4688,7 @@ export const getCompanies = () => {
 
 export const saveCompanies = (companies) => {
   localStorage.setItem("facilitadora_companies", JSON.stringify(companies));
+  syncToCloud("companies", companies);
 };
 
 // Users Methods
@@ -4658,6 +4699,7 @@ export const getUsers = () => {
 
 export const saveUsers = (users) => {
   localStorage.setItem("facilitadora_users", JSON.stringify(users));
+  syncToCloud("users", users);
 };
 
 // Products Methods
@@ -4671,6 +4713,7 @@ export const getProducts = (companyId = null) => {
 
 export const saveProducts = (products) => {
   localStorage.setItem("facilitadora_products", JSON.stringify(products));
+  syncToCloud("products", products);
 };
 
 // Orders Methods
@@ -4684,4 +4727,5 @@ export const getOrders = (companyId = null) => {
 
 export const saveOrders = (orders) => {
   localStorage.setItem("facilitadora_orders", JSON.stringify(orders));
+  syncToCloud("orders", orders);
 };

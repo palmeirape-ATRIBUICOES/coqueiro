@@ -4,7 +4,8 @@ import {
   getCompanies, saveCompanies, 
   getUsers, saveUsers, 
   getProducts, saveProducts, 
-  getOrders, saveOrders 
+  getOrders, saveOrders,
+  syncFromCloud
 } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import { 
@@ -63,6 +64,8 @@ export default function Admin() {
     address: '', phone: '', whatsapp: '', hours: ''
   });
 
+  const [firebaseUrl, setFirebaseUrl] = useState(localStorage.getItem("firebase_db_url") || '');
+
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
 
@@ -111,12 +114,24 @@ export default function Admin() {
     }
     setCurrentUser(user);
 
-    // 2. Load DB values
+    // 2. Load DB values (offline cache first)
     const allCompanies = getCompanies();
     setCompanies(allCompanies);
     setUsers(getUsers());
     setProducts(getProducts());
     setOrders(getOrders());
+
+    // 2.1. Sync from Firebase in background and reload state
+    syncFromCloud().then(() => {
+      const freshCompanies = getCompanies();
+      setCompanies(freshCompanies);
+      setUsers(getUsers());
+      setProducts(getProducts());
+      setOrders(getOrders());
+      if (user.companyId && freshCompanies[user.companyId]) {
+        setStoreConfig({ ...freshCompanies[user.companyId] });
+      }
+    });
 
     // 3. Set default configs if user has a store
     if (user.companyId && allCompanies[user.companyId]) {
@@ -520,6 +535,19 @@ export default function Admin() {
     setCompanies(updatedCompanies);
     reloadBranding();
     showSuccess('Configuração visual e dados da loja salvos com sucesso!');
+  };
+
+  const handleSaveFirebaseUrl = (e) => {
+    e.preventDefault();
+    localStorage.setItem("firebase_db_url", firebaseUrl.trim());
+    showSuccess('URL do Firebase salva com sucesso! Sincronizando dados...');
+    if (firebaseUrl.trim()) {
+      syncFromCloud().then(() => {
+        window.location.reload();
+      });
+    } else {
+      window.location.reload();
+    }
   };
 
   if (!currentUser) return null;
@@ -1753,6 +1781,31 @@ export default function Admin() {
 
                 <button type="submit" className="btn btn-primary" style={{ display: 'inline-flex', alignSelf: 'flex-start' }}>
                   <Save size={16} /> Salvar Alterações
+                </button>
+              </form>
+
+              {/* Firebase Cloud Sync Configuration Section */}
+              <form onSubmit={handleSaveFirebaseUrl} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '800px', marginTop: '24px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+                  ☁️ Integração Cloud Database (Firebase)
+                </h3>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
+                  Conecte o sistema a um banco de dados online para sincronizar pedidos, clientes e produtos entre diferentes abas (normais e anônimas) e diferentes aparelhos (computador e celular) em tempo real.
+                </p>
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Firebase Realtime Database URL</label>
+                  <input 
+                    type="url" className="form-input" 
+                    placeholder="https://seu-projeto-default-rtdb.firebaseio.com"
+                    value={firebaseUrl}
+                    onChange={(e) => setFirebaseUrl(e.target.value)}
+                  />
+                  <small style={{ color: 'var(--text-light)', display: 'block', marginTop: '4px', fontSize: '11px' }}>
+                    * Deixe em branco para usar o modo de simulação LocalStorage (apenas offline).
+                  </small>
+                </div>
+                <button type="submit" className="btn btn-primary" style={{ display: 'inline-flex', alignSelf: 'flex-start', backgroundColor: '#eab308', color: '#1e293b' }}>
+                  <Save size={16} /> Conectar e Sincronizar Firebase
                 </button>
               </form>
             </div>
