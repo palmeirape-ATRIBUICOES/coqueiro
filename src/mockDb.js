@@ -1855,8 +1855,9 @@ export const saveUsers = (users) => {
 export const getProducts = (companyId = null) => {
   initDb();
   const all = JSON.parse(localStorage.getItem("facilitadora_products"));
-  if (!companyId) return all;
-  return all.filter(p => p.companyId === companyId);
+  if (!Array.isArray(all)) return [];
+  if (!companyId) return all.filter(Boolean);
+  return all.filter(p => p && p.companyId === companyId);
 };
 
 export const saveProducts = (products) => {
@@ -1867,8 +1868,9 @@ export const saveProducts = (products) => {
 export const getOrders = (companyId = null) => {
   initDb();
   const all = JSON.parse(localStorage.getItem("facilitadora_orders"));
-  if (!companyId) return all;
-  return all.filter(o => o.companyId === companyId);
+  if (!Array.isArray(all)) return [];
+  if (!companyId) return all.filter(Boolean);
+  return all.filter(o => o && o.companyId === companyId);
 };
 
 export const saveOrders = (orders) => {
