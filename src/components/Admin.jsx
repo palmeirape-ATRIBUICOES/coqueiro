@@ -75,14 +75,37 @@ export default function Admin() {
   };
 
   useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'facilitadora_orders') {
+        setOrders(getOrders());
+      }
+      if (e.key === 'facilitadora_products') {
+        setProducts(getProducts());
+      }
+      if (e.key === 'facilitadora_users') {
+        setUsers(getUsers());
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  useEffect(() => {
     // 1. Authenticate user
     const storedUser = localStorage.getItem('clubbi_active_merchant');
     if (!storedUser) {
       navigate('/login');
       return;
     }
-    const user = JSON.parse(storedUser);
-    if (user.role === 'cliente') {
+    let user;
+    try {
+      user = JSON.parse(storedUser);
+    } catch (e) {
+      localStorage.removeItem('clubbi_active_merchant');
+      navigate('/login');
+      return;
+    }
+    if (!user || user.role === 'cliente') {
       navigate('/');
       return;
     }

@@ -21,8 +21,15 @@ export default function Checkout() {
       navigate('/login');
       return;
     }
-    const user = JSON.parse(storedUser);
-    if (user.role !== 'cliente') {
+    let user;
+    try {
+      user = JSON.parse(storedUser);
+    } catch (e) {
+      localStorage.removeItem('clubbi_active_merchant');
+      navigate('/login');
+      return;
+    }
+    if (!user || user.role !== 'cliente') {
       navigate('/admin');
       return;
     }
@@ -35,18 +42,23 @@ export default function Checkout() {
     // 2. Load Cart
     const storedCart = localStorage.getItem(`cart_${user.code}`);
     if (storedCart) {
-      const items = JSON.parse(storedCart);
-      if (items.length === 0) {
+      try {
+        const items = JSON.parse(storedCart);
+        if (!Array.isArray(items) || items.length === 0) {
+          navigate('/');
+        } else {
+          setCart(items);
+        }
+      } catch (e) {
+        setCart([]);
         navigate('/');
-      } else {
-        setCart(items);
       }
     } else {
       navigate('/');
     }
   }, [navigate]);
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  const subtotal = cart.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.qty || 0)), 0);
 
   const handlePlaceOrder = (e) => {
     e.preventDefault();
