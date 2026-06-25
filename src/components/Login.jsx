@@ -6,7 +6,20 @@ import { ShoppingCart } from 'lucide-react';
 export default function Login() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const [showDebug, setShowDebug] = useState(false);
+  const [activeCodes, setActiveCodes] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      const u = getUsers();
+      if (u) {
+        setActiveCodes(Object.keys(u));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   useEffect(() => {
     // If user is already logged in, redirect them
@@ -168,6 +181,65 @@ export default function Login() {
           >
             Entrar no Sistema
           </button>
+
+          {/* Debug active access codes list */}
+          <div style={{ marginTop: '24px', borderTop: '1px dashed #e2e8f0', paddingTop: '16px' }}>
+            <button
+              type="button"
+              onClick={() => setShowDebug(!showDebug)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#64748b',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                gap: '4px'
+              }}
+            >
+              ⚙️ {showDebug ? 'Ocultar Códigos Ativos' : 'Mostrar Códigos Ativos (Debug)'}
+            </button>
+            
+            {showDebug && (
+              <div style={{
+                marginTop: '12px',
+                backgroundColor: '#f8fafc',
+                borderRadius: '8px',
+                padding: '12px',
+                fontSize: '11px',
+                color: '#475569',
+                textAlign: 'left',
+                maxHeight: '120px',
+                overflowY: 'auto'
+              }}>
+                <div style={{ fontWeight: 700, marginBottom: '6px', color: '#1e293b' }}>
+                  Códigos salvos nesta máquina (clique p/ usar):
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {activeCodes.map(c => (
+                    <span 
+                      key={c} 
+                      onClick={() => setCode(c)}
+                      style={{
+                        backgroundColor: '#e2e8f0',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontWeight: 700,
+                        fontFamily: 'monospace'
+                      }}
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </form>
       </div>
     </div>
