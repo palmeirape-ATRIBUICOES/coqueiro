@@ -134,6 +134,21 @@ for (let i = 0; i < 100; i++) {
     packageItems: ${packageItems},
     packagePrice: ${packagePrice}
   }`);
+
+  realProducts.push(`  {
+    id: "coq-real-${idCounter}",
+    code: "COQ-REAL-${idCounter}",
+    description: "${item.n} ${brand}",
+    category: "${category}",
+    brand: "${brand}",
+    unit: "Cx c/ ${packageItems}",
+    price: ${price},
+    stock: ${Math.floor(Math.random() * 200 + 50)},
+    imageUrl: "${imageUrl}",
+    companyId: "coqueiro",
+    packageItems: ${packageItems},
+    packagePrice: ${packagePrice}
+  }`);
   idCounter++;
 }
 
