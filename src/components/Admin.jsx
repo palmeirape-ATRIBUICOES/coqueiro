@@ -1192,7 +1192,7 @@ export default function Admin() {
                             </div>
                           </td>
                           <td>{p.category}</td>
-                          <td style={{ fontWeight: 700 }}>R$ {p.price.toFixed(2)}</td>
+                          <td style={{ fontWeight: 700 }}>R$ {Number(p.price || 0).toFixed(2)}</td>
                           <td style={{ fontWeight: 600, color: p.stock < 20 ? 'var(--danger)' : 'var(--text-primary)' }}>
                             {p.stock} {p.unit}
                           </td>
@@ -1785,8 +1785,8 @@ export default function Admin() {
                   <td style={{ border: '1px solid black', padding: '6px' }}>{item.description}</td>
                   <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</td>
                   <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>{item.unit}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {item.price.toFixed(2)}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {(item.price * item.qty).toFixed(2)}</td>
+                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number(item.price || 0).toFixed(2)}</td>
+                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number((item.price * item.qty) || 0).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

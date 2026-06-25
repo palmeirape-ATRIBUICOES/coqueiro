@@ -148,11 +148,11 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
           {variant === 'atacado' ? (
             <>
               <span style={{ fontSize: '11px', color: '#94a3b8' }}>
-                R$ {p.price.toFixed(2)}/un
+                R$ {Number(p.price || 0).toFixed(2)}/un
               </span>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                 <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                  R$ {currentPrice.toFixed(2)}
+                  R$ {Number(currentPrice || 0).toFixed(2)}
                 </span>
               </div>
             </>
@@ -161,7 +161,7 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
               <span style={{ fontSize: '11px', color: '#94a3b8' }}>Preço final</span>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                 <span style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                  R$ {currentPrice.toFixed(2)}
+                  R$ {Number(currentPrice || 0).toFixed(2)}
                 </span>
               </div>
             </>

@@ -178,7 +178,7 @@ export default function CartDrawer({ isOpen, onClose, cart, updateQty, removePro
                       {item.description}
                     </span>
                     <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                      Marca: {item.brand} • Preço: R$ {item.price.toFixed(2)} / {item.unit}
+                      Marca: {item.brand} • Preço: R$ {Number(item.price || 0).toFixed(2)} / {item.unit}
                     </span>
 
                     {/* Quantity Controls & Price */}

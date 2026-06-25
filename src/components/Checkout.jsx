@@ -271,7 +271,7 @@ export default function Checkout() {
                   <div style={{ flex: 1, paddingRight: '8px' }}>
                     <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.description}</div>
                     <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                      {item.qty} un • R$ {item.price.toFixed(2)} / {item.unit}
+                      {item.qty} un • R$ {Number(item.price || 0).toFixed(2)} / {item.unit}
                     </div>
                   </div>
                   <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
