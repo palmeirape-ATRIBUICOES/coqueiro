@@ -16,13 +16,18 @@ export const WhitelabelProvider = ({ children }) => {
     // Check if there is an authenticated user session
     const storedUser = localStorage.getItem('clubbi_active_merchant');
     if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.companyId && companies[user.companyId]) {
-        // If the user belongs to a specific company, override the branding to match that company
-        setCurrentCompany(companies[user.companyId]);
-        setActiveCompanyId(user.companyId);
-        applyBranding(companies[user.companyId]);
-        return;
+      try {
+        const user = JSON.parse(storedUser);
+        if (user && user.companyId && companies[user.companyId]) {
+          // If the user belongs to a specific company, override the branding to match that company
+          setCurrentCompany(companies[user.companyId]);
+          setActiveCompanyId(user.companyId);
+          applyBranding(companies[user.companyId]);
+          return;
+        }
+      } catch (e) {
+        console.error("Error parsing stored user session:", e);
+        localStorage.removeItem('clubbi_active_merchant');
       }
     }
 

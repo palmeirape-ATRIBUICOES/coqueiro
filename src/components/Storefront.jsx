@@ -59,8 +59,15 @@ export default function Storefront() {
       navigate('/login');
       return;
     }
-    const user = JSON.parse(storedUser);
-    if (user.role !== 'cliente') {
+    let user;
+    try {
+      user = JSON.parse(storedUser);
+    } catch (e) {
+      localStorage.removeItem('clubbi_active_merchant');
+      navigate('/login');
+      return;
+    }
+    if (!user || user.role !== 'cliente') {
       navigate('/admin');
       return;
     }
@@ -78,7 +85,12 @@ export default function Storefront() {
     // 4. Load active cart
     const storedCart = localStorage.getItem(`cart_${user.code}`);
     if (storedCart) {
-      setCart(JSON.parse(storedCart));
+      try {
+        const parsed = JSON.parse(storedCart);
+        setCart(Array.isArray(parsed) ? parsed : []);
+      } catch (e) {
+        setCart([]);
+      }
     }
   }, [navigate]);
 
@@ -155,8 +167,8 @@ export default function Storefront() {
 
   const categories = ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
 
-  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = cart.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.qty || 0)), 0);
+  const cartCount = cart.reduce((sum, item) => sum + Number(item.qty || 0), 0);
 
   const getStatusBadgeClass = (status) => {
     switch (status) {

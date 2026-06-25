@@ -12,11 +12,17 @@ export default function Login() {
     // If user is already logged in, redirect them
     const storedUser = localStorage.getItem('clubbi_active_merchant');
     if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.role === 'cliente') {
-        navigate('/');
-      } else {
-        navigate('/admin');
+      try {
+        const user = JSON.parse(storedUser);
+        if (user && user.role) {
+          if (user.role === 'cliente') {
+            navigate('/');
+          } else {
+            navigate('/admin');
+          }
+        }
+      } catch (e) {
+        localStorage.removeItem('clubbi_active_merchant');
       }
     }
   }, [navigate]);
