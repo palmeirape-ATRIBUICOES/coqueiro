@@ -4614,9 +4614,17 @@ export const initDb = () => {
     localStorage.removeItem("facilitadora_users");
     localStorage.removeItem("facilitadora_products");
   }
-  // FORCE UPDATE for 100 products and new users
-  localStorage.removeItem("facilitadora_products");
-  localStorage.removeItem("facilitadora_users");
+  // Force update only if new Coqueiro products are missing
+  const existingProducts = localStorage.getItem("facilitadora_products");
+  if (existingProducts && !existingProducts.includes("coq-real-1")) {
+    localStorage.removeItem("facilitadora_products");
+  }
+
+  // Force update only if new CLUBB user is missing
+  const existingUsers = localStorage.getItem("facilitadora_users");
+  if (existingUsers && !existingUsers.includes("CLUBB")) {
+    localStorage.removeItem("facilitadora_users");
+  }
 
   if (!localStorage.getItem("facilitadora_companies")) {
     localStorage.setItem("facilitadora_companies", JSON.stringify(INITIAL_COMPANIES));
