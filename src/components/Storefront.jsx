@@ -621,7 +621,7 @@ export default function Storefront() {
               ) : (
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(210px, 1fr))',
+                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
                   gap: isMobile ? '12px' : '20px'
                 }}>
                   {filteredProducts.map(p => {
