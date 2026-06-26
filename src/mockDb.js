@@ -4642,7 +4642,7 @@ export const initDb = () => {
 
 // Firebase cloud sync helpers
 const getFirebaseUrl = () => {
-  const url = localStorage.getItem("firebase_db_url");
+  const url = localStorage.getItem("firebase_db_url") || "https://coqueiro-a586e-default-rtdb.firebaseio.com";
   if (!url) return null;
   return url.trim().replace(/\/+$/, "");
 };
