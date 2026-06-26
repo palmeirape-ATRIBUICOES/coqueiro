@@ -98,6 +98,70 @@ const categories = {
   }
 };
 
+const itemImageMap = {
+  "Refrigerante 2L": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
+  "Cerveja Pilsen Lata 350ml": "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
+  "Água Mineral Sem Gás 500ml": "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&auto=format&fit=crop&q=60",
+  "Suco Integral 1L": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
+  "Energético 250ml": "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
+  "Água Tônica Lata 350ml": "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
+  "Cerveja Puro Malte 600ml": "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
+  "Refrigerante Lata 350ml": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
+  "Isotônico Laranja 500ml": "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
+  "Chá Gelado Pêssego 1.5L": "https://images.unsplash.com/photo-1556881286-fc6915169721?w=300&auto=format&fit=crop&q=60",
+  "Arroz Tipo 1 5kg": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
+  "Feijão Carioca 1kg": "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=300&auto=format&fit=crop&q=60",
+  "Óleo de Soja 900ml": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
+  "Azeite Extra Virgem 500ml": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
+  "Macarrão Espaguete 500g": "https://images.unsplash.com/photo-1621961401348-f099ce688b4a?w=300&auto=format&fit=crop&q=60",
+  "Farinha de Trigo 1kg": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
+  "Açúcar Refinado 1kg": "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
+  "Café Torrado e Moído 500g": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
+  "Molho de Tomate 340g": "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
+  "Sal Refinado 1kg": "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
+  "Milho para Pipoca 500g": "https://images.unsplash.com/photo-1578271851222-4022766062a1?w=300&auto=format&fit=crop&q=60",
+  "Leite Condensado 395g": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
+  "Creme de Leite 200g": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
+  "Extrato de Tomate 140g": "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
+  "Biscoito Recheado Chocolate 140g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Biscoito Água e Sal 200g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Cookies Tradicional 100g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Wafer Chocolate 120g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Torrada Tradicional 160g": "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
+  "Biscoito Maizena 400g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Biscoito de Polvilho 100g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Biscoito Amanteigado 300g": "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
+  "Bolo Sabor Laranja 250g": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
+  "Sabão em Pó 1kg": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
+  "Detergente Líquido Neutro 500ml": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
+  "Amaciante 2L": "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
+  "Limpador Multiuso 500ml": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
+  "Água Sanitária 2L": "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
+  "Esponja de Aço 8un": "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
+  "Esponja Dupla Face 4un": "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
+  "Desinfetante Pinho 1L": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
+  "Sabão em Barra 5un": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
+  "Saco para Lixo 50L 30un": "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
+  "Creme Dental Menta 90g": "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
+  "Sabonete em Barra 90g": "https://images.unsplash.com/photo-1607006342411-9a910c64b6c8?w=300&auto=format&fit=crop&q=60",
+  "Desodorante Aerosol 150ml": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
+  "Shampoo Cabelos Normais 350ml": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
+  "Condicionador 350ml": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
+  "Fio Dental 50m": "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
+  "Enxaguante Bucal 500ml": "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
+  "Absorvente com Abas 8un": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
+  "Haste Flexível 75un": "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
+  "Papel Higiênico Folha Dupla 4un": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
+  "Leite UHT Integral 1L": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
+  "Leite UHT Desnatado 1L": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
+  "Iogurte Morango 900g": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
+  "Bebida Láctea Achocolatada 200ml": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
+  "Manteiga Extra com Sal 200g": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&auto=format&fit=crop&q=60",
+  "Requeijão Tradicional 200g": "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
+  "Queijo Parmesão Ralado 50g": "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
+  "Creme de Queijo Minas 200g": "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60"
+};
+
 let realProducts = [];
 let idCounter = 1;
 
@@ -115,10 +179,7 @@ for (let i = 0; i < 100; i++) {
   const packageItems = item.pkg;
   const packagePrice = (price * packageItems * 0.95).toFixed(2); // 5% bulk discount
   
-  // Format image text for placehold (encode uri)
-  const imageText = encodeURIComponent(item.n.split(' ').slice(0, 2).join(' '));
-  const bg = category === 'Bebidas' ? '0284c7' : category === 'Mercearia' ? 'ea580c' : category === 'Higiene' ? '0891b2' : '475569';
-  const imageUrl = `https://placehold.co/300x300/${bg}/ffffff?text=${imageText}`;
+  const imageUrl = itemImageMap[item.n] || `https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60`;
 
   realProducts.push(`  {
     id: "clubbi-real-${idCounter}",
