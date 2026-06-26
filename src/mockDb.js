@@ -4672,6 +4672,17 @@ export const syncFromCloud = async () => {
         const data = await res.json();
         if (data) {
           localStorage.setItem(`facilitadora_${key}`, JSON.stringify(data));
+        } else {
+          // Seed Firebase with local data if Firebase is empty
+          const localData = localStorage.getItem(`facilitadora_${key}`);
+          if (localData) {
+            try {
+              const parsed = JSON.parse(localData);
+              if (parsed) {
+                await syncToCloud(key, parsed);
+              }
+            } catch(e) {}
+          }
         }
       }
     }
