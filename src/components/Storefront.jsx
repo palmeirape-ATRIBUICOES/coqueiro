@@ -720,37 +720,18 @@ export default function Storefront() {
 
       {/* Floating total footer */}
       {activeTab === 'catalog' && cartCount > 0 && (
-        <div style={{
-          position: 'fixed',
-          bottom: '24px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: '#0f172a',
-          color: 'white',
-          padding: '12px 24px',
-          borderRadius: '999px',
-          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '24px',
-          zIndex: 999,
-          cursor: 'pointer'
-        }}
-        onClick={() => setIsCartOpen(true)}
-        >
-          <span style={{ fontSize: '13px', fontWeight: 500 }}>
-            {cartCount} {cartCount === 1 ? 'item' : 'itens'} no carrinho • <strong>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
-          </span>
-          <span style={{
-            backgroundColor: company.primaryColor,
-            color: 'white',
-            padding: '6px 16px',
-            borderRadius: '999px',
-            fontSize: '12px',
-            fontWeight: 700
-          }}>
-            Ver Orçamento
-          </span>
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-50 animate-slide-up">
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="w-full text-white py-4 px-6 rounded-2xl flex items-center justify-between shadow-lg active:scale-95 transition-all font-bold cursor-pointer border-none"
+            style={{ backgroundColor: company.primaryColor }}
+          >
+            <span className="flex items-center gap-2">
+              <span>🛒 Ver Carrinho</span>
+              <span className="bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-black">{cartCount}</span>
+            </span>
+            <span>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} →</span>
+          </button>
         </div>
       )}
 
