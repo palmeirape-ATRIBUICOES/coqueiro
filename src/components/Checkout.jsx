@@ -19,6 +19,13 @@ export default function Checkout() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('pix');
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     // 1. Check Authentication
     const storedUser = localStorage.getItem('coqueiro_active_merchant');
@@ -277,8 +284,8 @@ export default function Checkout() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 380px',
-          gap: '32px',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
+          gap: isMobile ? '16px' : '32px',
           alignItems: 'start'
         }}>
           {/* Form Side */}

@@ -694,10 +694,10 @@ export default function Storefront() {
       </main>
 
       {/* Floating total footer (Only on desktop catalog) */}
-      {!isMobile && activeTab === 'catalog' && cartCount > 0 && (
+      {activeTab === 'catalog' && cartCount > 0 && (
         <div style={{
           position: 'fixed',
-          bottom: '24px',
+          bottom: isMobile ? '80px' : '24px',
           left: '50%',
           transform: 'translateX(-50%)',
           backgroundColor: '#0f172a',
