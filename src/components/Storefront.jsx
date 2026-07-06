@@ -562,75 +562,35 @@ export default function Storefront() {
           <div>
             {/* Category selection */}
             <div style={{ marginBottom: '24px' }}>
-              {isMobile ? (
-                /* Mobile categories: premium pills */
-                <div style={{
-                  display: 'flex',
-                  gap: '8px',
-                  overflowX: 'auto',
-                  paddingBottom: '8px',
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none'
-                }}>
-                  {categories.map(cat => {
-                    const isActive = activeCategory === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        style={{
-                          borderRadius: '9999px',
-                          padding: '8px 16px',
-                          whiteSpace: 'nowrap',
-                          fontWeight: 700,
-                          fontSize: '12px',
-                          backgroundColor: isActive ? company.primaryColor : '#f1f5f9',
-                          color: isActive ? '#ffffff' : '#475569',
-                          border: 'none',
-                          boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s'
-                        }}
-                      >
-                        {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                /* Desktop categories: premium pills */
-                <div style={{
-                  display: 'flex',
-                  gap: '8px',
-                  overflowX: 'auto',
-                  paddingBottom: '8px'
-                }}>
-                  {categories.map(cat => {
-                    const isActive = activeCategory === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        style={{
-                          borderRadius: '9999px',
-                          padding: '8px 16px',
-                          whiteSpace: 'nowrap',
-                          fontWeight: 700,
-                          fontSize: '13px',
-                          backgroundColor: isActive ? company.primaryColor : '#f1f5f9',
-                          color: isActive ? '#ffffff' : '#475569',
-                          border: 'none',
-                          boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s'
-                        }}
-                      >
-                        {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="categories-scroll">
+                {categories.map(cat => {
+                  const isActive = activeCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      style={{
+                        borderRadius: '9999px',
+                        padding: '8px 16px',
+                        whiteSpace: 'nowrap',
+                        fontWeight: 700,
+                        fontSize: '12px',
+                        backgroundColor: isActive ? company.primaryColor : '#ffffff',
+                        color: isActive ? '#ffffff' : '#475569',
+                        border: isActive ? 'none' : '1px solid var(--border-color)',
+                        boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             
             {/* Search Box - Premium like reference site */}
@@ -677,11 +637,7 @@ export default function Storefront() {
                   <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>Nenhum produto encontrado.</p>
                 </div>
               ) : (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
-                  gap: isMobile ? '12px' : '20px'
-                }}>
+                <div className="products-grid">
                   {filteredProducts.map(p => {
                     return (
                       <ProductCard 
