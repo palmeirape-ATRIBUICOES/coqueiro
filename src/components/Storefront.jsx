@@ -275,38 +275,7 @@ export default function Storefront() {
               </div>
             </div>
 
-            {/* Mobile Search Bar */}
-            {activeTab === 'catalog' && (
-              <div style={{ position: 'relative', width: '100%' }}>
-                <input 
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Buscar produtos..."
-                  className="form-input"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{
-                    paddingLeft: '38px',
-                    borderRadius: '999px',
-                    border: '1px solid var(--border-color)',
-                    height: '38px',
-                    fontSize: '13px',
-                    backgroundColor: '#f8fafc',
-                    width: '100%'
-                  }}
-                />
-                <Search 
-                  size={14} 
-                  style={{
-                    position: 'absolute',
-                    left: '14px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: '#94a3b8'
-                  }}
-                />
-              </div>
-            )}
+
           </div>
         ) : (
           /* Desktop Header */
@@ -348,38 +317,7 @@ export default function Storefront() {
 
             
 
-            {/* Search Box (Only on catalog tab) */}
-            {activeTab === 'catalog' ? (
-              <div style={{ flex: 1, maxWidth: '340px', position: 'relative' }}>
-                <input 
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Buscar produtos ou marcas..."
-                  className="form-input"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{
-                    paddingLeft: '40px',
-                    borderRadius: '999px',
-                    border: '1.5px solid var(--border-color)',
-                    height: '40px',
-                    fontSize: '13px'
-                  }}
-                />
-                <Search 
-                  size={16} 
-                  style={{
-                    position: 'absolute',
-                    left: '14px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: 'var(--text-light)'
-                  }}
-                />
-              </div>
-            ) : (
-              <div style={{ flex: 1 }} />
-            )}
+            <div style={{ flex: 1 }} />
 
             {/* Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
@@ -611,6 +549,39 @@ export default function Storefront() {
                   })}
                 </div>
               )}
+            </div>
+            
+            {/* Search Box - Premium like reference site */}
+            <div style={{ position: 'relative', marginBottom: '24px', width: '100%' }}>
+              <input 
+                ref={searchInputRef}
+                type="text"
+                placeholder="O que você está procurando hoje?"
+                className="form-input"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  paddingLeft: '44px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--border-color)',
+                  backgroundColor: '#ffffff',
+                  height: '48px',
+                  fontSize: '14px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
+                  width: '100%',
+                  outline: 'none'
+                }}
+              />
+              <Search 
+                size={18} 
+                style={{
+                  position: 'absolute',
+                  left: '16px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#94a3b8'
+                }}
+              />
             </div>
 
             {/* Products grid */}
