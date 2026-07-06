@@ -561,39 +561,17 @@ export default function Storefront() {
         {activeTab === 'catalog' && (
           <div>
             {/* Category selection */}
-            <div style={{ marginBottom: '24px' }}>
-              <div className="categories-scroll" style={{
-                display: 'flex',
-                gap: '8px',
-                overflowX: 'auto',
-                paddingBottom: '8px',
-                whiteSpace: 'nowrap',
-                flexWrap: 'nowrap',
-                WebkitOverflowScrolling: 'touch',
-                width: '100%'
-              }}>
+            <div className="mb-6">
+              <div className="flex gap-2 overflow-x-auto scrollbar-none py-2 w-full whitespace-nowrap scroll-smooth select-none" style={{ WebkitOverflowScrolling: 'touch' }}>
                 {categories.map(cat => {
                   const isActive = activeCategory === cat;
                   return (
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      style={{
-                        borderRadius: '9999px',
-                        padding: '8px 16px',
-                        whiteSpace: 'nowrap',
-                        fontWeight: 700,
-                        fontSize: '12px',
-                        backgroundColor: isActive ? company.primaryColor : '#ffffff',
-                        color: isActive ? '#ffffff' : '#475569',
-                        border: isActive ? 'none' : '1px solid var(--border-color)',
-                        boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
+                      className={`rounded-full py-2 px-4 whitespace-nowrap font-bold text-xs cursor-pointer border transition-all flex items-center gap-1.5
+                        ${isActive ? 'text-white border-transparent' : 'bg-white text-gray-600 border-gray-200'}`}
+                      style={{ backgroundColor: isActive ? company.primaryColor : undefined }}
                     >
                       {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
                     </button>
@@ -642,16 +620,11 @@ export default function Storefront() {
               </h2>
 
               {filteredProducts.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '60px 0', backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>Nenhum produto encontrado.</p>
+                <div className="text-center py-16 bg-white rounded-3xl border border-gray-100">
+                  <p className="text-sm font-semibold text-gray-500">Nenhum produto encontrado.</p>
                 </div>
               ) : (
-                <div className="products-grid" style={{
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
-                  gap: isMobile ? '12px' : '20px',
-                  width: '100%'
-                }}>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 w-full">
                   {filteredProducts.map(p => {
                     return (
                       <ProductCard 

@@ -21,169 +21,80 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
     updateCartQty(cartItemId, delta);
   };
 
+  const price = currentPrice;
+  const isOutOfStock = p.stock <= 0;
+
   return (
-    <div className="card" style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      border: '1px solid #f1f5f9',
-      backgroundColor: '#ffffff',
-      textAlign: 'left',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
-      position: 'relative',
-      height: '100%',
-      overflow: 'hidden',
-      borderRadius: isMobile ? '24px' : '16px',
-      padding: isMobile ? '12px' : '16px'
-    }}>
+    <div className={`card p-3 flex flex-col justify-between hover:shadow-md transition-shadow relative bg-white border border-gray-100 rounded-3xl ${isOutOfStock ? 'opacity-60' : ''}`}>
       {/* Discount Tag */}
       {hasAtacado && (
-        <div style={{
-          position: 'absolute',
-          top: '16px',
-          left: '16px',
-          backgroundColor: '#10b981',
-          color: 'white',
-          fontSize: '9px',
-          fontWeight: 800,
-          padding: '3px 8px',
-          borderRadius: '9999px',
-          zIndex: 2,
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px'
-        }}>
+        <div className="absolute top-3 left-3 bg-emerald-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full z-10 uppercase tracking-wide">
           Atacado
         </div>
       )}
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="flex-1 flex flex-col">
         {/* Image */}
-        <div style={{
-          height: isMobile ? '110px' : '150px',
-          backgroundColor: '#f8fafc',
-          borderRadius: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: isMobile ? '10px' : '12px',
-          width: '100%',
-          padding: '8px',
-          overflow: 'hidden'
-        }}>
+        <div className="h-32 w-full flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden p-2 relative mb-2.5">
           {p.imageUrl ? (
-            <img src={p.imageUrl} alt={p.description} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+            <img src={p.imageUrl} alt={p.description} className="max-h-full max-w-full object-contain animate-fade-in" />
           ) : (
-            <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>Sem Foto</span>
+            <span className="text-xs text-gray-400 font-bold">Sem Foto</span>
+          )}
+          {isOutOfStock && (
+            <span className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-black uppercase tracking-wider rounded-2xl select-none">Esgotado</span>
           )}
         </div>
 
         {/* Description / Title */}
-        <h4 style={{
-          fontSize: isMobile ? '13px' : '14px',
-          fontWeight: 800,
-          color: '#0f172a',
-          lineHeight: '1.3',
-          marginTop: '0',
-          marginBottom: '2px',
-          overflow: 'hidden',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          textTransform: 'uppercase'
-        }}>
+        <h4 className="font-extrabold text-gray-900 text-sm line-clamp-2 leading-snug uppercase">
           {p.description}
         </h4>
 
         {/* Brand/Subtext */}
-        <span style={{ fontSize: isMobile ? '10px' : '11px', color: '#94a3b8', fontWeight: 500, display: 'block', marginBottom: '2px' }}>
+        <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-2">
           {p.brand || 'Sem descrição'}
-        </span>
+        </p>
 
         {/* Stock Badge */}
-        <span style={{
-          display: 'inline-block',
-          fontSize: '9px',
-          fontWeight: 900,
-          padding: '2px 6px',
-          borderRadius: '6px',
-          marginTop: '4px',
-          backgroundColor: p.stock > 0 ? '#ecfdf5' : '#fef2f2',
-          color: p.stock > 0 ? '#047857' : '#b91c1c',
-          width: 'fit-content'
-        }}>
+        <span className={`inline-block text-[9px] font-black px-1.5 py-0.5 rounded-md mt-1.5 w-fit
+          ${p.stock > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
           {p.stock > 0 ? `Estoque: ${p.stock} un` : 'Esgotado'}
         </span>
         
         {/* Variant Tabs */}
         {hasAtacado ? (
-          <div style={{
-            display: 'flex',
-            backgroundColor: '#f1f5f9',
-            borderRadius: '9999px',
-            padding: '2px',
-            marginBottom: isMobile ? '10px' : '12px',
-            marginTop: isMobile ? '8px' : '10px',
-            width: '100%'
-          }}>
+          <div className="flex bg-gray-100 rounded-full p-0.5 my-2.5 w-full">
             <button
               onClick={() => setVariant('atacado')}
-              style={{
-                flex: 1,
-                border: 'none',
-                padding: '4px 8px',
-                fontSize: '10px',
-                fontWeight: 700,
-                borderRadius: '9999px',
-                cursor: 'pointer',
-                backgroundColor: variant === 'atacado' ? '#ffffff' : 'transparent',
-                color: variant === 'atacado' ? '#0f172a' : '#64748b',
-                boxShadow: variant === 'atacado' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                transition: 'all 0.1s'
-              }}
+              className={`flex-1 border-none py-1 px-2 text-[10px] font-bold rounded-full transition-all cursor-pointer
+                ${variant === 'atacado' ? 'bg-white text-gray-900 shadow-sm' : 'bg-transparent text-gray-500'}`}
             >
               Caixa
             </button>
             <button
               onClick={() => setVariant('unit')}
-              style={{
-                flex: 1,
-                border: 'none',
-                padding: '4px 8px',
-                fontSize: '10px',
-                fontWeight: 700,
-                borderRadius: '9999px',
-                cursor: 'pointer',
-                backgroundColor: variant === 'unit' ? '#ffffff' : 'transparent',
-                color: variant === 'unit' ? '#0f172a' : '#64748b',
-                boxShadow: variant === 'unit' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                transition: 'all 0.1s'
-              }}
+              className={`flex-1 border-none py-1 px-2 text-[10px] font-bold rounded-full transition-all cursor-pointer
+                ${variant === 'unit' ? 'bg-white text-gray-900 shadow-sm' : 'bg-transparent text-gray-500'}`}
             >
               Unid
             </button>
           </div>
         ) : (
-          <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '8px', fontWeight: 600, marginTop: '8px' }}>
+          <div className="text-[10px] text-gray-400 my-2 font-bold">
             {currentUnit}
           </div>
         )}
 
         {/* Pricing details and actions Row */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: 'auto',
-          paddingTop: '8px',
-          gap: '8px'
-        }}>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="mt-auto pt-2 flex items-center justify-between gap-1.5">
+          <div className="flex flex-col">
             {variant === 'atacado' && (
-              <span style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 600 }}>
+              <span className="text-[9px] text-gray-400 font-bold leading-none mb-0.5">
                 R$ {Number(p.price || 0).toFixed(2)}/un
               </span>
             )}
-            <span style={{ fontSize: isMobile ? '16px' : '18px', fontWeight: 900, color: company.primaryColor }}>
+            <span className="font-black text-sm" style={{ color: company.primaryColor }}>
               R$ {Number(currentPrice || 0).toFixed(2)}
             </span>
           </div>
@@ -192,61 +103,22 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
           {qty === 0 ? (
             <button
               onClick={handleAdd}
-              disabled={p.stock <= 0}
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: p.stock > 0 ? company.primaryColor : '#cbd5e1',
-                color: 'white',
-                border: 'none',
-                fontSize: '18px',
-                fontWeight: 800,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: p.stock > 0 ? 'pointer' : 'not-allowed',
-                boxShadow: p.stock > 0 ? '0 2px 6px rgba(0,0,0,0.1)' : 'none',
-                transition: 'transform 0.1s active'
-              }}
+              disabled={isOutOfStock}
+              className="w-9 h-9 rounded-full font-black text-lg flex items-center justify-center active:scale-90 transition-all shadow-sm text-white cursor-pointer border-none"
+              style={{ backgroundColor: isOutOfStock ? '#cbd5e1' : company.primaryColor }}
             >
               +
             </button>
           ) : (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: '#f1f5f9',
-              borderRadius: '12px',
-              padding: '2px',
-              height: '36px'
-            }}>
+            <div className="flex items-center bg-gray-100 rounded-xl p-0.5 h-9">
               <button 
                 onClick={() => handleUpdate(-1)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  width: '24px',
-                  height: '100%',
-                  cursor: 'pointer',
-                  color: '#475569',
-                  fontWeight: 800,
-                  fontSize: '14px'
-                }}
+                className="border-none bg-transparent w-6 h-full cursor-pointer text-gray-600 font-extrabold text-sm"
               >-</button>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: '#0f172a', minWidth: '18px', textAlign: 'center' }}>{qty}</span>
+              <span className="text-xs font-extrabold text-gray-900 min-w-[16px] text-center">{qty}</span>
               <button 
                 onClick={() => handleUpdate(1)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  width: '24px',
-                  height: '100%',
-                  cursor: 'pointer',
-                  color: '#475569',
-                  fontWeight: 800,
-                  fontSize: '14px'
-                }}
+                className="border-none bg-transparent w-6 h-full cursor-pointer text-gray-600 font-extrabold text-sm"
               >+</button>
             </div>
           )}

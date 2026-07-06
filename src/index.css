@@ -248,30 +248,12 @@ body {
   }
 }
 
-.products-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 12px !important;
-}
-@media (min-width: 769px) {
-  .products-grid {
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 20px !important;
-  }
-}
-
-.categories-scroll {
-  display: flex !important;
-  gap: 8px !important;
-  overflow-x: auto !important;
-  padding-bottom: 8px !important;
-  white-space: nowrap !important;
-  flex-wrap: nowrap !important;
-  -webkit-overflow-scrolling: touch !important;
-  width: 100% !important;
-}
-.categories-scroll::-webkit-scrollbar {
+.scrollbar-none::-webkit-scrollbar {
   display: none !important;
+}
+.scrollbar-none {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* Form controls */
