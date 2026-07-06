@@ -35,10 +35,10 @@ export default function Storefront() {
   const [activeBanner, setActiveBanner] = useState(0);
   const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' or 'orders'
   const [clientOrders, setClientOrders] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -562,7 +562,16 @@ export default function Storefront() {
           <div>
             {/* Category selection */}
             <div style={{ marginBottom: '24px' }}>
-              <div className="categories-scroll">
+              <div className="categories-scroll" style={{
+                display: 'flex',
+                gap: '8px',
+                overflowX: 'auto',
+                paddingBottom: '8px',
+                whiteSpace: 'nowrap',
+                flexWrap: 'nowrap',
+                WebkitOverflowScrolling: 'touch',
+                width: '100%'
+              }}>
                 {categories.map(cat => {
                   const isActive = activeCategory === cat;
                   return (
@@ -637,7 +646,12 @@ export default function Storefront() {
                   <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>Nenhum produto encontrado.</p>
                 </div>
               ) : (
-                <div className="products-grid">
+                <div className="products-grid" style={{
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
+                  gap: isMobile ? '12px' : '20px',
+                  width: '100%'
+                }}>
                   {filteredProducts.map(p => {
                     return (
                       <ProductCard 
