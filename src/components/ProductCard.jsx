@@ -77,12 +77,7 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
           )}
         </div>
 
-        {/* Brand */}
-        <span style={{ fontSize: isMobile ? '9px' : '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, display: 'block', marginBottom: '2px' }}>
-          {p.brand}
-        </span>
-        
-        {/* Description */}
+        {/* Description / Title */}
         <h4 style={{
           fontSize: isMobile ? '13px' : '14px',
           fontWeight: 800,
@@ -94,10 +89,15 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
           display: '-webkit-box',
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
-          flex: 1
+          textTransform: 'uppercase'
         }}>
           {p.description}
         </h4>
+
+        {/* Brand/Subtext */}
+        <span style={{ fontSize: isMobile ? '10px' : '11px', color: '#94a3b8', fontWeight: 500, display: 'block', marginBottom: '2px' }}>
+          {p.brand || 'Sem descrição'}
+        </span>
 
         {/* Stock Badge */}
         <span style={{
@@ -196,7 +196,7 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '12px',
+                borderRadius: '50%',
                 backgroundColor: p.stock > 0 ? company.primaryColor : '#cbd5e1',
                 color: 'white',
                 border: 'none',

@@ -220,115 +220,180 @@ export default function Storefront() {
         color: '#0f172a'
       }}>
         {isMobile ? (
-          /* Mobile Header */
-          <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-              {/* Logo / Company Name */}
-              <div 
-                onClick={() => { setSearch(''); setActiveCategory('Todos'); setActiveTab('catalog'); }}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
-              >
+          /* Mobile Header - screenshot replica */
+          <div style={{
+            padding: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: '#ffffff'
+          }}>
+            {/* Left side: store name and greeting */}
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{
                   width: '32px',
                   height: '32px',
                   borderRadius: '8px',
-                  backgroundColor: company.primaryColor,
+                  backgroundColor: `${company.primaryColor}15`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 800,
-                  fontSize: '14px'
+                  fontSize: '18px'
                 }}>
-                  {(company.logoText || company.name).substring(0, 2).toUpperCase()}
+                  🏪
                 </div>
                 <span style={{
-                  fontFamily: "'Outfit', sans-serif",
                   fontSize: '18px',
-                  fontWeight: 800,
-                  color: '#0f172a'
+                  fontWeight: 900,
+                  color: '#0f172a',
+                  fontFamily: "'Inter', sans-serif"
                 }}>
-                  {company.logoText || company.name}
+                  {company.name}
                 </span>
               </div>
-
-              {/* Delivery Address Condensed */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                backgroundColor: '#f1f5f9',
-                color: '#475569',
-                borderRadius: '12px',
-                padding: '4px 8px',
-                fontSize: '10px',
-                fontWeight: 600,
-                maxWidth: '180px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
-              }}
-              title={merchant.address}
-              >
-                <span>📍</span>
-                <span>{merchant.address ? merchant.address.split(',')[1]?.trim() || merchant.address : 'Entrega'}</span>
-              </div>
+              <span style={{
+                fontSize: '13px',
+                color: '#64748b',
+                marginTop: '4px',
+                fontWeight: 500
+              }}>
+                Olá, {merchant?.name ? merchant.name.toLowerCase() : 'visitante'}
+              </span>
             </div>
 
+            {/* Right side: round actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Cart Button */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  position: 'relative'
+                }}
+              >
+                <ShoppingCart size={18} />
+                {cartCount > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-4px',
+                    backgroundColor: company.primaryColor,
+                    color: 'white',
+                    borderRadius: '50%',
+                    minWidth: '16px',
+                    height: '16px',
+                    fontSize: '9px',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {cartCount}
+                  </span>
+                )}
+              </button>
 
+              {/* Chat Button */}
+              <button
+                onClick={() => alert('Suporte via WhatsApp em breve!')}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#475569'
+                }}
+              >
+                <span style={{ fontSize: '16px' }}>💬</span>
+              </button>
+
+              {/* Sair Button */}
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '999px',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  color: '#475569',
+                  cursor: 'pointer',
+                  minHeight: '36px'
+                }}
+              >
+                Sair
+              </button>
+            </div>
           </div>
         ) : (
-          /* Desktop Header */
+          /* Desktop Header - screenshot replica */
           <div className="container" style={{
             height: '76px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '16px'
+            backgroundColor: '#ffffff'
           }}>
-            {/* Logo */}
-            <div 
-              onClick={() => { setSearch(''); setActiveCategory('Todos'); setActiveTab('catalog'); }}
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', flexShrink: 0 }}
-            >
-              <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '10px',
-                backgroundColor: company.primaryColor,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontWeight: 800,
-                fontSize: '18px'
-              }}>
-                {(company.logoText || company.name).substring(0, 2).toUpperCase()}
+            {/* Left side: store name and greeting */}
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  backgroundColor: `${company.primaryColor}15`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '22px'
+                }}>
+                  🏪
+                </div>
+                <span style={{
+                  fontSize: '22px',
+                  fontWeight: 900,
+                  color: '#0f172a',
+                  fontFamily: "'Inter', sans-serif"
+                }}>
+                  {company.name}
+                </span>
               </div>
               <span style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontSize: '20px',
-                fontWeight: 800,
-                color: '#0f172a'
+                fontSize: '14px',
+                color: '#64748b',
+                marginTop: '4px',
+                fontWeight: 500
               }}>
-                {company.logoText || company.name}
+                Olá, {merchant?.name ? merchant.name.toLowerCase() : 'visitante'}
               </span>
             </div>
 
-            
-
-            <div style={{ flex: 1 }} />
-
-            {/* Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-              
-              {/* Tab Toggles */}
+            {/* Right side: actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {/* Tab selector on desktop */}
               <div style={{
                 display: 'flex',
                 backgroundColor: '#f1f5f9',
                 padding: '4px',
                 borderRadius: '8px',
-                border: '1px solid var(--border-color)'
+                border: '1px solid var(--border-color)',
+                marginRight: '12px'
               }}>
                 <button
                   onClick={() => setActiveTab('catalog')}
@@ -370,20 +435,20 @@ export default function Storefront() {
                 </button>
               </div>
 
-              {/* Cart Trigger */}
-              <button 
+              {/* Cart Button */}
+              <button
                 onClick={() => setIsCartOpen(true)}
-                className="btn btn-outline"
                 style={{
-                  borderRadius: '20px',
                   height: '40px',
                   padding: '0 16px',
+                  borderRadius: '20px',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  backgroundColor: '#ffffff',
-                  borderColor: company.primaryColor,
-                  color: company.primaryColor,
+                  cursor: 'pointer',
+                  color: '#475569',
                   fontWeight: 700,
                   fontSize: '13px'
                 }}
@@ -392,14 +457,14 @@ export default function Storefront() {
                 <span>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                 {cartCount > 0 && (
                   <span style={{
-                    backgroundColor: company.accentColor,
+                    backgroundColor: company.primaryColor,
                     color: 'white',
                     borderRadius: '50%',
-                    minWidth: '18px',
-                    height: '18px',
+                    minWidth: '20px',
+                    height: '20px',
                     fontSize: '10px',
-                    fontWeight: 700,
-                    display: 'inline-flex',
+                    fontWeight: 800,
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
@@ -408,24 +473,41 @@ export default function Storefront() {
                 )}
               </button>
 
-              {/* Exit */}
-              <button 
-                onClick={handleLogout}
-                className="btn btn-outline"
-                title="Sair"
+              {/* Support chat */}
+              <button
+                onClick={() => alert('Suporte via WhatsApp em breve!')}
                 style={{
-                  borderRadius: '50%',
-                  height: '40px',
                   width: '40px',
-                  padding: 0,
-                  color: 'var(--danger)',
-                  backgroundColor: '#ffffff',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#475569'
                 }}
               >
-                <LogOut size={16} />
+                <span style={{ fontSize: '18px' }}>💬</span>
+              </button>
+
+              {/* Sair Button */}
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '0 16px',
+                  borderRadius: '20px',
+                  backgroundColor: '#f1f5f9',
+                  border: 'none',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  color: '#475569',
+                  cursor: 'pointer',
+                  height: '40px'
+                }}
+              >
+                Sair
               </button>
             </div>
           </div>
@@ -693,11 +775,11 @@ export default function Storefront() {
 
       </main>
 
-      {/* Floating total footer (Only on desktop catalog) */}
+      {/* Floating total footer */}
       {activeTab === 'catalog' && cartCount > 0 && (
         <div style={{
           position: 'fixed',
-          bottom: isMobile ? '80px' : '24px',
+          bottom: '24px',
           left: '50%',
           transform: 'translateX(-50%)',
           backgroundColor: '#0f172a',
@@ -726,144 +808,6 @@ export default function Storefront() {
           }}>
             Ver Orçamento
           </span>
-        </div>
-      )}
-
-      {/* 4. Mobile Bottom Navigation Bar */}
-      {isMobile && (
-        <div style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '64px',
-          backgroundColor: '#ffffff',
-          borderTop: '1px solid var(--border-color)',
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          zIndex: 1000,
-          boxShadow: '0 -2px 10px rgba(0,0,0,0.05)'
-        }}>
-          {/* Catalogo Button */}
-          <button
-            onClick={() => setActiveTab('catalog')}
-            style={{
-              border: 'none',
-              background: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              color: activeTab === 'catalog' ? company.primaryColor : '#94a3b8',
-              cursor: 'pointer',
-              flex: 1
-            }}
-          >
-            <ShoppingBag size={20} />
-            <span style={{ fontSize: '10px', fontWeight: activeTab === 'catalog' ? 700 : 500 }}>Início</span>
-          </button>
-
-          {/* Buscar Button */}
-          <button
-            onClick={handleMobileSearchClick}
-            style={{
-              border: 'none',
-              background: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              flex: 1
-            }}
-          >
-            <Search size={20} />
-            <span style={{ fontSize: '10px', fontWeight: 500 }}>Buscar</span>
-          </button>
-
-          {/* Carrinho Button */}
-          <button
-            onClick={() => setIsCartOpen(true)}
-            style={{
-              border: 'none',
-              background: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              color: cartCount > 0 ? company.primaryColor : '#94a3b8',
-              cursor: 'pointer',
-              position: 'relative',
-              flex: 1
-            }}
-          >
-            <ShoppingCart size={20} />
-            {cartCount > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: '-4px',
-                right: '20px',
-                backgroundColor: company.accentColor,
-                color: 'white',
-                borderRadius: '50%',
-                minWidth: '16px',
-                height: '16px',
-                fontSize: '9px',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {cartCount}
-              </span>
-            )}
-            <span style={{ fontSize: '10px', fontWeight: cartCount > 0 ? 700 : 500 }}>Carrinho</span>
-          </button>
-
-          {/* Pedidos Button */}
-          <button
-            onClick={() => { setActiveTab('orders'); handleRefreshOrders(); }}
-            style={{
-              border: 'none',
-              background: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              color: activeTab === 'orders' ? company.primaryColor : '#94a3b8',
-              cursor: 'pointer',
-              flex: 1
-            }}
-          >
-            <ClipboardList size={20} />
-            <span style={{ fontSize: '10px', fontWeight: activeTab === 'orders' ? 700 : 500 }}>Pedidos</span>
-          </button>
-
-          {/* Sair Button */}
-          <button
-            onClick={handleLogout}
-            style={{
-              border: 'none',
-              background: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              color: '#ef4444',
-              cursor: 'pointer',
-              flex: 1
-            }}
-          >
-            <LogOut size={20} />
-            <span style={{ fontSize: '10px', fontWeight: 500 }}>Sair</span>
-          </button>
         </div>
       )}
 
