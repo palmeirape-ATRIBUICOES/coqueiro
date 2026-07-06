@@ -14,7 +14,7 @@ export const WhitelabelProvider = ({ children }) => {
   // Dynamic branding resolution
   useEffect(() => {
     // Check if there is an authenticated user session
-    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -27,7 +27,7 @@ export const WhitelabelProvider = ({ children }) => {
         }
       } catch (e) {
         console.error("Error parsing stored user session:", e);
-        localStorage.removeItem('clubbi_active_merchant');
+        localStorage.removeItem('coqueiro_active_merchant');
       }
     }
 

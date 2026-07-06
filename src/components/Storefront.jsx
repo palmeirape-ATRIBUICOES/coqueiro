@@ -8,13 +8,13 @@ import { Search, ShoppingCart, LogOut, ClipboardList, ShoppingBag, Calendar, Clo
 
 const categoryEmojiMap = {
   'Todos': '🛍️',
-  'Biscoitos': '🍪',
-  'Derivados de Leite': '🥛',
-  'Preparo de Sobremesas': '🍮',
-  'Massas Secas': '🍝',
-  'Mercearia': '🥫',
   'Bebidas': '🥤',
-  'Hortifruti': '🍎'
+  'Hortifruti': '🍎',
+  'Mercearia': '🥫',
+  'Biscoitos': '🍪',
+  'Laticínios': '🧀',
+  'Limpeza': '🧹',
+  'Higiene': '🧼'
 };
 
 const getCategoryEmoji = (cat) => {
@@ -54,7 +54,7 @@ export default function Storefront() {
 
   useEffect(() => {
     // 1. Authenticate Client
-    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (!storedUser) {
       navigate('/login');
       return;
@@ -63,7 +63,7 @@ export default function Storefront() {
     try {
       user = JSON.parse(storedUser);
     } catch (e) {
-      localStorage.removeItem('clubbi_active_merchant');
+      localStorage.removeItem('coqueiro_active_merchant');
       navigate('/login');
       return;
     }
@@ -115,7 +115,7 @@ export default function Storefront() {
   }, [company.banners]);
 
   const handleLogout = () => {
-    localStorage.removeItem('clubbi_active_merchant');
+    localStorage.removeItem('coqueiro_active_merchant');
     navigate('/login');
   };
 
@@ -522,7 +522,7 @@ export default function Storefront() {
                     color: 'white',
                     lineHeight: '1.2'
                   }}>
-                    Abasteça seu comércio com a Clubbi
+                    Abasteça seu comércio com a {company.name}
                   </h2>
                   <p style={{ fontSize: isMobile ? '11px' : '13px', color: '#cbd5e1', marginTop: '4px' }}>
                     Preços direto da distribuidora e entrega rápida. Reponha seu estoque em 1-click!
@@ -543,7 +543,7 @@ export default function Storefront() {
             {/* Category selection */}
             <div style={{ marginBottom: '24px' }}>
               {isMobile ? (
-                /* Mobile categories: text pills */
+                /* Mobile categories: premium pills */
                 <div style={{
                   display: 'flex',
                   gap: '8px',
@@ -559,51 +559,56 @@ export default function Storefront() {
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
                         style={{
-                          borderRadius: '4px',
+                          borderRadius: '9999px',
                           padding: '8px 16px',
                           whiteSpace: 'nowrap',
-                          fontWeight: 600,
-                          fontSize: '13px',
-                          backgroundColor: isActive ? '#f1f5f9' : '#ffffff',
-                          color: isActive ? '#0f172a' : '#64748b',
-                          border: isActive ? '1px solid #cbd5e1' : '1px solid transparent',
-                          borderBottom: isActive ? `2px solid ${company.primaryColor}` : '1px solid transparent',
-                          cursor: 'pointer'
+                          fontWeight: 700,
+                          fontSize: '12px',
+                          backgroundColor: isActive ? company.primaryColor : '#f1f5f9',
+                          color: isActive ? '#ffffff' : '#475569',
+                          border: 'none',
+                          boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
                         }}
                       >
-                        {cat}
+                        {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
                       </button>
                     );
                   })}
                 </div>
               ) : (
-                /* Desktop categories: pills */
+                /* Desktop categories: premium pills */
                 <div style={{
                   display: 'flex',
                   gap: '8px',
                   overflowX: 'auto',
                   paddingBottom: '8px'
                 }}>
-                  {categories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setActiveCategory(cat)}
-                      style={{
-                        borderRadius: '4px',
-                        padding: '8px 16px',
-                        whiteSpace: 'nowrap',
-                        fontWeight: 600,
-                        fontSize: '14px',
-                        backgroundColor: activeCategory === cat ? '#f1f5f9' : '#ffffff',
-                        color: activeCategory === cat ? '#0f172a' : '#64748b',
-                        border: activeCategory === cat ? '1px solid #cbd5e1' : '1px solid transparent',
-                        borderBottom: activeCategory === cat ? `2px solid ${company.primaryColor}` : '1px solid transparent',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {cat}
-                    </button>
-                  ))}
+                  {categories.map(cat => {
+                    const isActive = activeCategory === cat;
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        style={{
+                          borderRadius: '9999px',
+                          padding: '8px 16px',
+                          whiteSpace: 'nowrap',
+                          fontWeight: 700,
+                          fontSize: '13px',
+                          backgroundColor: isActive ? company.primaryColor : '#f1f5f9',
+                          color: isActive ? '#ffffff' : '#475569',
+                          border: 'none',
+                          boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {cat === 'Todos' ? '🏷️ Todos' : `${getCategoryEmoji(cat)} ${cat}`}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>

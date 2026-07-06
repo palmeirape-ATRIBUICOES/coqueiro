@@ -16,7 +16,7 @@ export default function Checkout() {
 
   useEffect(() => {
     // 1. Check Authentication
-    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (!storedUser) {
       navigate('/login');
       return;
@@ -25,7 +25,7 @@ export default function Checkout() {
     try {
       user = JSON.parse(storedUser);
     } catch (e) {
-      localStorage.removeItem('clubbi_active_merchant');
+      localStorage.removeItem('coqueiro_active_merchant');
       navigate('/login');
       return;
     }

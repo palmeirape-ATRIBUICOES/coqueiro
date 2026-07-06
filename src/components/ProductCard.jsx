@@ -26,42 +26,49 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      border: '1px solid #e2e8f0',
+      border: '1px solid #f1f5f9',
       backgroundColor: '#ffffff',
       textAlign: 'left',
-      boxShadow: 'none',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
       position: 'relative',
       height: '100%',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      borderRadius: isMobile ? '24px' : '16px',
+      padding: isMobile ? '12px' : '16px'
     }}>
       {/* Discount Tag */}
       {hasAtacado && (
         <div style={{
           position: 'absolute',
-          top: '8px',
-          left: '8px',
+          top: '16px',
+          left: '16px',
           backgroundColor: '#10b981',
           color: 'white',
-          fontSize: '10px',
-          fontWeight: 700,
-          padding: '2px 6px',
-          borderRadius: '4px',
-          zIndex: 2
+          fontSize: '9px',
+          fontWeight: 800,
+          padding: '3px 8px',
+          borderRadius: '9999px',
+          zIndex: 2,
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px'
         }}>
           Atacado
         </div>
       )}
 
-      <div style={{ padding: isMobile ? '8px' : '12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {/* Image */}
         <div style={{
-          height: isMobile ? '100px' : '150px',
-          backgroundColor: '#fff',
+          height: isMobile ? '110px' : '150px',
+          backgroundColor: '#f8fafc',
+          borderRadius: '16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: isMobile ? '8px' : '12px',
-          width: '100%'
+          marginBottom: isMobile ? '10px' : '12px',
+          width: '100%',
+          padding: '8px',
+          overflow: 'hidden'
         }}>
           {p.imageUrl ? (
             <img src={p.imageUrl} alt={p.description} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
@@ -71,14 +78,14 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
         </div>
 
         {/* Brand */}
-        <span style={{ fontSize: isMobile ? '10px' : '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, display: 'block', marginBottom: '2px' }}>
+        <span style={{ fontSize: isMobile ? '9px' : '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, display: 'block', marginBottom: '2px' }}>
           {p.brand}
         </span>
         
         {/* Description */}
         <h4 style={{
-          fontSize: isMobile ? '12px' : '14px',
-          fontWeight: 600,
+          fontSize: isMobile ? '13px' : '14px',
+          fontWeight: 800,
           color: '#0f172a',
           lineHeight: '1.3',
           marginTop: '0',
@@ -91,30 +98,47 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
         }}>
           {p.description}
         </h4>
+
+        {/* Stock Badge */}
+        <span style={{
+          display: 'inline-block',
+          fontSize: '9px',
+          fontWeight: 900,
+          padding: '2px 6px',
+          borderRadius: '6px',
+          marginTop: '4px',
+          backgroundColor: p.stock > 0 ? '#ecfdf5' : '#fef2f2',
+          color: p.stock > 0 ? '#047857' : '#b91c1c',
+          width: 'fit-content'
+        }}>
+          {p.stock > 0 ? `Estoque: ${p.stock} un` : 'Esgotado'}
+        </span>
         
         {/* Variant Tabs */}
         {hasAtacado ? (
           <div style={{
             display: 'flex',
             backgroundColor: '#f1f5f9',
-            borderRadius: '6px',
+            borderRadius: '9999px',
             padding: '2px',
-            marginBottom: isMobile ? '8px' : '12px',
-            marginTop: isMobile ? '4px' : '8px'
+            marginBottom: isMobile ? '10px' : '12px',
+            marginTop: isMobile ? '8px' : '10px',
+            width: '100%'
           }}>
             <button
               onClick={() => setVariant('atacado')}
               style={{
                 flex: 1,
                 border: 'none',
-                padding: isMobile ? '3px 6px' : '4px 8px',
-                fontSize: isMobile ? '10px' : '11px',
+                padding: '4px 8px',
+                fontSize: '10px',
                 fontWeight: 700,
-                borderRadius: '4px',
+                borderRadius: '9999px',
                 cursor: 'pointer',
                 backgroundColor: variant === 'atacado' ? '#ffffff' : 'transparent',
                 color: variant === 'atacado' ? '#0f172a' : '#64748b',
-                boxShadow: variant === 'atacado' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
+                boxShadow: variant === 'atacado' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                transition: 'all 0.1s'
               }}
             >
               Caixa
@@ -124,96 +148,109 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
               style={{
                 flex: 1,
                 border: 'none',
-                padding: isMobile ? '3px 6px' : '4px 8px',
-                fontSize: isMobile ? '10px' : '11px',
+                padding: '4px 8px',
+                fontSize: '10px',
                 fontWeight: 700,
-                borderRadius: '4px',
+                borderRadius: '9999px',
                 cursor: 'pointer',
                 backgroundColor: variant === 'unit' ? '#ffffff' : 'transparent',
                 color: variant === 'unit' ? '#0f172a' : '#64748b',
-                boxShadow: variant === 'unit' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
+                boxShadow: variant === 'unit' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                transition: 'all 0.1s'
               }}
             >
               Unid
             </button>
           </div>
         ) : (
-          <div style={{ fontSize: isMobile ? '10px' : '11px', color: '#64748b', marginBottom: isMobile ? '8px' : '12px', fontWeight: 500, marginTop: isMobile ? '4px' : '8px' }}>
+          <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '8px', fontWeight: 600, marginTop: '8px' }}>
             {currentUnit}
           </div>
         )}
 
-        {/* Pricing details */}
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: 'auto' }}>
-          {variant === 'atacado' ? (
-            <>
-              <span style={{ fontSize: isMobile ? '10px' : '11px', color: '#94a3b8' }}>
+        {/* Pricing details and actions Row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 'auto',
+          paddingTop: '8px',
+          gap: '8px'
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {variant === 'atacado' && (
+              <span style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 600 }}>
                 R$ {Number(p.price || 0).toFixed(2)}/un
               </span>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: isMobile ? '15px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                  R$ {Number(currentPrice || 0).toFixed(2)}
-                </span>
-              </div>
-            </>
-          ) : (
-            <>
-              <span style={{ fontSize: isMobile ? '10px' : '11px', color: '#94a3b8' }}>Preço final</span>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: isMobile ? '15px' : '20px', fontWeight: 800, color: '#0f172a' }}>
-                  R$ {Number(currentPrice || 0).toFixed(2)}
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+            )}
+            <span style={{ fontSize: isMobile ? '16px' : '18px', fontWeight: 900, color: company.primaryColor }}>
+              R$ {Number(currentPrice || 0).toFixed(2)}
+            </span>
+          </div>
 
-      {/* Full width Cart Actions attached to bottom */}
-      <div style={{ width: '100%', borderTop: '1px solid #e2e8f0' }}>
-        {qty === 0 ? (
-          <button
-            onClick={handleAdd}
-            style={{
-              width: '100%',
-              padding: isMobile ? '8px' : '10px',
-              fontSize: isMobile ? '12px' : '13px',
-              fontWeight: 700,
-              color: company.primaryColor,
-              border: 'none',
+          {/* Cart actions */}
+          {qty === 0 ? (
+            <button
+              onClick={handleAdd}
+              disabled={p.stock <= 0}
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '12px',
+                backgroundColor: p.stock > 0 ? company.primaryColor : '#cbd5e1',
+                color: 'white',
+                border: 'none',
+                fontSize: '18px',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: p.stock > 0 ? 'pointer' : 'not-allowed',
+                boxShadow: p.stock > 0 ? '0 2px 6px rgba(0,0,0,0.1)' : 'none',
+                transition: 'transform 0.1s active'
+              }}
+            >
+              +
+            </button>
+          ) : (
+            <div style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              backgroundColor: '#f8fafc',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#f8fafc'}
-          >
-            Adicionar {variant === 'atacado' ? 'Caixa' : 'Unidade'}
-          </button>
-        ) : (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: company.primaryColor,
-            color: 'white',
-            height: '38px',
-            width: '100%'
-          }}>
-            <button 
-              onClick={() => handleUpdate(-1)}
-              style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
-            >-</button>
-            <span style={{ fontSize: '14px', fontWeight: 700, minWidth: '30px', textAlign: 'center' }}>{qty}</span>
-            <button 
-              onClick={() => handleUpdate(1)}
-              style={{ border: 'none', background: 'none', flex: 1, height: '100%', cursor: 'pointer', color: 'white', fontWeight: 700, fontSize: '16px' }}
-            >+</button>
-          </div>
-        )}
+              backgroundColor: '#f1f5f9',
+              borderRadius: '12px',
+              padding: '2px',
+              height: '36px'
+            }}>
+              <button 
+                onClick={() => handleUpdate(-1)}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  width: '24px',
+                  height: '100%',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  fontWeight: 800,
+                  fontSize: '14px'
+                }}
+              >-</button>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: '#0f172a', minWidth: '18px', textAlign: 'center' }}>{qty}</span>
+              <button 
+                onClick={() => handleUpdate(1)}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  width: '24px',
+                  height: '100%',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  fontWeight: 800,
+                  fontSize: '14px'
+                }}
+              >+</button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ export default function Login() {
 
   useEffect(() => {
     // If user is already logged in, redirect them
-    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -35,7 +35,7 @@ export default function Login() {
           }
         }
       } catch (e) {
-        localStorage.removeItem('clubbi_active_merchant');
+        localStorage.removeItem('coqueiro_active_merchant');
       }
     }
   }, [navigate]);
@@ -66,7 +66,7 @@ export default function Login() {
       }
 
       // Store authenticated user session
-      localStorage.setItem('clubbi_active_merchant', JSON.stringify(user));
+      localStorage.setItem('coqueiro_active_merchant', JSON.stringify(user));
       
       // Redirect based on role
       if (user.role === 'cliente') {

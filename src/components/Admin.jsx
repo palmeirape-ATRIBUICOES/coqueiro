@@ -95,7 +95,7 @@ export default function Admin() {
 
   useEffect(() => {
     // 1. Authenticate user
-    const storedUser = localStorage.getItem('clubbi_active_merchant');
+    const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (!storedUser) {
       navigate('/login');
       return;
@@ -104,7 +104,7 @@ export default function Admin() {
     try {
       user = JSON.parse(storedUser);
     } catch (e) {
-      localStorage.removeItem('clubbi_active_merchant');
+      localStorage.removeItem('coqueiro_active_merchant');
       navigate('/login');
       return;
     }
@@ -175,7 +175,7 @@ export default function Admin() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('clubbi_active_merchant');
+    localStorage.removeItem('coqueiro_active_merchant');
     navigate('/login');
   };
 
@@ -1323,11 +1323,13 @@ export default function Admin() {
                       value={newProduct.category}
                       onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                     >
+                      <option value="Bebidas">Bebidas</option>
                       <option value="Hortifruti">Hortifruti</option>
                       <option value="Mercearia">Mercearia</option>
-                      <option value="Bebidas">Bebidas</option>
-                      <option value="Carnes / Frios">Carnes / Frios</option>
+                      <option value="Biscoitos">Biscoitos</option>
+                      <option value="Laticínios">Laticínios</option>
                       <option value="Limpeza">Limpeza</option>
+                      <option value="Higiene">Higiene</option>
                     </select>
                   </div>
 
