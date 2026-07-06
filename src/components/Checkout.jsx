@@ -14,6 +14,11 @@ export default function Checkout() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
 
+  // Fields from missoes-da-loja layout
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('pix');
+
   useEffect(() => {
     // 1. Check Authentication
     const storedUser = localStorage.getItem('coqueiro_active_merchant');
@@ -34,6 +39,7 @@ export default function Checkout() {
       return;
     }
     setClient(user);
+    setDeliveryAddress(user.address || '');
 
     // Load saved notes
     const savedNotes = localStorage.getItem(`cart_notes_${user.code}`) || '';
@@ -58,6 +64,50 @@ export default function Checkout() {
     }
   }, [navigate]);
 
+  const availableSlots = React.useMemo(() => {
+    const fixedHours = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+    const slots = [];
+    const now = new Date();
+
+    const toLocalDateStr = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+
+    const todayStr = toLocalDateStr(now);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = toLocalDateStr(tomorrow);
+
+    fixedHours.forEach(time => {
+      const [h, m] = time.split(':').map(Number);
+      const slotTimeMs = new Date().setHours(h, m, 0, 0);
+      const minDeliveryTimeMs = Date.now() + 30 * 60 * 1000;
+
+      if (slotTimeMs >= minDeliveryTimeMs) {
+        slots.push({
+          id: `today_${time}`,
+          date: todayStr,
+          time: time,
+          isToday: true
+        });
+      }
+    });
+
+    fixedHours.forEach(time => {
+      slots.push({
+        id: `tomorrow_${time}`,
+        date: tomorrowStr,
+        time: time,
+        isToday: false
+      });
+    });
+
+    return slots;
+  }, []);
+
   const subtotal = cart.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.qty || 0)), 0);
 
   const handlePlaceOrder = (e) => {
@@ -80,6 +130,9 @@ export default function Checkout() {
       })),
       total: parseFloat(subtotal.toFixed(2)),
       notes: notes,
+      deliveryAddress: deliveryAddress,
+      deliverySlot: selectedSlot ? `${selectedSlot.isToday ? 'Hoje' : 'Amanhã'} às ${selectedSlot.time}` : 'Não selecionado',
+      paymentMethod: paymentMethod,
       status: 'Recebido'
     };
 
@@ -231,17 +284,140 @@ export default function Checkout() {
           {/* Form Side */}
           <form onSubmit={handlePlaceOrder} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
-            {/* Note about direct payment */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', color: 'var(--text-primary)' }}>
-                <FileText size={20} style={{ color: company.primaryColor }} />
-                Condição de Faturamento & Pagamento
+            {/* Address */}
+            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
+                📍 Endereço de Entrega
               </h3>
-              
-              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                Nenhum pagamento é processado online. Toda a negociação comercial, prazos de faturamento e 
-                recebimento de valores serão definidos diretamente pela nossa equipe comercial após a conclusão do pedido.
-              </p>
+              <textarea
+                required
+                value={deliveryAddress}
+                onChange={e => setDeliveryAddress(e.target.value)}
+                placeholder="Rua, número, complemento, ponto de referência..."
+                style={{
+                  width: '100%',
+                  minHeight: '90px',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border-color)',
+                  backgroundColor: 'var(--bg-color)',
+                  color: 'var(--text-primary)',
+                  fontSize: '14px',
+                  fontFamily: 'inherit',
+                  resize: 'vertical',
+                  outline: 'none'
+                }}
+              />
+            </div>
+
+            {/* Delivery Slots */}
+            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
+                📅 Escolha o Horário de Entrega
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
+                {availableSlots.map(slot => {
+                  const isSelected = selectedSlot?.id === slot.id;
+                  return (
+                    <button
+                      key={slot.id}
+                      type="button"
+                      onClick={() => setSelectedSlot(slot)}
+                      style={{
+                        padding: '10px',
+                        borderRadius: '12px',
+                        border: isSelected ? `2.5px solid ${company.primaryColor}` : '1.5px solid var(--border-color)',
+                        backgroundColor: isSelected ? `${company.primaryColor}10` : 'var(--card-bg)',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <div style={{ fontSize: '10px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase' }}>
+                        {slot.isToday ? 'Hoje' : 'Amanhã'}
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
+                        ⏰ {slot.time}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Payment Method */}
+            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
+                💳 Forma de Pagamento (No Recebimento)
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('pix')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '16px',
+                    border: paymentMethod === 'pix' ? '2.5px solid #10b981' : '1.5px solid var(--border-color)',
+                    backgroundColor: paymentMethod === 'pix' ? '#10b98110' : 'var(--card-bg)',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>⚡</span>
+                  <span>PIX</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('cartao')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '16px',
+                    border: paymentMethod === 'cartao' ? `2.5px solid ${company.primaryColor}` : '1.5px solid var(--border-color)',
+                    backgroundColor: paymentMethod === 'cartao' ? `${company.primaryColor}10` : 'var(--card-bg)',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>💳</span>
+                  <span>Cartão</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('dinheiro')}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '16px',
+                    border: paymentMethod === 'dinheiro' ? '2.5px solid #f59e0b' : '1.5px solid var(--border-color)',
+                    backgroundColor: paymentMethod === 'dinheiro' ? '#f59e0b10' : 'var(--card-bg)',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'all 0.15s',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>💵</span>
+                  <span>Dinheiro</span>
+                </button>
+              </div>
             </div>
 
             {/* Confirm order button */}
@@ -251,14 +427,17 @@ export default function Checkout() {
               style={{
                 padding: '16px',
                 fontSize: '16px',
-                borderRadius: '12px',
-                fontWeight: 700,
+                borderRadius: '16px',
+                fontWeight: 800,
                 backgroundColor: company.primaryColor,
                 border: 'none',
-                color: 'white'
+                color: 'white',
+                cursor: 'pointer',
+                boxShadow: `0 4px 12px ${company.primaryColor}30`,
+                transition: 'all 0.15s'
               }}
             >
-              Confirmar Pedido
+              🚀 Confirmar e Enviar Pedido
             </button>
           </form>
 
