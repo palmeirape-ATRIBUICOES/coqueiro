@@ -161,7 +161,6 @@ const INITIAL_USERS = {
 };
 
 const INITIAL_PRODUCTS = [
-  // Casa Coqueiro Catalog
   {
     id: "coq-1",
     code: "COQ-101",
@@ -171,7 +170,7 @@ const INITIAL_PRODUCTS = [
     unit: "Un",
     price: 2.96,
     stock: 150,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760357",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro"
   },
   {
@@ -183,7 +182,7 @@ const INITIAL_PRODUCTS = [
     unit: "Un",
     price: 4.85,
     stock: 80,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7892840808020",
+    imageUrl: "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro"
   },
   {
@@ -193,7 +192,7 @@ const INITIAL_PRODUCTS = [
     category: "Hortifruti",
     brand: "Produtor Rio",
     unit: "Kg",
-    price: 6.90,
+    price: 6.9,
     stock: 200,
     imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=200&auto=format&fit=crop&q=80",
     companyId: "coqueiro"
@@ -207,7 +206,7 @@ const INITIAL_PRODUCTS = [
     unit: "Un",
     price: 4.23,
     stock: 120,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896004007632",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro"
   },
   {
@@ -219,7 +218,7 @@ const INITIAL_PRODUCTS = [
     unit: "Un",
     price: 2.24,
     stock: 300,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7891079000229",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro"
   },
   {
@@ -229,13 +228,11 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Menina",
     unit: "Un",
-    price: 3.10,
+    price: 3.1,
     stock: 90,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_120/f_png/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896028014494",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro"
   },
-
-  // Hortifruti Verde Vale Catalog
   {
     id: "hv-1",
     code: "HVV-201",
@@ -243,7 +240,7 @@ const INITIAL_PRODUCTS = [
     category: "Hortifruti",
     brand: "Verde Vale",
     unit: "Un",
-    price: 3.50,
+    price: 3.5,
     stock: 60,
     imageUrl: "https://images.unsplash.com/photo-1622484211148-716598e04141?w=200&auto=format&fit=crop&q=80",
     companyId: "horti-verde"
@@ -255,7 +252,7 @@ const INITIAL_PRODUCTS = [
     category: "Hortifruti",
     brand: "Fazenda Orgânica",
     unit: "Kg",
-    price: 8.90,
+    price: 8.9,
     stock: 140,
     imageUrl: "https://images.unsplash.com/photo-1595855759920-86582396756a?w=200&auto=format&fit=crop&q=80",
     companyId: "horti-verde"
@@ -267,9 +264,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Aliança",
     unit: "Un",
-    price: 14.90,
+    price: 14.9,
     stock: 50,
-    imageUrl: "",
+    imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "horti-verde"
   },
   {
@@ -281,7 +278,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.96,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760357",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 85.5
@@ -295,7 +292,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.96,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760371",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 85.5
@@ -309,7 +306,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.96,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024760364",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 85.5
@@ -323,7 +320,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 48",
     price: 2.96,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761651",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 48,
     packagePrice: 136.8
@@ -337,7 +334,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 50",
     price: 2.8,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896024761439",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 50,
     packagePrice: 134.5
@@ -351,7 +348,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.65,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7898080640222",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 61.2
@@ -365,7 +362,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.24,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7896028014494",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 51.6
@@ -379,12 +376,11 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 50",
     price: 2.24,
     stock: 100,
-    imageUrl: "https://res.cloudinary.com/dti85ldyv/image/upload/c_scale,h_300/f_png,fl_progressive/b_white,c_limit,d_product-thumb_ybwmng.png/products/7891079000229",
+    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 50,
     packagePrice: 107.5
-  }
-,
+  },
 ,
   {
     id: "clubbi-real-1",
@@ -395,7 +391,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 12.49,
     stock: 189,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Suco%20Integral",
+    imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 71.19
@@ -409,7 +405,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.84,
     stock: 243,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Extrato%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 64.75
@@ -423,7 +419,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.38,
     stock: 166,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 54.26
@@ -437,7 +433,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.38,
     stock: 247,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 54.26
@@ -451,7 +447,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.15,
     stock: 231,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 67.92
@@ -465,7 +461,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 27.31,
     stock: 175,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Arroz%20Tipo",
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 155.67
@@ -479,10 +475,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 8.75,
     stock: 183,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
-    packagePrice: 199.50
+    packagePrice: 199.5
   },
   {
     id: "clubbi-real-8",
@@ -493,7 +489,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.34,
     stock: 52,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 53.35
@@ -507,7 +503,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 19.16,
     stock: 115,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Condicionador%20350ml",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 218.42
@@ -521,7 +517,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 5.04,
     stock: 162,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 57.46
@@ -535,7 +531,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.51,
     stock: 100,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Sal%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 71.53
@@ -549,7 +545,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.85,
     stock: 194,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 56.14
@@ -563,7 +559,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.07,
     stock: 148,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 77.33
@@ -577,7 +573,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.51,
     stock: 146,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 51.41
@@ -591,7 +587,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.63,
     stock: 197,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Queijo%20Parmes%C3%A3o",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 106.97
@@ -603,9 +599,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Coca-Cola",
     unit: "Cx c/ 6",
-    price: 8.40,
+    price: 8.4,
     stock: 109,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 47.88
@@ -619,7 +615,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 6.78,
     stock: 169,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 64.41
@@ -633,7 +629,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 5.94,
     stock: 88,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 56.43
@@ -647,7 +643,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 3.51,
     stock: 98,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20de",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 46.68
@@ -659,9 +655,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Rexona",
     unit: "Cx c/ 12",
-    price: 18.40,
+    price: 18.4,
     stock: 233,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 209.76
@@ -675,7 +671,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 1.52,
     stock: 224,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20Mineral",
+    imageUrl: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 17.33
@@ -689,7 +685,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.17,
     stock: 102,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 163.12
@@ -703,7 +699,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 8.15,
     stock: 133,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 108.39
@@ -717,7 +713,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.66,
     stock: 184,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 101.88
@@ -731,7 +727,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.73,
     stock: 205,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 85.04
@@ -745,7 +741,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 16.55,
     stock: 167,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Desodorante%20Aerosol",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 188.67
@@ -759,7 +755,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.49,
     stock: 58,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 166.15
@@ -773,7 +769,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.04,
     stock: 234,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 86.64
@@ -787,7 +783,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 5.41,
     stock: 229,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=%C3%81gua%20Sanit%C3%A1ria",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 30.84
@@ -801,7 +797,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.72,
     stock: 154,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Extrato%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 62.02
@@ -813,9 +809,9 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Piracanjuba",
     unit: "Cx c/ 12",
-    price: 7.70,
+    price: 7.7,
     stock: 212,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Creme%20de",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 87.78
@@ -829,7 +825,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.66,
     stock: 211,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 104.31
@@ -843,10 +839,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.07,
     stock: 227,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 63.10
+    packagePrice: 63.1
   },
   {
     id: "clubbi-real-34",
@@ -857,7 +853,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 32.53,
     stock: 174,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 185.42
@@ -871,7 +867,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.65,
     stock: 225,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Fio%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 98.61
@@ -885,7 +881,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 18.51,
     stock: 72,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 211.01
@@ -897,9 +893,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Oral-B",
     unit: "Cx c/ 12",
-    price: 15.60,
+    price: 15.6,
     stock: 123,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Desodorante%20Aerosol",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 177.84
@@ -913,7 +909,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 8.81,
     stock: 112,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Requeij%C3%A3o%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 200.87
@@ -927,7 +923,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.05,
     stock: 70,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=%C3%93leo%20de",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 114.95
@@ -941,7 +937,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.59,
     stock: 193,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 54.66
@@ -955,7 +951,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 7.72,
     stock: 75,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 117.34
@@ -969,7 +965,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.98,
     stock: 119,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 22.69
@@ -983,7 +979,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 6.02,
     stock: 74,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Cookies%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 137.26
@@ -997,7 +993,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.78,
     stock: 152,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 103.47
@@ -1011,10 +1007,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.21,
     stock: 218,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 63.90
+    packagePrice: 63.9
   },
   {
     id: "clubbi-real-46",
@@ -1025,7 +1021,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.76,
     stock: 111,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 21.43
@@ -1039,7 +1035,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.53,
     stock: 75,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Queijo%20Parmes%C3%A3o",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 105.07
@@ -1053,7 +1049,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 7.34,
     stock: 150,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 111.57
@@ -1067,7 +1063,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.71,
     stock: 170,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Queijo%20Parmes%C3%A3o",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 108.49
@@ -1081,7 +1077,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 6.54,
     stock: 54,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Leite%20Condensado",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 149.11
@@ -1095,7 +1091,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.57,
     stock: 189,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Feij%C3%A3o%20Carioca",
+    imageUrl: "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 71.92
@@ -1109,7 +1105,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.11,
     stock: 76,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 27,
     packagePrice: 54.12
@@ -1123,7 +1119,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 15.17,
     stock: 155,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 172.94
@@ -1137,7 +1133,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 5.39,
     stock: 51,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Absorvente%20com",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 81.93
@@ -1149,9 +1145,9 @@ const INITIAL_PRODUCTS = [
     category: "Biscoitos",
     brand: "Piraquê",
     unit: "Cx c/ 12",
-    price: 8.10,
+    price: 8.1,
     stock: 140,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 92.34
@@ -1165,7 +1161,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.57,
     stock: 235,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 54.55
@@ -1179,7 +1175,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 1.55,
     stock: 226,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20Mineral",
+    imageUrl: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 17.67
@@ -1193,7 +1189,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.96,
     stock: 164,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 22.57
@@ -1207,7 +1203,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.14,
     stock: 179,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 27,
     packagePrice: 54.89
@@ -1221,7 +1217,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 5.77,
     stock: 181,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 54.81
@@ -1235,7 +1231,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 12.75,
     stock: 239,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 121.13
@@ -1249,7 +1245,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 23.67,
     stock: 140,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Enxaguante%20Bucal",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 134.92
@@ -1263,7 +1259,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 4.04,
     stock: 247,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=A%C3%A7%C3%BAcar%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 38.38
@@ -1277,10 +1273,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.07,
     stock: 141,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 51.70
+    packagePrice: 51.7
   },
   {
     id: "clubbi-real-65",
@@ -1291,10 +1287,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.85,
     stock: 177,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
-    packagePrice: 104.40
+    packagePrice: 104.4
   },
   {
     id: "clubbi-real-66",
@@ -1305,7 +1301,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.33,
     stock: 216,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 49.36
@@ -1317,9 +1313,9 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Elegê",
     unit: "Cx c/ 12",
-    price: 5.10,
+    price: 5.1,
     stock: 240,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 58.14
@@ -1333,7 +1329,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.95,
     stock: 176,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 22.52
@@ -1347,7 +1343,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.29,
     stock: 106,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 52.95
@@ -1361,7 +1357,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 13.39,
     stock: 107,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Manteiga%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 152.65
@@ -1375,7 +1371,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.91,
     stock: 53,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Extrato%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 66.35
@@ -1389,7 +1385,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.26,
     stock: 204,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 51.53
@@ -1403,7 +1399,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 8.59,
     stock: 247,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 195.85
@@ -1417,7 +1413,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.06,
     stock: 185,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 87.21
@@ -1431,7 +1427,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.97,
     stock: 230,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Haste%20Flex%C3%ADvel",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 90.52
@@ -1445,7 +1441,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.27,
     stock: 235,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 51.76
@@ -1459,7 +1455,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.71,
     stock: 192,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 49.65
@@ -1473,7 +1469,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.67,
     stock: 202,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 104.59
@@ -1487,7 +1483,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.08,
     stock: 116,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 35.11
@@ -1501,7 +1497,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 13.22,
     stock: 225,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Manteiga%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 150.71
@@ -1515,7 +1511,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.13,
     stock: 219,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 92.68
@@ -1529,7 +1525,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 7.87,
     stock: 55,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Creme%20de",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 89.72
@@ -1543,7 +1539,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 15.51,
     stock: 124,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Desodorante%20Aerosol",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 176.81
@@ -1557,7 +1553,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 10.26,
     stock: 136,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 97.47
@@ -1571,7 +1567,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 15.25,
     stock: 151,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 173.85
@@ -1585,7 +1581,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.69,
     stock: 142,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 102.28
@@ -1599,7 +1595,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.35,
     stock: 78,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 38.19
@@ -1613,10 +1609,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.97,
     stock: 110,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
-    packagePrice: 106.00
+    packagePrice: 106
   },
   {
     id: "clubbi-real-89",
@@ -1627,7 +1623,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 13.39,
     stock: 55,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Manteiga%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 152.65
@@ -1641,7 +1637,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.09,
     stock: 102,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 35.23
@@ -1655,7 +1651,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 13.34,
     stock: 178,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 126.73
@@ -1667,9 +1663,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Colgate",
     unit: "Cx c/ 16",
-    price: 7.20,
+    price: 7.2,
     stock: 206,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 109.44
@@ -1683,10 +1679,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 12.43,
     stock: 149,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Manteiga%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
-    packagePrice: 141.70
+    packagePrice: 141.7
   },
   {
     id: "clubbi-real-94",
@@ -1697,7 +1693,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 5.11,
     stock: 240,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 58.25
@@ -1711,10 +1707,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.75,
     stock: 177,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
-    packagePrice: 85.50
+    packagePrice: 85.5
   },
   {
     id: "clubbi-real-96",
@@ -1725,7 +1721,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.98,
     stock: 234,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=%C3%93leo%20de",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 113.62
@@ -1739,7 +1735,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.87,
     stock: 112,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 104.67
@@ -1753,7 +1749,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.96,
     stock: 177,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 56.54
@@ -1767,7 +1763,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 4.05,
     stock: 211,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 92.34
@@ -1781,12 +1777,11 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 7.56,
     stock: 98,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 114.91
-  }
-,
+  },
   {
     id: "clubbi-real-1",
     code: "CLB-REAL-1",
@@ -1796,7 +1791,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.11,
     stock: 218,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 78.09
@@ -1810,7 +1805,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.11,
     stock: 215,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 78.09
@@ -1824,7 +1819,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.77,
     stock: 210,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 55.69
@@ -1838,7 +1833,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.77,
     stock: 189,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 55.69
@@ -1852,7 +1847,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.53,
     stock: 138,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 54.32
@@ -1866,7 +1861,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 9.53,
     stock: 189,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 54.32
@@ -1880,7 +1875,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.54,
     stock: 183,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Queijo%20Parmes%C3%A3o",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 105.26
@@ -1894,7 +1889,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 5.54,
     stock: 89,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Queijo%20Parmes%C3%A3o",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 105.26
@@ -1908,7 +1903,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 10.95,
     stock: 86,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 62.41
@@ -1922,7 +1917,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 10.95,
     stock: 128,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 62.41
@@ -1936,7 +1931,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 7.63,
     stock: 99,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 16,
     packagePrice: 115.98
@@ -1950,7 +1945,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 16",
     price: 7.63,
     stock: 57,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Papel%20Higi%C3%AAnico",
+    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 16,
     packagePrice: 115.98
@@ -1964,7 +1959,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.21,
     stock: 91,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 91.48
@@ -1978,7 +1973,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.21,
     stock: 201,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
     packagePrice: 91.48
@@ -1990,9 +1985,9 @@ const INITIAL_PRODUCTS = [
     category: "Limpeza",
     brand: "Brilhante",
     unit: "Cx c/ 10",
-    price: 7.10,
+    price: 7.1,
     stock: 133,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 67.45
@@ -2004,9 +1999,9 @@ const INITIAL_PRODUCTS = [
     category: "Limpeza",
     brand: "Brilhante",
     unit: "Cx c/ 10",
-    price: 7.10,
+    price: 7.1,
     stock: 122,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 67.45
@@ -2020,7 +2015,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.86,
     stock: 137,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 92.34
@@ -2034,7 +2029,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.86,
     stock: 158,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 92.34
@@ -2048,7 +2043,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.86,
     stock: 190,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 92.34
@@ -2062,7 +2057,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.86,
     stock: 182,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 92.34
@@ -2076,7 +2071,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.86,
     stock: 162,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 88.01
@@ -2090,7 +2085,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.86,
     stock: 121,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 88.01
@@ -2104,7 +2099,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.19,
     stock: 241,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Ch%C3%A1%20Gelado",
+    imageUrl: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 46.68
@@ -2118,7 +2113,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.19,
     stock: 122,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Ch%C3%A1%20Gelado",
+    imageUrl: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 46.68
@@ -2132,7 +2127,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.11,
     stock: 187,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Molho%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 48.11
@@ -2146,7 +2141,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.11,
     stock: 159,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Molho%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 48.11
@@ -2160,7 +2155,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 4.32,
     stock: 83,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=A%C3%A7%C3%BAcar%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 41.04
@@ -2174,7 +2169,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 4.32,
     stock: 142,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=A%C3%A7%C3%BAcar%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 41.04
@@ -2188,7 +2183,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.62,
     stock: 189,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 103.17
@@ -2202,7 +2197,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.62,
     stock: 124,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
     packagePrice: 103.17
@@ -2216,7 +2211,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.29,
     stock: 170,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 27,
     packagePrice: 58.74
@@ -2230,7 +2225,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.29,
     stock: 216,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 27,
     packagePrice: 58.74
@@ -2244,10 +2239,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 4.07,
     stock: 107,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
-    packagePrice: 92.80
+    packagePrice: 92.8
   },
   {
     id: "coq-real-17",
@@ -2258,10 +2253,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 4.07,
     stock: 142,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
-    packagePrice: 92.80
+    packagePrice: 92.8
   },
   {
     id: "clubbi-real-18",
@@ -2272,7 +2267,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.28,
     stock: 243,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Macarr%C3%A3o%20Espaguete",
+    imageUrl: "https://images.unsplash.com/photo-1621961401348-f099ce688b4a?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 81.32
@@ -2286,7 +2281,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.28,
     stock: 65,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Macarr%C3%A3o%20Espaguete",
+    imageUrl: "https://images.unsplash.com/photo-1621961401348-f099ce688b4a?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 81.32
@@ -2300,7 +2295,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.32,
     stock: 246,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 120.08
@@ -2314,7 +2309,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.32,
     stock: 99,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 120.08
@@ -2328,7 +2323,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.79,
     stock: 70,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 129.01
@@ -2342,7 +2337,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.79,
     stock: 169,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 129.01
@@ -2354,9 +2349,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Del Valle",
     unit: "Cx c/ 24",
-    price: 8.70,
+    price: 8.7,
     stock: 78,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 198.36
@@ -2368,9 +2363,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Del Valle",
     unit: "Cx c/ 24",
-    price: 8.70,
+    price: 8.7,
     stock: 112,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 198.36
@@ -2384,7 +2379,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.33,
     stock: 50,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 120.27
@@ -2398,7 +2393,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.33,
     stock: 57,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 120.27
@@ -2412,7 +2407,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.29,
     stock: 219,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 37.51
@@ -2426,7 +2421,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.29,
     stock: 102,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 37.51
@@ -2440,7 +2435,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.74,
     stock: 92,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 21.32
@@ -2454,7 +2449,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 3.74,
     stock: 58,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 21.32
@@ -2468,7 +2463,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.05,
     stock: 230,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 66.97
@@ -2482,7 +2477,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.05,
     stock: 122,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 66.97
@@ -2496,7 +2491,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.27,
     stock: 143,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 37.28
@@ -2510,7 +2505,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.27,
     stock: 241,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 37.28
@@ -2524,7 +2519,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 8.28,
     stock: 246,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 110.12
@@ -2538,7 +2533,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 8.28,
     stock: 69,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 14,
     packagePrice: 110.12
@@ -2552,7 +2547,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 1.54,
     stock: 71,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20Mineral",
+    imageUrl: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 17.56
@@ -2566,7 +2561,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 1.54,
     stock: 156,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20Mineral",
+    imageUrl: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 17.56
@@ -2580,7 +2575,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.67,
     stock: 58,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Sabonete%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607006342411-9a910c64b6c8?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 60.88
@@ -2594,7 +2589,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.67,
     stock: 56,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Sabonete%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607006342411-9a910c64b6c8?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 60.88
@@ -2608,7 +2603,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.06,
     stock: 158,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 206.57
@@ -2622,7 +2617,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.06,
     stock: 163,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 206.57
@@ -2636,7 +2631,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.29,
     stock: 160,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 52.21
@@ -2650,7 +2645,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.29,
     stock: 208,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Detergente%20L%C3%ADquido",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 52.21
@@ -2664,7 +2659,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 31.95,
     stock: 206,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 182.11
@@ -2678,7 +2673,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 31.95,
     stock: 117,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 182.11
@@ -2692,10 +2687,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 4.07,
     stock: 147,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
-    packagePrice: 92.80
+    packagePrice: 92.8
   },
   {
     id: "coq-real-33",
@@ -2706,10 +2701,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 4.07,
     stock: 235,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
-    packagePrice: 92.80
+    packagePrice: 92.8
   },
   {
     id: "clubbi-real-34",
@@ -2720,7 +2715,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.31,
     stock: 113,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 81.89
@@ -2734,7 +2729,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.31,
     stock: 139,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 81.89
@@ -2748,7 +2743,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 13.14,
     stock: 164,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 124.83
@@ -2762,7 +2757,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 13.14,
     stock: 173,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 124.83
@@ -2776,7 +2771,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.42,
     stock: 209,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 121.98
@@ -2790,7 +2785,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.42,
     stock: 237,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 121.98
@@ -2804,7 +2799,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.19,
     stock: 142,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Requeij%C3%A3o%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 209.53
@@ -2818,7 +2813,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.19,
     stock: 171,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Requeij%C3%A3o%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 209.53
@@ -2830,9 +2825,9 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Batavo",
     unit: "Cx c/ 12",
-    price: 5.10,
+    price: 5.1,
     stock: 152,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 58.14
@@ -2844,9 +2839,9 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Batavo",
     unit: "Cx c/ 12",
-    price: 5.10,
+    price: 5.1,
     stock: 108,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 58.14
@@ -2860,7 +2855,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 14.75,
     stock: 93,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 168.15
@@ -2874,7 +2869,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 14.75,
     stock: 191,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 168.15
@@ -2888,7 +2883,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.88,
     stock: 71,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 92.72
@@ -2902,7 +2897,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.88,
     stock: 193,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Torrada%20Tradicional",
+    imageUrl: "https://images.unsplash.com/photo-1600431521340-491eca880813?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 92.72
@@ -2916,7 +2911,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 20.63,
     stock: 146,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Condicionador%20350ml",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 235.18
@@ -2930,7 +2925,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 20.63,
     stock: 182,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Condicionador%20350ml",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 235.18
@@ -2944,7 +2939,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 34.03,
     stock: 219,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 193.97
@@ -2958,7 +2953,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 34.03,
     stock: 201,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 193.97
@@ -2972,7 +2967,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.74,
     stock: 233,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 128.06
@@ -2986,7 +2981,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.74,
     stock: 248,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 128.06
@@ -2998,12 +2993,12 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Tio João",
     unit: "Cx c/ 30",
-    price: 2.60,
+    price: 2.6,
     stock: 107,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Sal%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
-    packagePrice: 74.10
+    packagePrice: 74.1
   },
   {
     id: "coq-real-44",
@@ -3012,12 +3007,12 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Tio João",
     unit: "Cx c/ 30",
-    price: 2.60,
+    price: 2.6,
     stock: 114,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Sal%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
-    packagePrice: 74.10
+    packagePrice: 74.1
   },
   {
     id: "clubbi-real-45",
@@ -3028,7 +3023,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 9.17,
     stock: 103,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Fio%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 104.54
@@ -3042,7 +3037,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 9.17,
     stock: 220,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Fio%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 104.54
@@ -3056,7 +3051,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 3.33,
     stock: 197,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20de",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 44.29
@@ -3070,7 +3065,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 3.33,
     stock: 161,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20de",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 14,
     packagePrice: 44.29
@@ -3084,7 +3079,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.11,
     stock: 175,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Molho%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 48.11
@@ -3098,7 +3093,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 2.11,
     stock: 204,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Molho%20de",
+    imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 48.11
@@ -3112,7 +3107,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.66,
     stock: 177,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 167.77
@@ -3126,7 +3121,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.66,
     stock: 221,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 167.77
@@ -3140,7 +3135,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 5.35,
     stock: 184,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Isot%C3%B4nico%20Laranja",
+    imageUrl: "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 30.49
@@ -3154,7 +3149,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 5.35,
     stock: 82,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Isot%C3%B4nico%20Laranja",
+    imageUrl: "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 30.49
@@ -3166,9 +3161,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Colgate",
     unit: "Cx c/ 12",
-    price: 17.70,
+    price: 17.7,
     stock: 153,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 201.78
@@ -3180,9 +3175,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Colgate",
     unit: "Cx c/ 12",
-    price: 17.70,
+    price: 17.7,
     stock: 171,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 201.78
@@ -3196,10 +3191,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 18.64,
     stock: 91,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
-    packagePrice: 212.50
+    packagePrice: 212.5
   },
   {
     id: "coq-real-51",
@@ -3210,10 +3205,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 18.64,
     stock: 210,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
-    packagePrice: 212.50
+    packagePrice: 212.5
   },
   {
     id: "clubbi-real-52",
@@ -3224,7 +3219,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.78,
     stock: 109,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 54.49
@@ -3238,7 +3233,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.78,
     stock: 200,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 54.49
@@ -3252,7 +3247,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.98,
     stock: 60,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 56.77
@@ -3266,7 +3261,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.98,
     stock: 108,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 56.77
@@ -3280,7 +3275,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.02,
     stock: 220,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 161.69
@@ -3294,7 +3289,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 17.02,
     stock: 195,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Caf%C3%A9%20Torrado",
+    imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 161.69
@@ -3308,7 +3303,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 5.41,
     stock: 179,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Isot%C3%B4nico%20Laranja",
+    imageUrl: "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 30.84
@@ -3322,7 +3317,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 5.41,
     stock: 104,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Isot%C3%B4nico%20Laranja",
+    imageUrl: "https://images.unsplash.com/photo-1571156137591-3e8c47e15622?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 30.84
@@ -3336,7 +3331,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.73,
     stock: 184,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Haste%20Flex%C3%ADvel",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 85.04
@@ -3350,7 +3345,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.73,
     stock: 106,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Haste%20Flex%C3%ADvel",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 85.04
@@ -3364,7 +3359,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.49,
     stock: 155,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 48.39
@@ -3378,7 +3373,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.49,
     stock: 167,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 48.39
@@ -3392,7 +3387,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.47,
     stock: 113,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 50.96
@@ -3406,7 +3401,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.47,
     stock: 85,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 50.96
@@ -3420,7 +3415,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 12.48,
     stock: 217,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 118.56
@@ -3434,7 +3429,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 12.48,
     stock: 106,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Saco%20para",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 118.56
@@ -3448,7 +3443,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.75,
     stock: 195,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 103.07
@@ -3462,7 +3457,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 7.75,
     stock: 243,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bolo%20Sabor",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 14,
     packagePrice: 103.07
@@ -3476,7 +3471,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.49,
     stock: 101,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 51.19
@@ -3490,7 +3485,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 4.49,
     stock: 151,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Creme%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 51.19
@@ -3504,7 +3499,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 33.33,
     stock: 69,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 189.98
@@ -3518,7 +3513,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 33.33,
     stock: 75,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 189.98
@@ -3532,7 +3527,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 7.66,
     stock: 162,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Creme%20de",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 87.32
@@ -3546,7 +3541,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 7.66,
     stock: 197,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Creme%20de",
+    imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 87.32
@@ -3560,7 +3555,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.46,
     stock: 223,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 98.61
@@ -3574,7 +3569,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.46,
     stock: 121,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Recheado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
     packagePrice: 98.61
@@ -3588,7 +3583,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 6.03,
     stock: 248,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 57.29
@@ -3602,7 +3597,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 6.03,
     stock: 59,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 57.29
@@ -3616,7 +3611,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.74,
     stock: 68,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Feij%C3%A3o%20Carioca",
+    imageUrl: "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 73.53
@@ -3630,7 +3625,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 7.74,
     stock: 122,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Feij%C3%A3o%20Carioca",
+    imageUrl: "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 73.53
@@ -3644,7 +3639,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 31.68,
     stock: 66,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 180.58
@@ -3658,7 +3653,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 31.68,
     stock: 93,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Azeite%20Extra",
+    imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 180.58
@@ -3672,7 +3667,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.03,
     stock: 233,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 205.88
@@ -3686,7 +3681,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 9.03,
     stock: 73,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Puro",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 205.88
@@ -3700,7 +3695,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.56,
     stock: 232,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 65.89
@@ -3714,7 +3709,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.56,
     stock: 144,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Amaciante%202L",
+    imageUrl: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 65.89
@@ -3728,7 +3723,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.21,
     stock: 241,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 93.59
@@ -3742,7 +3737,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.21,
     stock: 169,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 93.59
@@ -3756,7 +3751,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 17.97,
     stock: 92,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 204.86
@@ -3770,7 +3765,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 17.97,
     stock: 92,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 204.86
@@ -3784,7 +3779,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 5.06,
     stock: 213,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 57.68
@@ -3798,7 +3793,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 5.06,
     stock: 139,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Leite%20UHT",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 57.68
@@ -3812,7 +3807,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 18.45,
     stock: 109,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 210.33
@@ -3826,7 +3821,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 18.45,
     stock: 108,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Shampoo%20Cabelos",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 210.33
@@ -3840,7 +3835,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 26.67,
     stock: 200,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Arroz%20Tipo",
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 152.02
@@ -3854,7 +3849,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 26.67,
     stock: 125,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Arroz%20Tipo",
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 152.02
@@ -3868,7 +3863,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.97,
     stock: 57,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Fio%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 102.26
@@ -3882,7 +3877,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.97,
     stock: 184,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Fio%20Dental",
+    imageUrl: "https://images.unsplash.com/photo-1559599189-fe84dea4eb79?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 102.26
@@ -3896,7 +3891,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.91,
     stock: 90,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 101.57
@@ -3910,7 +3905,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.91,
     stock: 249,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 101.57
@@ -3924,7 +3919,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 3.35,
     stock: 191,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20de",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
     packagePrice: 44.55
@@ -3938,7 +3933,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 14",
     price: 3.35,
     stock: 185,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20de",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 14,
     packagePrice: 44.55
@@ -3950,9 +3945,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Rexona",
     unit: "Cx c/ 12",
-    price: 20.10,
+    price: 20.1,
     stock: 175,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Condicionador%20350ml",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 229.14
@@ -3964,9 +3959,9 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Rexona",
     unit: "Cx c/ 12",
-    price: 20.10,
+    price: 20.1,
     stock: 57,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Condicionador%20350ml",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 229.14
@@ -3980,7 +3975,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.88,
     stock: 62,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%20Lata",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 44.23
@@ -3994,7 +3989,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.88,
     stock: 73,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Refrigerante%20Lata",
+    imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 44.23
@@ -4008,7 +4003,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 16.44,
     stock: 135,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Desodorante%20Aerosol",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 187.42
@@ -4022,7 +4017,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 16.44,
     stock: 248,
-    imageUrl: "https://placehold.co/300x300/0891b2/ffffff?text=Desodorante%20Aerosol",
+    imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 187.42
@@ -4036,7 +4031,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.03,
     stock: 138,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 76.57
@@ -4050,7 +4045,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 4.03,
     stock: 202,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20%C3%81gua",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 76.57
@@ -4064,7 +4059,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 6.58,
     stock: 90,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 62.51
@@ -4078,7 +4073,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 6.58,
     stock: 124,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Esponja%20Dupla",
+    imageUrl: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 62.51
@@ -4092,7 +4087,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.24,
     stock: 170,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 36.94
@@ -4106,7 +4101,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.24,
     stock: 223,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 36.94
@@ -4120,7 +4115,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.02,
     stock: 180,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 86.07
@@ -4134,7 +4129,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 3.02,
     stock: 194,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Wafer%20Chocolate",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
     packagePrice: 86.07
@@ -4148,7 +4143,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.92,
     stock: 148,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 89.38
@@ -4162,7 +4157,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.92,
     stock: 130,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 89.38
@@ -4176,7 +4171,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.63,
     stock: 92,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 98.38
@@ -4190,7 +4185,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 8.63,
     stock: 76,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Amanteigado",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 98.38
@@ -4204,7 +4199,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.34,
     stock: 224,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 47.54
@@ -4218,7 +4213,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.34,
     stock: 130,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 47.54
@@ -4232,7 +4227,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.15,
     stock: 205,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 46.46
@@ -4246,7 +4241,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 8.15,
     stock: 228,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Energ%C3%A9tico%20250ml",
+    imageUrl: "https://images.unsplash.com/photo-1622543953490-0b70039a2be1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 46.46
@@ -4258,9 +4253,9 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Gallo",
     unit: "Cx c/ 10",
-    price: 4.90,
+    price: 4.9,
     stock: 90,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Milho%20para",
+    imageUrl: "https://images.unsplash.com/photo-1578271851222-4022766062a1?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 46.55
@@ -4272,9 +4267,9 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Gallo",
     unit: "Cx c/ 10",
-    price: 4.90,
+    price: 4.9,
     stock: 81,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Milho%20para",
+    imageUrl: "https://images.unsplash.com/photo-1578271851222-4022766062a1?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 46.55
@@ -4288,7 +4283,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.76,
     stock: 215,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 85.73
@@ -4302,7 +4297,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 3.76,
     stock: 100,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20de",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 85.73
@@ -4316,7 +4311,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 6.66,
     stock: 202,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Leite%20Condensado",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 24,
     packagePrice: 151.85
@@ -4330,7 +4325,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 24",
     price: 6.66,
     stock: 93,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Leite%20Condensado",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 24,
     packagePrice: 151.85
@@ -4344,7 +4339,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.33,
     stock: 231,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Iogurte%20Morango",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 64.58
@@ -4358,7 +4353,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 11.33,
     stock: 177,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Iogurte%20Morango",
+    imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 64.58
@@ -4372,7 +4367,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 25.89,
     stock: 78,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Arroz%20Tipo",
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 147.57
@@ -4386,7 +4381,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 6",
     price: 25.89,
     stock: 82,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Arroz%20Tipo",
+    imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 147.57
@@ -4400,7 +4395,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.58,
     stock: 64,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Sal%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 30,
     packagePrice: 73.53
@@ -4414,7 +4409,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 30",
     price: 2.58,
     stock: 78,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Sal%20Refinado",
+    imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 30,
     packagePrice: 73.53
@@ -4426,9 +4421,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Ambev",
     unit: "Cx c/ 6",
-    price: 3.70,
+    price: 3.7,
     stock: 192,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
     packagePrice: 21.09
@@ -4440,9 +4435,9 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Ambev",
     unit: "Cx c/ 6",
-    price: 3.70,
+    price: 3.7,
     stock: 145,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=%C3%81gua%20T%C3%B4nica",
+    imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
     packagePrice: 21.09
@@ -4456,7 +4451,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 9.61,
     stock: 107,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
     packagePrice: 91.29
@@ -4470,7 +4465,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 9.61,
     stock: 184,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Sab%C3%A3o%20em",
+    imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
     packagePrice: 91.29
@@ -4484,10 +4479,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.23,
     stock: 56,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 27,
-    packagePrice: 57.20
+    packagePrice: 57.2
   },
   {
     id: "coq-real-97",
@@ -4498,10 +4493,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 27",
     price: 2.23,
     stock: 245,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Bebida%20L%C3%A1ctea",
+    imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 27,
-    packagePrice: 57.20
+    packagePrice: 57.2
   },
   {
     id: "clubbi-real-98",
@@ -4512,7 +4507,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.67,
     stock: 198,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 20,
     packagePrice: 126.73
@@ -4526,7 +4521,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 20",
     price: 6.67,
     stock: 205,
-    imageUrl: "https://placehold.co/300x300/475569/ffffff?text=Biscoito%20Maizena",
+    imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 20,
     packagePrice: 126.73
@@ -4540,7 +4535,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.06,
     stock: 190,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
     packagePrice: 34.88
@@ -4554,7 +4549,7 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 12",
     price: 3.06,
     stock: 59,
-    imageUrl: "https://placehold.co/300x300/0284c7/ffffff?text=Cerveja%20Pilsen",
+    imageUrl: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
     packagePrice: 34.88
@@ -4568,10 +4563,10 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 5.79,
     stock: 124,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
-    packagePrice: 55.00
+    packagePrice: 55
   },
   {
     id: "coq-real-100",
@@ -4582,12 +4577,11 @@ const INITIAL_PRODUCTS = [
     unit: "Cx c/ 10",
     price: 5.79,
     stock: 241,
-    imageUrl: "https://placehold.co/300x300/ea580c/ffffff?text=Farinha%20de",
+    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
-    packagePrice: 55.00
-  }
-,
+    packagePrice: 55
+  },
   {
     id: "clubbi-real-1",
     code: "CLB-REAL-1",
@@ -4656,7 +4650,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
-    packagePrice: 92.00
+    packagePrice: 92
   },
   {
     id: "coq-real-3",
@@ -4670,7 +4664,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
-    packagePrice: 92.00
+    packagePrice: 92
   },
   {
     id: "clubbi-real-4",
@@ -4712,7 +4706,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 14,
-    packagePrice: 108.00
+    packagePrice: 108
   },
   {
     id: "coq-real-5",
@@ -4726,7 +4720,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 14,
-    packagePrice: 108.00
+    packagePrice: 108
   },
   {
     id: "clubbi-real-6",
@@ -5071,7 +5065,7 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Colgate",
     unit: "Cx c/ 12",
-    price: 19.40,
+    price: 19.4,
     stock: 245,
     imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -5085,7 +5079,7 @@ const INITIAL_PRODUCTS = [
     category: "Higiene",
     brand: "Colgate",
     unit: "Cx c/ 12",
-    price: 19.40,
+    price: 19.4,
     stock: 142,
     imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -5099,7 +5093,7 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Batavo",
     unit: "Cx c/ 27",
-    price: 2.30,
+    price: 2.3,
     stock: 244,
     imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -5113,7 +5107,7 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Batavo",
     unit: "Cx c/ 27",
-    price: 2.30,
+    price: 2.3,
     stock: 70,
     imageUrl: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -5211,12 +5205,12 @@ const INITIAL_PRODUCTS = [
     category: "Limpeza",
     brand: "Brilhante",
     unit: "Cx c/ 12",
-    price: 14.50,
+    price: 14.5,
     stock: 242,
     imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
-    packagePrice: 165.30
+    packagePrice: 165.3
   },
   {
     id: "coq-real-23",
@@ -5225,12 +5219,12 @@ const INITIAL_PRODUCTS = [
     category: "Limpeza",
     brand: "Brilhante",
     unit: "Cx c/ 12",
-    price: 14.50,
+    price: 14.5,
     stock: 108,
     imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
-    packagePrice: 165.30
+    packagePrice: 165.3
   },
   {
     id: "clubbi-real-24",
@@ -5496,7 +5490,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 21.60
+    packagePrice: 21.6
   },
   {
     id: "coq-real-33",
@@ -5510,7 +5504,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1598615367916-24e0f111f17e?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
-    packagePrice: 21.60
+    packagePrice: 21.6
   },
   {
     id: "clubbi-real-34",
@@ -5603,12 +5597,12 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Knorr",
     unit: "Cx c/ 10",
-    price: 4.40,
+    price: 4.4,
     stock: 97,
     imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 10,
-    packagePrice: 41.80
+    packagePrice: 41.8
   },
   {
     id: "coq-real-37",
@@ -5617,12 +5611,12 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Knorr",
     unit: "Cx c/ 10",
-    price: 4.40,
+    price: 4.4,
     stock: 132,
     imageUrl: "https://images.unsplash.com/photo-1600854483722-1d572718e24c?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 10,
-    packagePrice: 41.80
+    packagePrice: 41.8
   },
   {
     id: "clubbi-real-38",
@@ -5720,7 +5714,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 75.70
+    packagePrice: 75.7
   },
   {
     id: "coq-real-41",
@@ -5734,7 +5728,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
-    packagePrice: 75.70
+    packagePrice: 75.7
   },
   {
     id: "clubbi-real-42",
@@ -5827,7 +5821,7 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Ambev",
     unit: "Cx c/ 6",
-    price: 13.40,
+    price: 13.4,
     stock: 241,
     imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -5841,7 +5835,7 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Ambev",
     unit: "Cx c/ 6",
-    price: 13.40,
+    price: 13.4,
     stock: 93,
     imageUrl: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -5911,7 +5905,7 @@ const INITIAL_PRODUCTS = [
     category: "Biscoitos",
     brand: "Nestlé",
     unit: "Cx c/ 24",
-    price: 6.10,
+    price: 6.1,
     stock: 161,
     imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -5925,7 +5919,7 @@ const INITIAL_PRODUCTS = [
     category: "Biscoitos",
     brand: "Nestlé",
     unit: "Cx c/ 24",
-    price: 6.10,
+    price: 6.1,
     stock: 128,
     imageUrl: "https://images.unsplash.com/photo-1558961309-db6f1ca3eb82?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -5995,7 +5989,7 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Camil",
     unit: "Cx c/ 24",
-    price: 2.10,
+    price: 2.1,
     stock: 120,
     imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -6009,7 +6003,7 @@ const INITIAL_PRODUCTS = [
     category: "Mercearia",
     brand: "Camil",
     unit: "Cx c/ 24",
-    price: 2.10,
+    price: 2.1,
     stock: 219,
     imageUrl: "https://images.unsplash.com/photo-1607301408269-ac1702167d68?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -6415,7 +6409,7 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Coca-Cola",
     unit: "Cx c/ 12",
-    price: 3.90,
+    price: 3.9,
     stock: 80,
     imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -6429,7 +6423,7 @@ const INITIAL_PRODUCTS = [
     category: "Bebidas",
     brand: "Coca-Cola",
     unit: "Cx c/ 12",
-    price: 3.90,
+    price: 3.9,
     stock: 92,
     imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -6644,7 +6638,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 12,
-    packagePrice: 232.90
+    packagePrice: 232.9
   },
   {
     id: "coq-real-74",
@@ -6658,7 +6652,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 12,
-    packagePrice: 232.90
+    packagePrice: 232.9
   },
   {
     id: "clubbi-real-75",
@@ -7059,7 +7053,7 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Piracanjuba",
     unit: "Cx c/ 12",
-    price: 7.70,
+    price: 7.7,
     stock: 52,
     imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
@@ -7073,7 +7067,7 @@ const INITIAL_PRODUCTS = [
     category: "Laticínios",
     brand: "Piracanjuba",
     unit: "Cx c/ 12",
-    price: 7.70,
+    price: 7.7,
     stock: 53,
     imageUrl: "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
@@ -7148,7 +7142,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "clubbi",
     packageItems: 6,
-    packagePrice: 63.50
+    packagePrice: 63.5
   },
   {
     id: "coq-real-92",
@@ -7162,7 +7156,7 @@ const INITIAL_PRODUCTS = [
     imageUrl: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&auto=format&fit=crop&q=60",
     companyId: "coqueiro",
     packageItems: 6,
-    packagePrice: 63.50
+    packagePrice: 63.5
   },
   {
     id: "clubbi-real-93",
