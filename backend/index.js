@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const admin = require('firebase-admin');
+const { initializeApp } = require('firebase/app');
+const { getDatabase, ref, onChildAdded, onChildChanged, get, remove } = require('firebase/database');
 const webpush = require('web-push');
 
 // Express App to satisfy Render web service port binding requirement
@@ -30,35 +31,23 @@ webpush.setVapidDetails(
   VAPID_PRIVATE_KEY
 );
 
-// Initialize Firebase Admin
-let appOptions = {
+// Initialize Firebase Client SDK (No Google Cloud default credentials warning!)
+const firebaseConfig = {
   databaseURL: FIREBASE_DB_URL
 };
 
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    appOptions.credential = admin.credential.cert(serviceAccount);
-    console.log('Firebase initialized with service account.');
-  } catch (err) {
-    console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT env, trying default credential...', err);
-  }
-} else {
-  console.log('No service account provided. Running in public/default credentials mode...');
-}
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getDatabase(firebaseApp);
 
-admin.initializeApp(appOptions);
-const db = admin.database();
-
-console.log('Casa Coqueiro Real-time Push Gateway Active!');
+console.log('Casa Coqueiro Real-time Push Gateway Active (Client SDK mode)!');
 console.log('Listening to database URL:', FIREBASE_DB_URL);
 
 // Helper: Send Push Notification to all subscriptions of a specific user
 const sendPushToUser = async (userCode, payload) => {
   if (!userCode) return;
   try {
-    const subsRef = db.ref(`pushSubscriptions/${userCode}`);
-    const snapshot = await subsRef.once('value');
+    const subsRef = ref(db, `pushSubscriptions/${userCode}`);
+    const snapshot = await get(subsRef);
     const subs = snapshot.val();
     if (!subs) {
       console.log(`[Push] No subscriptions found for user Code: ${userCode}`);
@@ -97,7 +86,7 @@ const sendPushToUser = async (userCode, payload) => {
 
     if (deadKeys.length > 0) {
       console.log(`[Push] Removing ${deadKeys.length} dead/expired subscription(s) for user ${userCode}`);
-      const removePromises = deadKeys.map(key => db.ref(`pushSubscriptions/${userCode}/${key}`).remove());
+      const removePromises = deadKeys.map(key => remove(ref(db, `pushSubscriptions/${userCode}/${key}`)));
       await Promise.all(removePromises);
     }
   } catch (err) {
@@ -109,7 +98,7 @@ const sendPushToUser = async (userCode, payload) => {
 const gatewayStartTime = Date.now();
 
 // 1. Listen to New Orders
-db.ref('orders').on('child_added', async (snapshot) => {
+onChildAdded(ref(db, 'orders'), async (snapshot) => {
   const order = snapshot.val();
   if (!order) return;
 
@@ -123,7 +112,7 @@ db.ref('orders').on('child_added', async (snapshot) => {
 
   try {
     // Retrieve users list to find sellers of this company
-    const usersSnapshot = await db.ref('users').once('value');
+    const usersSnapshot = await get(ref(db, 'users'));
     const usersObj = usersSnapshot.val();
     if (!usersObj) return;
 
@@ -154,7 +143,7 @@ db.ref('orders').on('child_added', async (snapshot) => {
 });
 
 // 2. Listen to Order Changes (Status Updates)
-db.ref('orders').on('child_changed', async (snapshot) => {
+onChildChanged(ref(db, 'orders'), async (snapshot) => {
   const order = snapshot.val();
   if (!order) return;
 
@@ -177,7 +166,7 @@ db.ref('orders').on('child_changed', async (snapshot) => {
 });
 
 // 3. Listen to New Messages (In-App Support Chat)
-db.ref('messages').on('child_added', async (snapshot) => {
+onChildAdded(ref(db, 'messages'), async (snapshot) => {
   const message = snapshot.val();
   if (!message) return;
 
