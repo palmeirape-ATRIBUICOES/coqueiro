@@ -38,6 +38,7 @@ export default function Storefront() {
   const [clientOrders, setClientOrders] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
   const [visibleCount, setVisibleCount] = useState(30);
+  const [notificationPermission, setNotificationPermission] = useState('Notification' in window ? Notification.permission : 'denied');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
@@ -75,9 +76,8 @@ export default function Storefront() {
     }
     setMerchant(user);
 
-    // Request push notification permission
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
     }
 
     // 2. Load products filtered strictly by the client's linked company (offline cache first)
@@ -134,53 +134,83 @@ export default function Storefront() {
   }, [navigate]);
 
   const triggerLocalPushNotification = (orderId, newStatus) => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      const title = `Orçamento Atualizado! 🛍️`;
-      const body = `O status do orçamento #${orderId} foi alterado para: ${newStatus}`;
-      
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.15);
-        setTimeout(() => {
-          const osc2 = audioCtx.createOscillator();
-          const gain2 = audioCtx.createGain();
-          osc2.connect(gain2);
-          gain2.connect(audioCtx.destination);
-          osc2.type = 'sine';
-          osc2.frequency.setValueAtTime(880, audioCtx.currentTime);
-          gain2.gain.setValueAtTime(0.5, audioCtx.currentTime);
-          osc2.start();
-          osc2.stop(audioCtx.currentTime + 0.3);
-        }, 150);
-      } catch (e) {
-        console.warn('AudioContext failed:', e);
-      }
+    const title = `Orçamento Atualizado! 🛍️`;
+    const body = `O status do orçamento #${orderId} foi alterado para: ${newStatus}`;
+    const tag = `order-status-${orderId}`;
 
-      if (navigator.serviceWorker && navigator.serviceWorker.ready) {
-        navigator.serviceWorker.ready.then(reg => {
-          reg.showNotification(title, {
-            body,
-            icon: '/favicon.svg',
-            badge: '/favicon.svg',
-            vibrate: [200, 100, 200, 100, 300],
-            tag: `order-status-${orderId}`
-          });
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.15);
+      setTimeout(() => {
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, audioCtx.currentTime);
+        gain2.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        osc2.start();
+        osc2.stop(audioCtx.currentTime + 0.3);
+      }, 150);
+    } catch (e) {
+      console.warn('AudioContext failed:', e);
+    }
+
+    showNativeNotification(title, body, tag);
+  };
+
+  const showNativeNotification = (title, body, tag) => {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || 
+                  (ua.includes('Macintosh') && navigator.maxTouchPoints > 0);
+
+    const options = {
+      body,
+      tag,
+      data: { url: window.location.href }
+    };
+
+    if (!isIOS) {
+      options.icon = './logo.png';
+      options.badge = './logo.png';
+      options.vibrate = [200, 100, 200];
+    }
+
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(reg => {
+        reg.showNotification(title, options).catch(err => {
+          console.warn('[SW] showNotification fallback:', err);
+          reg.showNotification(title, { body, tag });
         });
-      } else {
-        new Notification(title, { 
-          body, 
-          tag: `order-status-${orderId}`,
-          vibrate: [200, 100, 200, 100, 300]
-        });
+      });
+    } else {
+      try {
+        new Notification(title, options);
+      } catch (e) {
+        console.warn('new Notification failed', e);
       }
+    }
+  };
+
+  const requestNotificationPermission = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        setNotificationPermission(permission);
+        if (permission === 'granted') {
+          showNativeNotification('Casa Coqueiro', 'Notificações ativadas com sucesso! 🎉', 'setup-success');
+        }
+      });
     }
   };
 
@@ -639,6 +669,48 @@ export default function Storefront() {
 
       {/* 3. Main content */}
       <main className="container" style={{ flex: 1, padding: isMobile ? '16px' : '24px 16px' }}>
+        {/* iOS/PWA Notification Permission Banner */}
+        {('Notification' in window) && notificationPermission === 'default' && (
+          <div style={{
+            backgroundColor: `${company.primaryColor}15`,
+            border: `1px solid ${company.primaryColor}30`,
+            borderRadius: '12px',
+            padding: '16px',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span style={{ fontSize: '20px' }}>🔔</span>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                  Receber Alertas de Orçamentos
+                </h4>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
+                  Ative as notificações para receber avisos de novos orçamentos e alterações de status.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={requestNotificationPermission}
+              className="btn btn-primary"
+              style={{
+                backgroundColor: company.primaryColor,
+                border: 'none',
+                color: '#fff',
+                padding: '8px 16px',
+                fontSize: '12px',
+                fontWeight: 700,
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              Ativar
+            </button>
+          </div>
+        )}
         
         {/* CATALOG VIEW */}
         {activeTab === 'catalog' && (

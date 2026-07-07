@@ -26,7 +26,55 @@ export default function Admin() {
   const removeToast = (id) => {
     setToasts(prev => prev.filter(t => t.id !== id));
   };
+
+  const showNativeNotification = (title, body, tag) => {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || 
+                  (ua.includes('Macintosh') && navigator.maxTouchPoints > 0);
+
+    const options = {
+      body,
+      tag,
+      data: { url: window.location.href }
+    };
+
+    if (!isIOS) {
+      options.icon = './logo.png';
+      options.badge = './logo.png';
+      options.vibrate = [200, 100, 200];
+    }
+
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(reg => {
+        reg.showNotification(title, options).catch(err => {
+          console.warn('[SW] showNotification fallback:', err);
+          reg.showNotification(title, { body, tag });
+        });
+      });
+    } else {
+      try {
+        new Notification(title, options);
+      } catch (e) {
+        console.warn('new Notification failed', e);
+      }
+    }
+  };
+
+  const requestNotificationPermission = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        setNotificationPermission(permission);
+        if (permission === 'granted') {
+          showNativeNotification('Casa Coqueiro', 'Notificações ativadas com sucesso! 🎉', 'setup-success');
+        }
+      });
+    }
+  };
   const prevOrdersCountRef = useRef(0);
+  const [notificationPermission, setNotificationPermission] = useState('Notification' in window ? Notification.permission : 'denied');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -206,6 +254,7 @@ export default function Admin() {
         if (nextOrders.length > prevOrdersCountRef.current) {
           const diff = nextOrders.length - prevOrdersCountRef.current;
           addToast(`Você recebeu ${diff} novo(s) orçamento(s)!`);
+          showNativeNotification('Novo Orçamento! 📥', `Você recebeu ${diff} novo(s) orçamento(s) de clientes.`, 'new-order');
         }
         prevOrdersCountRef.current = nextOrders.length;
         setOrders(nextOrders);
@@ -791,6 +840,50 @@ export default function Admin() {
           <Toast key={toast.id} message={toast.message} onClose={() => removeToast(toast.id)} />
         ))}
       </div>
+
+      {/* iOS/PWA Notification Permission Banner */}
+      {('Notification' in window) && notificationPermission === 'default' && (
+        <div style={{
+          borderRadius: '12px',
+          padding: '16px',
+          margin: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          backgroundColor: '#ecfdf5',
+          border: '1px solid #d1fae5',
+          color: '#065f46'
+        }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <span style={{ fontSize: '20px' }}>🔔</span>
+            <div style={{ textAlign: 'left' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 700, margin: 0 }}>
+                Receber Alertas de Novos Orçamentos
+              </h4>
+              <p style={{ fontSize: '12px', margin: 0, opacity: 0.9 }}>
+                Ative as notificações para receber avisos em tempo real ao receber novos orçamentos de clientes.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={requestNotificationPermission}
+            className="btn btn-primary"
+            style={{
+              backgroundColor: '#059669',
+              border: 'none',
+              color: '#fff',
+              padding: '8px 16px',
+              fontSize: '12px',
+              fontWeight: 700,
+              borderRadius: '8px',
+              cursor: 'pointer'
+            }}
+          >
+            Ativar
+          </button>
+        </div>
+      )}
 
       {/* ===================== MASTER ADMIN LAYOUT ===================== */}
       {isMaster && (
