@@ -1038,7 +1038,7 @@ export default function Admin() {
                 Controle Global de Usuários
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px' }}>
+              <div className="admin-grid-layout">
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                   <table className="admin-table">
                     <thead>
@@ -1340,7 +1340,7 @@ export default function Admin() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px' }}>
+              <div className="admin-grid-layout">
                 {/* List */}
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                   <table className="admin-table">
@@ -1634,7 +1634,7 @@ export default function Admin() {
                 Gestão de Clientes B2B
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px' }}>
+              <div className="admin-grid-layout">
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                   <table className="admin-table">
                     <thead>
@@ -1718,7 +1718,7 @@ export default function Admin() {
                 Equipe e Permissões de Acesso
               </h2>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '32px' }}>
+              <div className="admin-grid-layout">
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                   <table className="admin-table">
                     <thead>

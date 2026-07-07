@@ -505,3 +505,67 @@ input:checked + .slider:before {
     display: none !important;
   }
 }
+
+/* Responsive Backoffice/Admin Styles for Mobile Devices */
+.admin-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+}
+
+@media (max-width: 1024px) {
+  .admin-grid-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    padding: 16px !important;
+  }
+  .admin-header > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .admin-layout {
+    flex-direction: column !important;
+  }
+  .admin-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 10px 16px !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 8px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-sidebar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .admin-tab-btn {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+  }
+  .admin-content {
+    padding: 16px !important;
+  }
+  .admin-table {
+    min-width: 750px !important;
+  }
+  /* Force all cards inside admin content to enable horizontal scroll for tables */
+  .admin-content .card {
+    overflow-x: auto !important;
+    max-width: 100% !important;
+  }
+}
+
