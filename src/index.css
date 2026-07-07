@@ -980,11 +980,11 @@ input:checked + .slider:before {
     background-color: white !important;
     color: black !important;
   }
-  #root, .admin-layout, .admin-sidebar, .admin-content, .admin-header, header, main, footer, button, select, form {
-    display: none !important;
+  body * {
+    visibility: hidden !important;
   }
   .print-invoice-sheet, .print-invoice-sheet * {
-    display: block !important;
+    visibility: visible !important;
   }
   .print-invoice-sheet {
     position: absolute !important;
