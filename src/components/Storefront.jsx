@@ -891,7 +891,10 @@ export default function Storefront() {
 
       {/* Floating total footer */}
       {activeTab === 'catalog' && cartCount > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-50 animate-slide-up">
+        <div 
+          className="fixed left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-[998] animate-slide-up"
+          style={{ bottom: isMobile ? '80px' : '16px' }}
+        >
           <button 
             onClick={() => setIsCartOpen(true)}
             className="w-full text-white py-4 px-6 rounded-2xl flex items-center justify-between shadow-lg active:scale-95 transition-all font-bold cursor-pointer border-none"
