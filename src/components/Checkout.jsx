@@ -291,19 +291,21 @@ export default function Checkout() {
           {/* Form Side */}
           <form onSubmit={handlePlaceOrder} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
-            {/* Address */}
+            {/* Observations / notes */}
             <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
-                📍 Endereço de Entrega
+                📝 Observações ou Notas do Orçamento
               </h3>
               <textarea
-                required
-                value={deliveryAddress}
-                onChange={e => setDeliveryAddress(e.target.value)}
-                placeholder="Rua, número, complemento, ponto de referência..."
+                value={notes}
+                onChange={e => {
+                  setNotes(e.target.value);
+                  localStorage.setItem(`cart_notes_${client.code}`, e.target.value);
+                }}
+                placeholder="Ex: Gostaria de alinhar condições de desconto para pagamento à vista..."
                 style={{
                   width: '100%',
-                  minHeight: '90px',
+                  minHeight: '120px',
                   padding: '12px',
                   borderRadius: '12px',
                   border: '1px solid var(--border-color)',
@@ -315,116 +317,6 @@ export default function Checkout() {
                   outline: 'none'
                 }}
               />
-            </div>
-
-            {/* Delivery Slots */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
-                📅 Escolha o Horário de Entrega
-              </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
-                {availableSlots.map(slot => {
-                  const isSelected = selectedSlot?.id === slot.id;
-                  return (
-                    <button
-                      key={slot.id}
-                      type="button"
-                      onClick={() => setSelectedSlot(slot)}
-                      style={{
-                        padding: '10px',
-                        borderRadius: '12px',
-                        border: isSelected ? `2.5px solid ${company.primaryColor}` : '1.5px solid var(--border-color)',
-                        backgroundColor: isSelected ? `${company.primaryColor}10` : 'var(--card-bg)',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s'
-                      }}
-                    >
-                      <div style={{ fontSize: '10px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase' }}>
-                        {slot.isToday ? 'Hoje' : 'Amanhã'}
-                      </div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
-                        ⏰ {slot.time}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Payment Method */}
-            <div className="card" style={{ padding: '24px', textAlign: 'left', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '18px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--text-primary)' }}>
-                💳 Forma de Pagamento (No Recebimento)
-              </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('pix')}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '16px',
-                    border: paymentMethod === 'pix' ? '2.5px solid #10b981' : '1.5px solid var(--border-color)',
-                    backgroundColor: paymentMethod === 'pix' ? '#10b98110' : 'var(--card-bg)',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '4px',
-                    transition: 'all 0.15s',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  <span style={{ fontSize: '18px' }}>⚡</span>
-                  <span>PIX</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('cartao')}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '16px',
-                    border: paymentMethod === 'cartao' ? `2.5px solid ${company.primaryColor}` : '1.5px solid var(--border-color)',
-                    backgroundColor: paymentMethod === 'cartao' ? `${company.primaryColor}10` : 'var(--card-bg)',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '4px',
-                    transition: 'all 0.15s',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  <span style={{ fontSize: '18px' }}>💳</span>
-                  <span>Cartão</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('dinheiro')}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '16px',
-                    border: paymentMethod === 'dinheiro' ? '2.5px solid #f59e0b' : '1.5px solid var(--border-color)',
-                    backgroundColor: paymentMethod === 'dinheiro' ? '#f59e0b10' : 'var(--card-bg)',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '4px',
-                    transition: 'all 0.15s',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  <span style={{ fontSize: '18px' }}>💵</span>
-                  <span>Dinheiro</span>
-                </button>
-              </div>
             </div>
 
             {/* Confirm order button */}
@@ -444,7 +336,7 @@ export default function Checkout() {
                 transition: 'all 0.15s'
               }}
             >
-              🚀 Confirmar e Enviar Pedido
+              🚀 Confirmar e Gerar Orçamento
             </button>
           </form>
 

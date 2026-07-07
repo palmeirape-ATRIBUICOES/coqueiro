@@ -73,6 +73,11 @@ export default function Storefront() {
     }
     setMerchant(user);
 
+    // Request push notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
     // 2. Load products filtered strictly by the client's linked company (offline cache first)
     setProducts(getProducts(user.companyId));
 
@@ -82,7 +87,18 @@ export default function Storefront() {
     // 3.1. Sync from Firebase in background and reload state
     syncFromCloud().then(() => {
       setProducts(getProducts(user.companyId));
-      setClientOrders(getOrders(user.companyId).filter(o => o.clientCode === user.code));
+      
+      const newOrders = getOrders(user.companyId).filter(o => o.clientCode === user.code);
+      // Compare status for push notifications
+      setClientOrders(prevOrders => {
+        newOrders.forEach(newOrder => {
+          const oldOrder = prevOrders.find(o => o.id === newOrder.id);
+          if (oldOrder && oldOrder.status !== newOrder.status) {
+            triggerLocalPushNotification(newOrder.id, newOrder.status);
+          }
+        });
+        return newOrders;
+      });
     });
 
     // 4. Load active cart
@@ -96,6 +112,57 @@ export default function Storefront() {
       }
     }
   }, [navigate]);
+
+  const triggerLocalPushNotification = (orderId, newStatus) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const title = `Orçamento Atualizado! 🛍️`;
+      const body = `O status do orçamento #${orderId} foi alterado para: ${newStatus}`;
+      
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.15);
+        setTimeout(() => {
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(880, audioCtx.currentTime);
+          gain2.gain.setValueAtTime(0.5, audioCtx.currentTime);
+          osc2.start();
+          osc2.stop(audioCtx.currentTime + 0.3);
+        }, 150);
+      } catch (e) {
+        console.warn('AudioContext failed:', e);
+      }
+
+      if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification(title, {
+            body,
+            icon: '/favicon.svg',
+            badge: '/favicon.svg',
+            vibrate: [200, 100, 200, 100, 300],
+            tag: `order-status-${orderId}`
+          });
+        });
+      } else {
+        new Notification(title, { 
+          body, 
+          tag: `order-status-${orderId}`,
+          vibrate: [200, 100, 200, 100, 300]
+        });
+      }
+    }
+  };
 
   // Sync cart
   useEffect(() => {
