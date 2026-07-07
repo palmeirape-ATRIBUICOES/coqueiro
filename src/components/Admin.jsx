@@ -708,8 +708,207 @@ export default function Admin() {
   return (
     <div className="admin-container">
 
+      {/* ===================== MASTER ADMIN LAYOUT ===================== */}
+      {isMaster && (
+        <div>
+          {/* Master Header */}
+          <div className="admin-header print-hide">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <button
+                onClick={() => navigate('/')}
+                className="btn btn-outline"
+                style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+              >
+                <ArrowLeft size={16} /> Voltar ao Catálogo
+              </button>
+              <div style={{ textAlign: 'left' }}>
+                <h1 style={{ fontSize: '20px', fontWeight: 800, margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--text-primary)' }}>
+                  Painel Administrativo Master
+                </h1>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
+                  Visão Geral — Facilitadora
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ textAlign: 'right', fontSize: '13px' }}>
+                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{currentUser.name}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                  Cargo: <strong style={{ color: 'var(--primary-color)' }}>{currentUser.role.toUpperCase()}</strong>
+                </div>
+              </div>
+              <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '12px', color: 'var(--danger)', borderColor: 'var(--border-color)' }}>
+                Sair
+              </button>
+            </div>
+          </div>
+
+          {/* Banners */}
+          {successMsg && (<div className="print-hide" style={{ backgroundColor: '#ecfdf5', borderBottom: '1px solid #d1fae5', color: '#065f46', padding: '12px', fontSize: '14px', fontWeight: 600, textAlign: 'center' }}>✅ {successMsg}</div>)}
+          {errorMsg && (<div className="print-hide" style={{ backgroundColor: '#fef2f2', borderBottom: '1px solid #fee2e2', color: '#991b1b', padding: '12px', fontSize: '14px', fontWeight: 600, textAlign: 'center' }}>⚠️ {errorMsg}</div>)}
+
+          {/* Master Layout: Sidebar + Content */}
+          <div className="admin-layout">
+            <aside className="admin-sidebar print-hide">
+              <button onClick={() => setActiveTab('dashboard-master')} className={`admin-tab-btn ${activeTab === 'dashboard-master' ? 'active' : ''}`}>
+                <BarChart3 size={18} /> Painel Global
+              </button>
+              <button onClick={() => setActiveTab('companies')} className={`admin-tab-btn ${activeTab === 'companies' ? 'active' : ''}`}>
+                <Store size={18} /> Gestão de Lojas
+              </button>
+              <button onClick={() => setActiveTab('global-users')} className={`admin-tab-btn ${activeTab === 'global-users' ? 'active' : ''}`}>
+                <Shield size={18} /> Usuários Globais
+              </button>
+            </aside>
+            <main className="admin-content" style={{ textAlign: 'left' }}>
+              {/* ====== MASTER TAB: GLOBAL DASHBOARD ====== */}
+              {activeTab === 'dashboard-master' && (
+                <div>
+                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
+                    Painel Administrativo Master
+                  </h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
+                    <div className="card">
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Lojas Registradas</div>
+                      <div style={{ fontSize: '28px', fontWeight: 800, marginTop: '8px', color: 'var(--primary-color)' }}>{Object.keys(companies).length}</div>
+                    </div>
+                    <div className="card">
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Faturamento Acumulado</div>
+                      <div style={{ fontSize: '28px', fontWeight: 800, marginTop: '8px', color: 'var(--primary-color)' }}>
+                        R$ {orders.filter(o => o.status !== 'Cancelado').reduce((sum, o) => sum + o.total, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                    <div className="card">
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Orçamentos Solicitados</div>
+                      <div style={{ fontSize: '28px', fontWeight: 800, marginTop: '8px', color: 'var(--primary-color)' }}>{orders.length}</div>
+                    </div>
+                    <div className="card">
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>Usuários Ativos</div>
+                      <div style={{ fontSize: '28px', fontWeight: 800, marginTop: '8px', color: 'var(--primary-color)' }}>
+                        {Object.values(users).filter(u => u.status === 'Active').length}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Orçamentos Recentes das Filiais</h3>
+                    <div style={{ overflowX: 'auto' }}>
+                      <table className="admin-table">
+                        <thead><tr><th>Cód Pedido</th><th>Loja</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead>
+                        <tbody>
+                          {orders.slice(0, 10).map(ord => (
+                            <tr key={ord.id}>
+                              <td style={{ fontWeight: 700 }}>{ord.id}</td>
+                              <td style={{ fontWeight: 600 }}>{companies[ord.companyId]?.name || ord.companyId}</td>
+                              <td>{ord.clientName}</td>
+                              <td>R$ {ord.total.toFixed(2)}</td>
+                              <td><span className={`badge badge-${ord.status.toLowerCase().replace(/\s+/g, '-')}`}>{ord.status}</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ====== MASTER TAB: COMPANIES ====== */}
+              {activeTab === 'companies' && (
+                <div>
+                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
+                    Gerenciar Lojas e Clientes Administrativos
+                  </h2>
+                  <div className="admin-grid-layout">
+                    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                      <table className="admin-table">
+                        <thead><tr><th>ID</th><th>Nome</th><th>Telefone</th><th>Endereço</th></tr></thead>
+                        <tbody>
+                          {Object.values(companies).map(c => (
+                            <tr key={c.id}>
+                              <td style={{ fontWeight: 700 }}>{c.id}</td>
+                              <td>{c.name}</td>
+                              <td>{c.phone}</td>
+                              <td style={{ fontSize: '12px' }}>{c.address}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="card">
+                      <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Cadastrar Nova Loja</h3>
+                      <form onSubmit={handleCreateCompany} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>ID da Loja</label>
+                          <input className="input-field" placeholder="ex: coqueiro-matriz" value={newCompany.id} onChange={e => setNewCompany(p => ({ ...p, id: e.target.value }))} required /></div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Nome Completo</label>
+                          <input className="input-field" placeholder="Nome da loja" value={newCompany.name} onChange={e => setNewCompany(p => ({ ...p, name: e.target.value }))} required /></div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Nome Fantasia</label>
+                          <input className="input-field" placeholder="Nome fantasia" value={newCompany.tradeName} onChange={e => setNewCompany(p => ({ ...p, tradeName: e.target.value }))} /></div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Telefone</label>
+                          <input className="input-field" placeholder="(xx) xxxxx-xxxx" value={newCompany.phone} onChange={e => setNewCompany(p => ({ ...p, phone: e.target.value }))} /></div>
+                        <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '8px' }}>Cadastrar Loja</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ====== MASTER TAB: GLOBAL USERS ====== */}
+              {activeTab === 'global-users' && (
+                <div>
+                  <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
+                    Gerenciar Usuários Globais
+                  </h2>
+                  <div className="admin-grid-layout">
+                    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                      <table className="admin-table">
+                        <thead><tr><th>Código</th><th>Nome</th><th>Cargo</th><th>Loja</th><th>Status</th></tr></thead>
+                        <tbody>
+                          {Object.values(users).map(u => (
+                            <tr key={u.code}>
+                              <td style={{ fontWeight: 700 }}>{u.code}</td>
+                              <td>{u.name}</td>
+                              <td><span className={`badge badge-${u.role}`}>{u.role}</span></td>
+                              <td style={{ fontSize: '12px' }}>{companies[u.companyId]?.name || u.companyId || '—'}</td>
+                              <td><span className={`badge badge-${u.status?.toLowerCase()}`}>{u.status}</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="card">
+                      <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Cadastrar Novo Usuário</h3>
+                      <form onSubmit={handleCreateGlobalUser} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Código de Acesso</label>
+                          <input className="input-field" placeholder="ex: ADMIN01" value={newGlobalUser.code} onChange={e => setNewGlobalUser(p => ({ ...p, code: e.target.value }))} required /></div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Nome</label>
+                          <input className="input-field" placeholder="Nome completo" value={newGlobalUser.name} onChange={e => setNewGlobalUser(p => ({ ...p, name: e.target.value }))} required /></div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Cargo</label>
+                          <select className="input-field" value={newGlobalUser.role} onChange={e => setNewGlobalUser(p => ({ ...p, role: e.target.value }))}>
+                            <option value="admin-master">Admin Master</option>
+                            <option value="store-admin">Admin de Loja</option>
+                            <option value="gestor">Gestor</option>
+                            <option value="vendedor">Vendedor</option>
+                          </select>
+                        </div>
+                        <div><label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Loja</label>
+                          <select className="input-field" value={newGlobalUser.companyId} onChange={e => setNewGlobalUser(p => ({ ...p, companyId: e.target.value }))}>
+                            <option value="">Selecione uma loja...</option>
+                            {Object.values(companies).map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                          </select>
+                        </div>
+                        <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '8px' }}>Registrar Acesso</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </main>
+          </div>
+        </div>
+      )}
+
       {/* ===================== NON-MASTER HOME SCREEN ===================== */}
       {!isMaster && activeTab === 'home' && (
+
         <div className="missoes-home-page">
           {/* iOS-style header */}
           <header className="missoes-header print-hide">
