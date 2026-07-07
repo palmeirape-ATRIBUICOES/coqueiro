@@ -171,11 +171,12 @@ onChildAdded(ref(db, 'messages'), async (snapshot) => {
   if (!message) return;
 
   // Skip messages sent before gateway startup or older than 5 minutes
-  if (message.timestamp < gatewayStartTime - 2 * 60 * 1000) {
+  const msgTime = new Date(message.timestamp).getTime();
+  if (isNaN(msgTime) || msgTime < gatewayStartTime - 2 * 60 * 1000) {
     return;
   }
 
-  console.log(`[New Message] Detected: from ${message.senderName} (${message.sender}) to recipient ${message.recipient}`);
+  console.log(`[New Message] Detected: from ${message.senderName} (${message.sender}) for client: ${message.clientCode}`);
 
   try {
     const payload = {
@@ -187,7 +188,28 @@ onChildAdded(ref(db, 'messages'), async (snapshot) => {
       }
     };
 
-    sendPushToUser(message.recipient, payload);
+    if (message.sender === 'cliente') {
+      // Notify all sellers/admins of this company
+      const usersSnapshot = await get(ref(db, 'users'));
+      const usersObj = usersSnapshot.val();
+      if (!usersObj) return;
+
+      const users = Array.isArray(usersObj) ? usersObj : Object.values(usersObj);
+      const sellersToNotify = users.filter(u => 
+        u &&
+        u.companyId === message.companyId && 
+        (u.role === 'vendedor' || u.role === 'store-admin' || u.role === 'gestor')
+      );
+
+      console.log(`[New Message] Notifying ${sellersToNotify.length} staff member(s)...`);
+      sellersToNotify.forEach(seller => {
+        sendPushToUser(seller.code, payload);
+      });
+    } else {
+      // Notify the specific client
+      console.log(`[New Message] Notifying client: ${message.clientCode}`);
+      sendPushToUser(message.clientCode, payload);
+    }
   } catch (err) {
     console.error('[New Message] Notification failed:', err);
   }
