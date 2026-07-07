@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrders, saveOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import { ArrowLeft, CheckCircle, FileText, Calendar, ShoppingBag } from 'lucide-react';
+import Toast from './Toast';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -13,6 +14,17 @@ export default function Checkout() {
   const [notes, setNotes] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [toasts, setToasts] = useState([]);
+  
+  const addToast = (msg) => {
+    setToasts(prev => [...prev, { id: Date.now(), message: msg }]);
+  };
+  
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
+  const prevOrdersRef = useRef([]);
 
   // Fields from missoes-da-loja layout
   const [deliveryAddress, setDeliveryAddress] = useState('');
@@ -69,7 +81,28 @@ export default function Checkout() {
     } else {
       navigate('/');
     }
+    // Initialize previous orders ref to monitor status updates
+    const initialOrders = getOrders();
+    prevOrdersRef.current = initialOrders;
   }, [navigate]);
+
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'facilitadora_orders') {
+        const nextOrders = getOrders();
+        nextOrders.forEach(nextOrd => {
+          // Find corresponding order in previous orders list
+          const prevOrd = prevOrdersRef.current.find(o => o.id === nextOrd.id);
+          if (prevOrd && prevOrd.status !== nextOrd.status && nextOrd.clientCode === client?.code) {
+            addToast(`O status do orçamento ${nextOrd.id} mudou de "${prevOrd.status}" para "${nextOrd.status}"!`);
+          }
+        });
+        prevOrdersRef.current = nextOrders;
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [client]);
 
   const availableSlots = React.useMemo(() => {
     const fixedHours = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
@@ -154,6 +187,29 @@ export default function Checkout() {
     setOrderId(newOrderId);
     setIsSuccess(true);
   };
+
+  // Periodically pull orders from the cloud to update state and trigger status notifications
+  useEffect(() => {
+    if (!client) return;
+    
+    const interval = setInterval(() => {
+      // Fetch latest from Firebase database and load to localStorage
+      import('../mockDb').then(({ syncFromCloud, getOrders }) => {
+        syncFromCloud().then(() => {
+          const nextOrders = getOrders();
+          nextOrders.forEach(nextOrd => {
+            const prevOrd = prevOrdersRef.current.find(o => o.id === nextOrd.id);
+            if (prevOrd && prevOrd.status !== nextOrd.status && nextOrd.clientCode === client?.code) {
+              addToast(`O status do orçamento ${nextOrd.id} mudou de "${prevOrd.status}" para "${nextOrd.status}"!`);
+            }
+          });
+          prevOrdersRef.current = nextOrders;
+        });
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [client]);
 
   if (!client || cart.length === 0) return null;
 
@@ -249,6 +305,12 @@ export default function Checkout() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color)', padding: '40px 16px', color: 'var(--text-primary)' }}>
+      {/* Toasts List */}
+      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {toasts.map(t => (
+          <Toast key={t.id} message={t.message} onClose={() => removeToast(t.id)} />
+        ))}
+      </div>
       <div className="container" style={{ maxWidth: '1000px' }}>
         
         {/* Back Button */}

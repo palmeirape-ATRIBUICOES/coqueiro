@@ -36043,29 +36043,6 @@ const INITIAL_ORDERS = [
 ];
 
 export const initDb = () => {
-  // Clear and force update se o novo "clubbi" tenant não estiver presente
-  const existingCompanies = localStorage.getItem("facilitadora_companies");
-  if (existingCompanies && !JSON.parse(existingCompanies)["clubbi"]) {
-    localStorage.removeItem("facilitadora_companies");
-    localStorage.removeItem("facilitadora_users");
-    localStorage.removeItem("facilitadora_products");
-    localStorage.removeItem("facilitadora_companies");
-    localStorage.removeItem("facilitadora_companies");
-    localStorage.removeItem("facilitadora_companies");
-  }
-  // Force update only if new Coqueiro products are missing or old categories are active
-  const existingProducts = localStorage.getItem("facilitadora_products");
-  if (existingProducts && (!existingProducts.includes("SABONETES") || !existingProducts.includes("SABONETES"))) {
-    localStorage.removeItem("facilitadora_products");
-    localStorage.removeItem("facilitadora_companies");
-  }
-
-  // Force update only if new CLUBB user is missing
-  const existingUsers = localStorage.getItem("facilitadora_users");
-  if (existingUsers && !existingUsers.includes("CLUBB")) {
-    localStorage.removeItem("facilitadora_users");
-  }
-
   if (!localStorage.getItem("facilitadora_companies")) {
     localStorage.setItem("facilitadora_companies", JSON.stringify(INITIAL_COMPANIES));
   }
@@ -36163,7 +36140,10 @@ export const saveUsers = (users) => {
 export const getProducts = (companyId = null) => {
   initDb();
   let all = JSON.parse(localStorage.getItem("facilitadora_products"));
-  if (!Array.isArray(all)) return [];
+  if (!all) return [];
+  if (!Array.isArray(all)) {
+    all = Object.values(all);
+  }
   all = sanitizeProductsList(all);
   if (!companyId) return all.filter(Boolean);
   return all.filter(p => p && p.companyId === companyId);
@@ -36178,8 +36158,11 @@ export const saveProducts = (products) => {
 // Orders Methods
 export const getOrders = (companyId = null) => {
   initDb();
-  const all = JSON.parse(localStorage.getItem("facilitadora_orders"));
-  if (!Array.isArray(all)) return [];
+  let all = JSON.parse(localStorage.getItem("facilitadora_orders"));
+  if (!all) return [];
+  if (!Array.isArray(all)) {
+    all = Object.values(all);
+  }
   if (!companyId) return all.filter(Boolean);
   return all.filter(o => o && o.companyId === companyId);
 };

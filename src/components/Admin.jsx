@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import Toast from './Toast';
+import {  
   getCompanies, saveCompanies, 
   getUsers, saveUsers, 
   getProducts, saveProducts, 
@@ -18,6 +19,14 @@ export default function Admin() {
   const { company, reloadBranding } = useWhitelabel();
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [toasts, setToasts] = useState([]);
+  const addToast = (msg) => {
+    setToasts(prev => [...prev, { id: Date.now(), message: msg }]);
+  };
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+  const prevOrdersCountRef = useRef(0);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -38,6 +47,81 @@ export default function Admin() {
     code: '', name: '', role: 'store-admin', status: 'Active', companyId: ''
   });
 
+  const handleCreateCompany = (e) => {
+    e.preventDefault();
+    if (currentUser.role !== 'admin-master') return;
+
+    const companyId = newCompany.id.trim().toLowerCase().replace(/\s+/g, '-');
+    if (!companyId) {
+      showError('Identificador da empresa inválido.');
+      return;
+    }
+
+    if (companies[companyId]) {
+      showError('Já existe uma empresa cadastrada com este identificador.');
+      return;
+    }
+
+    const updatedCompanies = {
+      ...companies,
+      [companyId]: {
+        ...newCompany,
+        id: companyId
+      }
+    };
+
+    saveCompanies(updatedCompanies);
+    setCompanies(updatedCompanies);
+    showSuccess(`Empresa "${newCompany.name}" cadastrada com sucesso!`);
+    
+    // Reset form
+    setNewCompany({
+      id: '', name: '', tradeName: '', logoUrl: '', logoType: 'text', logoText: '',
+      primaryColor: '#059669', secondaryColor: '#eab308', accentColor: '#ef4444',
+      address: '', phone: '', whatsapp: '', hours: '08:00 às 18:00'
+    });
+  };
+
+  const handleCreateGlobalUser = (e) => {
+    e.preventDefault();
+    if (currentUser.role !== 'admin-master') return;
+
+    const code = newGlobalUser.code.trim().toUpperCase();
+    if (code.length !== 5) {
+      showError('O código deve conter exatamente 5 caracteres.');
+      return;
+    }
+
+    if (users[code]) {
+      showError('Código de acesso já está em uso.');
+      return;
+    }
+
+    const updatedUsers = {
+      ...users,
+      [code]: {
+        ...newGlobalUser,
+        code,
+        companyId: newGlobalUser.role === 'admin-master' ? null : newGlobalUser.companyId,
+        permissions: newGlobalUser.role === 'store-admin' ? null : {
+          financeiro: true, produtos: true, precos: true, clientes: true,
+          funcionarios: true, relatorios: true, impressao: true, visualConfig: true,
+          estoque: true, usuarios: true
+        }
+      }
+    };
+
+    // Persist new user locally and sync to cloud
+    saveUsers(updatedUsers);
+    setUsers(updatedUsers);
+    showSuccess(`Usuário ${newGlobalUser.name} cadastrado com código "${code}"`);
+
+    // Reset form fields
+    setNewGlobalUser({
+      code: '', name: '', role: 'store-admin', status: 'Active', companyId: ''
+    });
+  };
+
   // Store Admin / Staff specific CRUD states
   const [editingProduct, setEditingProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({
@@ -47,6 +131,7 @@ export default function Admin() {
   const [newClient, setNewClient] = useState({
     name: '', phone: '', code: ''
   });
+  const [editingClient, setEditingClient] = useState(null);
 
   const [editingStaff, setEditingStaff] = useState(null);
   const [newStaff, setNewStaff] = useState({
@@ -86,9 +171,20 @@ export default function Admin() {
   };
 
   useEffect(() => {
+    const currentOrders = getOrders();
+    prevOrdersCountRef.current = currentOrders.length;
+  }, []);
+
+  useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === 'facilitadora_orders') {
-        setOrders(getOrders());
+        const nextOrders = getOrders();
+        if (nextOrders.length > prevOrdersCountRef.current) {
+          const diff = nextOrders.length - prevOrdersCountRef.current;
+          addToast(`Você recebeu ${diff} novo(s) orçamento(s)!`);
+        }
+        prevOrdersCountRef.current = nextOrders.length;
+        setOrders(nextOrders);
       }
       if (e.key === 'facilitadora_products') {
         setProducts(getProducts());
@@ -100,6 +196,26 @@ export default function Admin() {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Periodically pull database values from Firebase to sync in real-time
+  useEffect(() => {
+    if (!currentUser) return;
+    const interval = setInterval(() => {
+      syncFromCloud().then(() => {
+        const nextOrders = getOrders();
+        if (nextOrders.length > prevOrdersCountRef.current) {
+          const diff = nextOrders.length - prevOrdersCountRef.current;
+          addToast(`Você recebeu ${diff} novo(s) orçamento(s)!`);
+        }
+        prevOrdersCountRef.current = nextOrders.length;
+        setOrders(nextOrders);
+        setUsers(getUsers());
+        setProducts(getProducts());
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentUser]);
 
   // Reset pagination limit when switching tabs or searching
   useEffect(() => {
@@ -148,7 +264,9 @@ export default function Admin() {
     setCompanies(allCompanies);
     setUsers(getUsers());
     setProducts(getProducts());
-    setOrders(getOrders());
+    const initialOrders = getOrders();
+    prevOrdersCountRef.current = initialOrders.length;
+    setOrders(initialOrders);
 
     // 2.1. Sync from Firebase in background and reload state
     syncFromCloud().then(() => {
@@ -156,7 +274,9 @@ export default function Admin() {
       setCompanies(freshCompanies);
       setUsers(getUsers());
       setProducts(getProducts());
-      setOrders(getOrders());
+      const syncedOrders = getOrders();
+      prevOrdersCountRef.current = syncedOrders.length;
+      setOrders(syncedOrders);
       if (user.companyId && freshCompanies[user.companyId]) {
         setStoreConfig({ ...freshCompanies[user.companyId] });
       }
@@ -215,78 +335,6 @@ export default function Admin() {
   };
 
   // --- ACTIONS: ADMIN MASTER ---
-  const handleCreateCompany = (e) => {
-    e.preventDefault();
-    if (currentUser.role !== 'admin-master') return;
-
-    const companyId = newCompany.id.trim().toLowerCase().replace(/\s+/g, '-');
-    if (!companyId) {
-      showError('Identificador da empresa inválido.');
-      return;
-    }
-
-    if (companies[companyId]) {
-      showError('Já existe uma empresa cadastrada com este identificador.');
-      return;
-    }
-
-    const updatedCompanies = {
-      ...companies,
-      [companyId]: {
-        ...newCompany,
-        id: companyId
-      }
-    };
-
-    saveCompanies(updatedCompanies);
-    setCompanies(updatedCompanies);
-    showSuccess(`Empresa "${newCompany.name}" cadastrada com sucesso!`);
-    
-    // Reset
-    setNewCompany({
-      id: '', name: '', tradeName: '', logoUrl: '', logoType: 'text', logoText: '',
-      primaryColor: '#059669', secondaryColor: '#eab308', accentColor: '#ef4444',
-      address: '', phone: '', whatsapp: '', hours: '08:00 às 18:00'
-    });
-  };
-
-  const handleCreateGlobalUser = (e) => {
-    e.preventDefault();
-    if (currentUser.role !== 'admin-master') return;
-
-    const code = newGlobalUser.code.trim().toUpperCase();
-    if (code.length !== 5) {
-      showError('O código deve conter exatamente 5 caracteres.');
-      return;
-    }
-
-    if (users[code]) {
-      showError('Código de acesso já está em uso.');
-      return;
-    }
-
-    const updatedUsers = {
-      ...users,
-      [code]: {
-        ...newGlobalUser,
-        code,
-        companyId: newGlobalUser.role === 'admin-master' ? null : newGlobalUser.companyId,
-        permissions: newGlobalUser.role === 'store-admin' ? null : {
-          financeiro: true, produtos: true, precos: true, clientes: true,
-          funcionarios: true, relatorios: true, impressao: true, visualConfig: true,
-          estoque: true, usuarios: true
-        }
-      }
-    };
-
-    saveUsers(updatedUsers);
-    setUsers(updatedUsers);
-    showSuccess(`Usuário ${newGlobalUser.name} cadastrado com código "${code}"`);
-    
-    setNewGlobalUser({
-      code: '', name: '', role: 'store-admin', status: 'Active', companyId: ''
-    });
-  };
 
   const handleDeleteUser = (code) => {
     if (code === currentUser.code) {
@@ -315,6 +363,8 @@ export default function Admin() {
     saveOrders(updated);
     setOrders(updated);
     showSuccess(`Orçamento ${orderId} atualizado para "${newStatus}".`);
+    // Notify vendor of status change
+    addToast(`Orçamento ${orderId} foi alterado para "${newStatus}".`);
   };
 
   // Print Order Action
@@ -498,20 +548,20 @@ export default function Admin() {
   };
 
   // Client Actions
-  const handleAddClient = (e) => {
+  const handleAddOrEditClient = (e) => {
     e.preventDefault();
     if (!checkPermission('clientes')) {
-      showError('Você não possui permissão para cadastrar clientes.');
+      showError('Você não possui permissão para gerenciar clientes.');
       return;
     }
 
-    const code = newClient.code.trim();
-    if (!/^\d{6}$/.test(code)) {
-      showError('O código de acesso do cliente deve conter exatamente 6 dígitos numéricos.');
+    const code = newClient.code.trim().toUpperCase();
+    if (!/^[A-Z]{5,10}$/.test(code)) {
+      showError('O código de acesso do cliente deve conter entre 5 e 10 letras (A-Z).');
       return;
     }
 
-    if (users[code]) {
+    if (!editingClient && users[code]) {
       showError('Código de acesso já está cadastrado.');
       return;
     }
@@ -530,13 +580,41 @@ export default function Admin() {
 
     saveUsers(updatedUsers);
     setUsers(updatedUsers);
-    showSuccess(`Cliente "${newClient.name}" cadastrado! Código: ${code}`);
+    showSuccess(editingClient ? `Cliente "${newClient.name}" atualizado!` : `Cliente "${newClient.name}" cadastrado! Código: ${code}`);
 
     setNewClient({ name: '', phone: '', code: '' });
+    setEditingClient(null);
+  };
+
+  const handleStartEditClient = (cli) => {
+    setEditingClient(cli);
+    setNewClient({
+      name: cli.name,
+      phone: cli.phone || '',
+      code: cli.code
+    });
+  };
+
+  const handleDeleteClient = (code) => {
+    if (!checkPermission('clientes')) {
+      showError('Você não possui permissão para deletar clientes.');
+      return;
+    }
+    if (confirm(`Deseja realmente remover o cliente com código "${code}"?`)) {
+      const updated = { ...users };
+      delete updated[code];
+      saveUsers(updated);
+      setUsers(updated);
+      showSuccess('Cliente removido com sucesso.');
+    }
   };
 
   const generateRandomClientCode = () => {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
     if (users[code]) {
       generateRandomClientCode();
     } else {
@@ -707,6 +785,12 @@ export default function Admin() {
 
   return (
     <div className="admin-container">
+      {/* Toast notifications */}
+      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {toasts.map(toast => (
+          <Toast key={toast.id} message={toast.message} onClose={() => removeToast(toast.id)} />
+        ))}
+      </div>
 
       {/* ===================== MASTER ADMIN LAYOUT ===================== */}
       {isMaster && (
@@ -1820,6 +1904,7 @@ export default function Admin() {
                         <th>Código Único</th>
                         <th>Nome Comercial</th>
                         <th>Telefone</th>
+                        <th style={{ textAlign: 'right' }}>Ações</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1828,16 +1913,33 @@ export default function Admin() {
                           <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{cli.code}</td>
                           <td style={{ fontWeight: 600 }}>{cli.name}</td>
                           <td>{cli.phone}</td>
+                          <td style={{ textAlign: 'right' }}>
+                            <button
+                              onClick={() => handleStartEditClient(cli)}
+                              className="btn btn-outline"
+                              style={{ padding: '4px 8px', fontSize: '11px', marginRight: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                            >
+                              <Edit2 size={12} /> Editar
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClient(cli.code)}
+                              className="btn btn-outline"
+                              style={{ padding: '4px 8px', fontSize: '11px', color: 'var(--danger)', borderColor: 'rgba(239, 68, 68, 0.2)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                            >
+                              <Trash2 size={12} /> Excluir
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
 
-                {/* Register client form */}
-                <form onSubmit={handleAddClient} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {/* Register/Edit client form */}
+                <form onSubmit={handleAddOrEditClient} className="card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
-                    <Plus size={18} style={{ verticalAlign: 'middle', marginRight: '6px' }} /> Novo Cliente
+                    {editingClient ? <Edit2 size={18} style={{ verticalAlign: 'middle', marginRight: '6px' }} /> : <Plus size={18} style={{ verticalAlign: 'middle', marginRight: '6px' }} />}
+                    {editingClient ? `Editar: ${editingClient.code}` : 'Novo Cliente'}
                   </h3>
 
                   <div className="form-group" style={{ margin: 0 }}>
@@ -1861,28 +1963,46 @@ export default function Admin() {
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">Código de Acesso Único (6 Dígitos Numéricos)</label>
+                    <label className="form-label">Código de Acesso Único (5 a 10 Letras)</label>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <input 
-                        type="text" className="form-input" maxLength={6} placeholder="ex: 123456"
+                        type="text" className="form-input" maxLength={10} placeholder="ex: ABCDEF"
                         value={newClient.code}
-                        onChange={(e) => setNewClient({ ...newClient, code: e.target.value.replace(/\D/g, '') })}
+                        onChange={(e) => setNewClient({ ...newClient, code: e.target.value.toUpperCase().replace(/[^A-Z]/g, '') })}
                         required
+                        disabled={!!editingClient}
                       />
-                      <button 
-                        type="button" 
-                        onClick={generateRandomClientCode}
-                        className="btn btn-outline"
-                        style={{ padding: '8px 12px', fontSize: '12px' }}
-                      >
-                        Gerar
-                      </button>
+                      {!editingClient && (
+                        <button 
+                          type="button" 
+                          onClick={generateRandomClientCode}
+                          className="btn btn-outline"
+                          style={{ padding: '8px 12px', fontSize: '12px' }}
+                        >
+                          Gerar
+                        </button>
+                      )}
                     </div>
                   </div>
 
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-                    Registrar Cliente
-                  </button>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                    <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                      {editingClient ? 'Salvar' : 'Registrar Cliente'}
+                    </button>
+                    {editingClient && (
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          setEditingClient(null);
+                          setNewClient({ name: '', phone: '', code: '' });
+                        }}
+                        className="btn btn-outline"
+                        style={{ flex: 1 }}
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                  </div>
                 </form>
               </div>
             </div>

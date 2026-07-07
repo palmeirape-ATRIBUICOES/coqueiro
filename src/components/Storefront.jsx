@@ -113,6 +113,24 @@ export default function Storefront() {
         setCart([]);
       }
     }
+
+    // 5. Setup periodic background syncing for real-time order status tracking
+    const interval = setInterval(() => {
+      syncFromCloud().then(() => {
+        const newOrders = getOrders(user.companyId).filter(o => o.clientCode === user.code);
+        setClientOrders(prevOrders => {
+          newOrders.forEach(newOrder => {
+            const oldOrder = prevOrders.find(o => o.id === newOrder.id);
+            if (oldOrder && oldOrder.status !== newOrder.status) {
+              triggerLocalPushNotification(newOrder.id, newOrder.status);
+            }
+          });
+          return newOrders;
+        });
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [navigate]);
 
   const triggerLocalPushNotification = (orderId, newStatus) => {
