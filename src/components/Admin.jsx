@@ -633,6 +633,10 @@ export default function Admin() {
   const isMaster = currentUser.role === 'admin-master';
   
   const tenantProducts = products.filter(p => isMaster ? true : p.companyId === currentUser.companyId);
+  const uniqueCategories = Array.from(new Set(tenantProducts.map(p => p.category))).filter(Boolean);
+  if (uniqueCategories.length === 0) {
+    uniqueCategories.push('Geral');
+  }
   const tenantOrders = orders.filter(o => isMaster ? true : o.companyId === currentUser.companyId);
   const tenantClients = Object.values(users).filter(u => u.role === 'cliente' && (isMaster ? true : u.companyId === currentUser.companyId));
   const tenantStaff = Object.values(users).filter(u => (u.role === 'gestor' || u.role === 'vendedor') && (isMaster ? true : u.companyId === currentUser.companyId));
@@ -1335,7 +1339,7 @@ export default function Admin() {
                                 cursor: 'pointer'
                               }}
                             >
-                              {['Bebidas', 'Hortifruti', 'Mercearia', 'Biscoitos', 'Laticínios', 'Limpeza', 'Higiene'].map(cat => (
+                              {uniqueCategories.map(cat => (
                                 <option key={cat} value={cat}>{cat}</option>
                               ))}
                             </select>
@@ -1501,13 +1505,9 @@ export default function Admin() {
                       value={newProduct.category}
                       onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                     >
-                      <option value="Bebidas">Bebidas</option>
-                      <option value="Hortifruti">Hortifruti</option>
-                      <option value="Mercearia">Mercearia</option>
-                      <option value="Biscoitos">Biscoitos</option>
-                      <option value="Laticínios">Laticínios</option>
-                      <option value="Limpeza">Limpeza</option>
-                      <option value="Higiene">Higiene</option>
+                      {uniqueCategories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
                     </select>
                   </div>
 
