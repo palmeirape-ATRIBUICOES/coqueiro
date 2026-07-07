@@ -461,6 +461,16 @@ export default function Admin() {
     addToast(`Orçamento ${orderId} foi alterado para "${newStatus}".`);
   };
 
+  const handleDeleteOrder = (orderId) => {
+    if (!confirm(`Tem certeza de que deseja excluir o orçamento ${orderId}?`)) {
+      return;
+    }
+    const updated = orders.filter(ord => ord.id !== orderId);
+    saveOrders(updated);
+    setOrders(updated);
+    showSuccess(`Orçamento ${orderId} excluído com sucesso.`);
+  };
+
   // Print Order Action
   const triggerPrintOrder = (ord) => {
     if (!checkPermission('impressao')) {
@@ -751,6 +761,35 @@ export default function Admin() {
     setUsers(updatedUsers);
     showSuccess(editingStaff ? 'Funcionário atualizado!' : 'Funcionário registrado com sucesso!');
 
+    setNewStaff({
+      code: '', name: '', role: 'vendedor', status: 'Active',
+      permissions: {
+        financeiro: false, produtos: false, precos: false, clientes: true,
+        funcionarios: false, relatorios: false, impressao: true, visualConfig: false,
+        estoque: false, usuarios: false
+      }
+    });
+    setEditingStaff(null);
+  };
+
+  const handleDeleteStaff = () => {
+    if (!editingStaff) return;
+    if (!checkPermission('funcionarios')) {
+      showError('Você não possui permissão para gerenciar funcionários.');
+      return;
+    }
+    if (editingStaff.code === currentUser.code) {
+      showError('Você não pode excluir o seu próprio usuário!');
+      return;
+    }
+    if (!confirm(`Tem certeza de que deseja excluir o funcionário ${editingStaff.name}?`)) {
+      return;
+    }
+    const updatedUsers = { ...users };
+    delete updatedUsers[editingStaff.code];
+    saveUsers(updatedUsers);
+    setUsers(updatedUsers);
+    showSuccess('Funcionário excluído com sucesso!');
     setNewStaff({
       code: '', name: '', role: 'vendedor', status: 'Active',
       permissions: {
@@ -1890,14 +1929,33 @@ export default function Admin() {
                             </select>
                           </td>
                           <td>
-                            <button
-                              onClick={() => triggerPrintOrder(ord)}
-                              className="btn btn-outline"
-                              title="Imprimir Folha A4 para Separação"
-                              style={{ padding: '6px 10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                            >
-                              <Printer size={14} /> Separar
-                            </button>
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button
+                                onClick={() => triggerPrintOrder(ord)}
+                                className="btn btn-outline"
+                                title="Imprimir Folha A4 para Separação"
+                                style={{ padding: '6px 10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                              >
+                                <Printer size={14} /> Separar
+                              </button>
+                              <button
+                                onClick={() => handleDeleteOrder(ord.id)}
+                                className="btn btn-outline"
+                                title="Excluir Orçamento"
+                                style={{ 
+                                  padding: '6px 10px', 
+                                  fontSize: '12px', 
+                                  display: 'inline-flex', 
+                                  alignItems: 'center', 
+                                  gap: '4px',
+                                  color: '#ef4444',
+                                  borderColor: 'rgba(239, 68, 68, 0.2)',
+                                  backgroundColor: 'transparent'
+                                }}
+                              >
+                                <Trash2 size={14} /> Excluir
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -2462,23 +2520,38 @@ export default function Admin() {
                       {editingStaff ? 'Salvar' : 'Cadastrar'}
                     </button>
                     {editingStaff && (
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          setEditingStaff(null);
-                          setNewStaff({
-                            code: '', name: '', role: 'vendedor', status: 'Active',
-                            permissions: {
-                              financeiro: false, produtos: false, precos: false, clientes: true,
-                              funcionarios: false, relatorios: false, impressao: true, visualConfig: false,
-                              estoque: false, usuarios: false
-                            }
-                          });
-                        }}
-                        className="btn btn-outline"
-                      >
-                        Cancelar
-                      </button>
+                      <>
+                        <button 
+                          type="button"
+                          onClick={handleDeleteStaff}
+                          className="btn btn-outline"
+                          style={{
+                            backgroundColor: '#ef4444',
+                            color: '#ffffff',
+                            borderColor: '#ef4444',
+                            fontWeight: 700
+                          }}
+                        >
+                          Excluir
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            setEditingStaff(null);
+                            setNewStaff({
+                              code: '', name: '', role: 'vendedor', status: 'Active',
+                              permissions: {
+                                financeiro: false, produtos: false, precos: false, clientes: true,
+                                funcionarios: false, relatorios: false, impressao: true, visualConfig: false,
+                                estoque: false, usuarios: false
+                              }
+                            });
+                          }}
+                          className="btn btn-outline"
+                        >
+                          Cancelar
+                        </button>
+                      </>
                     )}
                   </div>
                 </form>
