@@ -329,7 +329,20 @@ export default function Storefront() {
                   justifyContent: 'center',
                   fontSize: '18px'
                 }}>
-                  🏪
+                  <img 
+                  src="/coqueiro/logo.png" 
+                  alt="" 
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    objectFit: 'contain',
+                    backgroundColor: 'white',
+                    padding: '2px',
+                    marginRight: '4px'
+                  }} 
+                />
                 </div>
                 <span style={{
                   fontSize: '18px',
@@ -441,18 +454,20 @@ export default function Storefront() {
             {/* Left side: store name and greeting */}
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '22px'
-                }}>
-                  🏪
-                </div>
+                <img 
+                  src="/coqueiro/logo.png" 
+                  alt="" 
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    objectFit: 'contain',
+                    backgroundColor: 'white',
+                    padding: '2px',
+                    marginRight: '6px'
+                  }} 
+                />
                 <span style={{
                   fontSize: '22px',
                   fontWeight: 900,
