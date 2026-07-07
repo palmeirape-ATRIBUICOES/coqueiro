@@ -48,14 +48,25 @@ self.addEventListener('fetch', (event) => {
 
 // Push notifications receiver
 self.addEventListener('push', (event) => {
-  let data = { title: 'Casa Coqueiro', body: 'Atualização recebida!' };
+  console.log('[SW] Push received!');
+
+  const basePath = self.location.pathname.substring(0, self.location.pathname.lastIndexOf('/') + 1);
+  const BASE_URL = self.location.origin + basePath;
+
+  let data = { 
+    title: 'Casa Coqueiro', 
+    body: 'Atualização recebida!',
+    data: { url: BASE_URL }
+  };
+
   try {
     if (event.data) {
-      data = event.data.json();
+      const parsed = event.data.json();
+      if (parsed) data = { ...data, ...parsed };
     }
   } catch (e) {
     console.warn('[SW] Push text message fallback:', event.data?.text());
-    data = { title: 'Casa Coqueiro', body: event.data?.text() || 'Novidade no painel!' };
+    data = { title: 'Casa Coqueiro', body: event.data?.text() || 'Novidade no painel!', data: { url: BASE_URL } };
   }
 
   let isIOS = false;
@@ -73,8 +84,8 @@ self.addEventListener('push', (event) => {
 
   // Only apply rich visual actions on non-iOS browsers to avoid silent failures on Apple devices
   if (!isIOS) {
-    options.icon = './logo.png';
-    options.badge = './logo.png';
+    options.icon = data.icon || BASE_URL + 'logo.png';
+    options.badge = data.badge || BASE_URL + 'logo.png';
     options.vibrate = [200, 100, 200];
     options.requireInteraction = true;
   }
@@ -84,7 +95,8 @@ self.addEventListener('push', (event) => {
       console.warn('[SW] High compatibility notification fallback:', err);
       return self.registration.showNotification(data.title, {
         body: data.body,
-        tag: data.tag || 'coqueiro-order-alert'
+        tag: data.tag || 'coqueiro-order-alert',
+        data: data.data || {}
       });
     })
   );
@@ -93,7 +105,20 @@ self.addEventListener('push', (event) => {
 // On notification click, open or focus the app
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const targetUrl = event.notification.data?.url || './';
+  let targetUrl = event.notification.data?.url || './';
+
+  // Rewrite relative routing paths (e.g. /#/admin) to be absolute to current subdomain base directory
+  if (targetUrl.includes('/#/')) {
+    try {
+      const hashIndex = targetUrl.indexOf('/#/');
+      const routePath = targetUrl.substring(hashIndex + 1);
+      const basePath = self.location.pathname.substring(0, self.location.pathname.lastIndexOf('/') + 1);
+      const BASE_URL = self.location.origin + basePath;
+      targetUrl = BASE_URL + routePath;
+    } catch (err) {
+      console.error('[SW] Error rewriting targetUrl:', err);
+    }
+  }
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {

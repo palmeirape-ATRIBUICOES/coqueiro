@@ -93,6 +93,9 @@ export default function Storefront() {
 
     if ('Notification' in window) {
       setNotificationPermission(Notification.permission);
+      if (Notification.permission === 'granted') {
+        registerPushSubscription(user);
+      }
     }
 
     // 2. Load products filtered strictly by the client's linked company (offline cache first)
@@ -221,12 +224,59 @@ export default function Storefront() {
     }
   };
 
+  const savePushSubscriptionToFirebase = async (userCode, subscription) => {
+    const dbUrl = "https://coqueiro-a586e-default-rtdb.firebaseio.com";
+    const endpointSafe = btoa(subscription.endpoint).replace(/[^a-zA-Z0-9]/g, '');
+    const url = `${dbUrl}/pushSubscriptions/${userCode}/${endpointSafe}.json`;
+    try {
+      await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(subscription.toJSON())
+      });
+      console.log('[Push] Subscription saved successfully for:', userCode);
+    } catch (e) {
+      console.error('[Push] Error saving subscription:', e);
+    }
+  };
+
+  const registerPushSubscription = async (user) => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const publicKey = "BP7J_touxNd1qY6-ioJIZhNKlJPi6_gnNfRBmkHZqzpCX-xB7JtbM5OU9Z4t1zJ8M2l26rGopNzWyxpw6-oE0VQ";
+      const urlBase64ToUint8 = (base64) => {
+        const pad = '='.repeat((4 - base64.length % 4) % 4);
+        const b64 = (base64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+        const raw = atob(b64);
+        return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+      };
+
+      let sub = await reg.pushManager.getSubscription();
+      if (sub) {
+        await sub.unsubscribe().catch(() => {});
+      }
+
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8(publicKey)
+      });
+
+      await savePushSubscriptionToFirebase(user.code, sub);
+    } catch (err) {
+      console.warn('[Push] Error registering push subscription:', err);
+    }
+  };
+
   const requestNotificationPermission = () => {
     if ('Notification' in window) {
       Notification.requestPermission().then(permission => {
         setNotificationPermission(permission);
         if (permission === 'granted') {
           showNativeNotification('Casa Coqueiro', 'Notificações ativadas com sucesso! 🎉', 'setup-success');
+          if (merchant) {
+            registerPushSubscription(merchant);
+          }
         }
       });
     }
