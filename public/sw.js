@@ -1,5 +1,5 @@
 // Service Worker for Casa Coqueiro PWA / SaaS
-const CACHE_NAME = 'coqueiro-cache-v1';
+const CACHE_NAME = 'coqueiro-cache-v3';
 
 const STATIC_ASSETS = [
   './',

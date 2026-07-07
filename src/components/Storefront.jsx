@@ -225,7 +225,7 @@ export default function Storefront() {
   };
 
   const savePushSubscriptionToFirebase = async (userCode, subscription) => {
-    const dbUrl = "https://coqueiro-a586e-default-rtdb.firebaseio.com";
+    const dbUrl = localStorage.getItem("firebase_db_url") || "https://coqueiro-a586e-default-rtdb.firebaseio.com";
     const endpointSafe = btoa(subscription.endpoint).replace(/[^a-zA-Z0-9]/g, '');
     const url = `${dbUrl}/pushSubscriptions/${userCode}/${endpointSafe}.json`;
     try {
@@ -244,6 +244,14 @@ export default function Storefront() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
     try {
       const reg = await navigator.serviceWorker.ready;
+      
+      // Force service worker update to bypass caching of push handlers
+      try {
+        await reg.update();
+      } catch (err) {
+        console.warn('[Push] reg.update failed:', err);
+      }
+
       const publicKey = "BP7J_touxNd1qY6-ioJIZhNKlJPi6_gnNfRBmkHZqzpCX-xB7JtbM5OU9Z4t1zJ8M2l26rGopNzWyxpw6-oE0VQ";
       const urlBase64ToUint8 = (base64) => {
         const pad = '='.repeat((4 - base64.length % 4) % 4);
