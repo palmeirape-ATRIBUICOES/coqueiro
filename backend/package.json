@@ -4,7 +4,8 @@
   "description": "Firebase to Web Push Notification Gateway for Casa Coqueiro PWA",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "echo 'No build required'"
   },
   "dependencies": {
     "cors": "^2.8.5",
