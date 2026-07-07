@@ -187,9 +187,8 @@ export default function Admin() {
       if (hasStaff) tabs.push('staff');
       if (hasSettings) tabs.push('settings');
 
-      if (tabs.length > 0) {
-        setActiveTab(tabs[0]);
-      }
+      // Always start at home card dashboard
+      setActiveTab('home');
     }
   }, [navigate]);
 
@@ -764,6 +763,13 @@ export default function Admin() {
           ) : (
             <>
               {/* Store specific tabs */}
+              <button 
+                onClick={() => setActiveTab('home')}
+                className={`admin-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
+              >
+                🏠 Início
+              </button>
+
               {(currentUser.role === 'store-admin' || currentUser.permissions?.financeiro || currentUser.permissions?.relatorios) && (
                 <button 
                   onClick={() => setActiveTab('dashboard')}
@@ -1144,6 +1150,143 @@ export default function Admin() {
               </div>
             </div>
           )}
+
+          {/* ========================================= */}
+          {/* TAB: HOME CARD DASHBOARD */}
+          {activeTab === 'home' && !isMaster && (() => {
+            const homeModules = [
+              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.financeiro || currentUser?.permissions?.relatorios) ? [{
+                key: 'dashboard', icon: '📊', label: 'Indicadores', sub: 'Faturamento e métricas',
+                gradient: 'linear-gradient(135deg, #0ea5e9, #6366f1)'
+              }] : []),
+              { key: 'orders', icon: '📋', label: 'Orçamentos', sub: 'Gestão e separação',
+                gradient: 'linear-gradient(135deg, #10b981, #059669)',
+                badge: tenantOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Aprovação').length
+              },
+              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.produtos) ? [{
+                key: 'products', icon: '📦', label: 'Produtos', sub: 'Catálogo e estoque',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                badge: tenantProducts.filter(p => (p.stock ?? 0) < 20).length > 0 ? tenantProducts.filter(p => (p.stock ?? 0) < 20).length : 0
+              }] : []),
+              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.clientes) ? [{
+                key: 'clients', icon: '👥', label: 'Clientes', sub: 'Base B2B cadastrada',
+                gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                badge: tenantClients.filter(c => c.status === 'Pendente').length
+              }] : []),
+              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.funcionarios) ? [{
+                key: 'staff', icon: '🛡️', label: 'Equipe', sub: 'Permissões e acessos',
+                gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)'
+              }] : []),
+              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.visualConfig) ? [{
+                key: 'settings', icon: '⚙️', label: 'Configurações', sub: 'Identidade visual',
+                gradient: 'linear-gradient(135deg, #64748b, #475569)'
+              }] : []),
+            ];
+            return (
+              <div>
+                {/* Welcome header */}
+                <div style={{
+                  background: `linear-gradient(135deg, ${company.primaryColor}22, ${company.secondaryColor}11)`,
+                  border: `1px solid ${company.primaryColor}33`,
+                  borderRadius: '20px',
+                  padding: '28px 32px',
+                  marginBottom: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '20px'
+                }}>
+                  <div style={{
+                    width: '60px', height: '60px', borderRadius: '18px',
+                    background: `linear-gradient(135deg, ${company.primaryColor}, ${company.secondaryColor})`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '28px', flexShrink: 0, boxShadow: `0 8px 24px ${company.primaryColor}44`
+                  }}>🏪</div>
+                  <div>
+                    <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>
+                      Olá, {currentUser?.name?.split(' ')[0]}! 👋
+                    </div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })} — Painel {company.tradeName || company.name}
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Orçamentos Pendentes</div>
+                    <div style={{ fontSize: '36px', fontWeight: 900, color: tenantOrders.filter(o => o.status === 'Pendente').length > 0 ? 'var(--danger)' : company.primaryColor, lineHeight: 1, marginTop: '4px' }}>
+                      {tenantOrders.filter(o => o.status === 'Pendente').length}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 900, color: company.primaryColor }}>{tenantOrders.length}</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total de Orçamentos</div>
+                  </div>
+                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 900, color: company.primaryColor }}>{tenantClients.length}</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Clientes B2B</div>
+                  </div>
+                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: 900, color: tenantProducts.filter(p => (p.stock ?? 0) < 20).length > 0 ? 'var(--danger)' : company.primaryColor }}>
+                      {tenantProducts.filter(p => (p.stock ?? 0) < 20).length}
+                    </div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Estoque Crítico</div>
+                  </div>
+                </div>
+
+                {/* Module cards grid */}
+                <div style={{ marginBottom: '8px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Módulos do Sistema</div>
+                  <div className="admin-home-cards-grid">
+                    {homeModules.map(mod => (
+                      <button
+                        key={mod.key}
+                        onClick={() => setActiveTab(mod.key)}
+                        className="admin-home-card"
+                      >
+                        <div className="admin-home-card-icon" style={{ background: mod.gradient }}>
+                          <span style={{ fontSize: '28px' }}>{mod.icon}</span>
+                        </div>
+                        <div className="admin-home-card-label">{mod.label}</div>
+                        <div className="admin-home-card-sub">{mod.sub}</div>
+                        {mod.badge > 0 && (
+                          <span className="admin-home-card-badge">
+                            {mod.badge > 99 ? '99+' : mod.badge}
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Recent orders quick view */}
+                {tenantOrders.length > 0 && (
+                  <div className="card" style={{ marginTop: '32px', padding: 0, overflow: 'hidden' }}>
+                    <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ fontWeight: 700, fontSize: '15px' }}>📋 Últimos Orçamentos</div>
+                      <button onClick={() => setActiveTab('orders')} style={{ fontSize: '12px', color: company.primaryColor, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>Ver todos →</button>
+                    </div>
+                    <div style={{ overflowX: 'auto' }}>
+                      <table className="admin-table">
+                        <thead><tr><th>Código</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead>
+                        <tbody>
+                          {tenantOrders.slice(0, 5).map(o => (
+                            <tr key={o.id}>
+                              <td style={{ fontWeight: 700 }}>{o.id}</td>
+                              <td>{o.clientName}</td>
+                              <td style={{ fontWeight: 600 }}>R$ {o.total.toFixed(2)}</td>
+                              <td><span className={`badge badge-${o.status.toLowerCase().replace(/\s+/g, '-')}`}>{o.status}</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ========================================= */}
           {/* TAB: STORE GENERAL DASHBOARD INDICATORS */}
