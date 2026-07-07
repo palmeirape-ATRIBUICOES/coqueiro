@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 
 export default function ProductCard({ p, company, addToCart, updateCartQty, cart, isMobile }) {
-  // If product has a wholesale option, default to it, otherwise unit
-  const hasAtacado = p.packagePrice && p.packageItems && p.packageItems > 1;
-  const [variant, setVariant] = useState(hasAtacado ? 'atacado' : 'unit');
+  // Force wholesale/retail options on all items (use database package value or generate 12x default box with 5% discount)
+  const packageItems = p.packageItems && p.packageItems > 1 ? p.packageItems : 12;
+  const packagePrice = p.packagePrice && p.packagePrice > 0 ? p.packagePrice : parseFloat((p.price * packageItems * 0.95).toFixed(2));
+  
+  const hasAtacado = true;
+  const [variant, setVariant] = useState('unit'); // Default to unit (varejo) as requested
 
   // Find this specific variant in cart
   const cartItemId = `${p.id}-${variant}`;
   const cartItem = cart.find(item => item.cartItemId === cartItemId);
   const qty = cartItem ? cartItem.qty : 0;
 
-  const currentPrice = variant === 'atacado' ? p.packagePrice : p.price;
-  const currentUnit = variant === 'atacado' ? `Cx c/ ${p.packageItems}` : (p.unit || 'Unidade');
+  const currentPrice = variant === 'atacado' ? packagePrice : p.price;
+  const currentUnit = variant === 'atacado' ? `Cx c/ ${packageItems}` : (p.unit || 'un');
 
   const handleAdd = () => {
     addToCart(p, variant, currentPrice, currentUnit);
@@ -110,16 +113,38 @@ export default function ProductCard({ p, company, addToCart, updateCartQty, cart
               +
             </button>
           ) : (
-            <div className="flex items-center bg-gray-100 rounded-xl p-0.5 h-9">
+            <div className="flex items-center bg-gray-100 rounded-xl p-1 h-9 gap-1">
               <button 
                 onClick={() => handleUpdate(-1)}
-                className="border-none bg-transparent w-6 h-full cursor-pointer text-gray-600 font-extrabold text-sm"
+                className="border-none bg-transparent w-5 h-full cursor-pointer text-gray-600 font-extrabold text-sm flex items-center justify-center active:scale-95"
               >-</button>
-              <span className="text-xs font-extrabold text-gray-900 min-w-[16px] text-center">{qty}</span>
+              <input 
+                type="number"
+                min="0"
+                value={qty}
+                onChange={e => {
+                  const val = parseInt(e.target.value);
+                  if (isNaN(val) || val <= 0) {
+                    updateCartQty(cartItemId, -qty);
+                  } else {
+                    updateCartQty(cartItemId, val - qty);
+                  }
+                }}
+                className="text-xs font-extrabold text-gray-900 bg-transparent border-none text-center outline-none p-0"
+                style={{ width: '26px', border: 'none', background: 'transparent', textAlign: 'center' }}
+              />
               <button 
                 onClick={() => handleUpdate(1)}
-                className="border-none bg-transparent w-6 h-full cursor-pointer text-gray-600 font-extrabold text-sm"
+                className="border-none bg-transparent w-5 h-full cursor-pointer text-gray-600 font-extrabold text-sm flex items-center justify-center active:scale-95"
               >+</button>
+              <button
+                onClick={() => updateCartQty(cartItemId, -qty)}
+                title="Remover"
+                className="border-none bg-transparent text-red-500 hover:text-red-700 cursor-pointer pl-1 pr-1.5 flex items-center justify-center active:scale-90"
+                style={{ fontSize: '12px' }}
+              >
+                🗑️
+              </button>
             </div>
           )}
         </div>
