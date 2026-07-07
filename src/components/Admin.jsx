@@ -397,6 +397,25 @@ export default function Admin() {
     }
   };
 
+  const handleInlineProductChange = (productId, field, value) => {
+    if (!checkPermission('produtos')) {
+      showError('Você não tem permissão para editar produtos.');
+      return;
+    }
+    const updated = products.map(p => {
+      if (p.id === productId) {
+        const updatedItem = { ...p, [field]: value };
+        if (field === 'price' && p.packageItems) {
+          updatedItem.packagePrice = parseFloat((value * p.packageItems * 0.95).toFixed(2));
+        }
+        return updatedItem;
+      }
+      return p;
+    });
+    saveProducts(updated);
+    setProducts(updated);
+  };
+
   // Client Actions
   const handleAddClient = (e) => {
     e.preventDefault();
@@ -405,9 +424,9 @@ export default function Admin() {
       return;
     }
 
-    const code = newClient.code.trim().toUpperCase();
-    if (code.length !== 5) {
-      showError('O código deve conter exatamente 5 caracteres.');
+    const code = newClient.code.trim();
+    if (!/^\d{6}$/.test(code)) {
+      showError('O código de acesso do cliente deve conter exatamente 6 dígitos numéricos.');
       return;
     }
 
@@ -436,8 +455,7 @@ export default function Admin() {
   };
 
   const generateRandomClientCode = () => {
-    const rand = Math.floor(10 + Math.random() * 90);
-    const code = `CLI${rand}`;
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     if (users[code]) {
       generateRandomClientCode();
     } else {
@@ -1243,10 +1261,49 @@ export default function Admin() {
                             </div>
                           </td>
                           <td>{p.category}</td>
-                          <td style={{ fontWeight: 700 }}>R$ {Number(p.price || 0).toFixed(2)}</td>
-                          <td style={{ fontWeight: 600, color: p.stock < 20 ? 'var(--danger)' : 'var(--text-primary)' }}>
-                            {p.stock} {p.unit}
-                          </td>
+                          <td>
+                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                               <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>R$</span>
+                               <input 
+                                 type="number"
+                                 step="0.01"
+                                 value={p.price || 0}
+                                 onChange={e => handleInlineProductChange(p.id, 'price', parseFloat(e.target.value) || 0)}
+                                 style={{
+                                   width: '75px',
+                                   padding: '4px 6px',
+                                   borderRadius: '6px',
+                                   border: '1px solid var(--border-color)',
+                                   fontSize: '13px',
+                                   fontWeight: 700,
+                                   backgroundColor: 'var(--card-bg)',
+                                   color: 'var(--text-primary)',
+                                   outline: 'none'
+                                 }}
+                               />
+                             </div>
+                           </td>
+                           <td>
+                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                               <input 
+                                 type="number"
+                                 value={p.stock}
+                                 onChange={e => handleInlineProductChange(p.id, 'stock', parseInt(e.target.value) || 0)}
+                                 style={{
+                                   width: '65px',
+                                   padding: '4px 6px',
+                                   borderRadius: '6px',
+                                   border: '1px solid var(--border-color)',
+                                   fontSize: '13px',
+                                   fontWeight: 600,
+                                   backgroundColor: 'var(--card-bg)',
+                                   color: p.stock < 20 ? 'var(--danger)' : 'var(--text-primary)',
+                                   outline: 'none'
+                                 }}
+                               />
+                               <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>un</span>
+                             </div>
+                           </td>
                           <td>
                             <div style={{ display: 'flex', gap: '8px' }}>
                               <button 
@@ -1446,12 +1503,12 @@ export default function Admin() {
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">Código de Acesso Único (5 Letras)</label>
+                    <label className="form-label">Código de Acesso Único (6 Dígitos Numéricos)</label>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <input 
-                        type="text" className="form-input" maxLength={5} placeholder="CLI04"
+                        type="text" className="form-input" maxLength={6} placeholder="ex: 123456"
                         value={newClient.code}
-                        onChange={(e) => setNewClient({ ...newClient, code: e.target.value.toUpperCase() })}
+                        onChange={(e) => setNewClient({ ...newClient, code: e.target.value.replace(/\D/g, '') })}
                         required
                       />
                       <button 
