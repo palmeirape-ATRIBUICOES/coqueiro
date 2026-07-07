@@ -66,6 +66,12 @@ export default function Admin() {
 
   const [firebaseUrl, setFirebaseUrl] = useState(localStorage.getItem("firebase_db_url") || '');
 
+  // Resilient Multi-Proxy Google Image Search (DuckDuckGo Backend)
+  const [searchingImages, setSearchingImages] = useState(false);
+  const [imageResults, setImageResults] = useState([]);
+  const [showImageSearchModal, setShowImageSearchModal] = useState(false);
+  const [imageSearchQuery, setImageSearchQuery] = useState('');
+
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
 
@@ -382,6 +388,59 @@ export default function Admin() {
       stock: p.stock,
       imageUrl: p.imageUrl
     });
+  };
+
+  const handleSearchProductImage = (query) => {
+    if (!query || !query.trim()) return;
+    setImageSearchQuery(query.trim());
+    setShowImageSearchModal(true);
+    searchGoogleImages(query.trim());
+  };
+
+  const searchGoogleImages = async (queryText) => {
+    const fullQuery = encodeURIComponent(queryText + " png fundo branco");
+    const searchUrl = `https://duckduckgo.com/?q=${fullQuery}`;
+    
+    const proxies = [
+      url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+      url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+    ];
+
+    setSearchingImages(true);
+    setImageResults([]);
+
+    for (let proxyFn of proxies) {
+      try {
+        const htmlRes = await fetch(proxyFn(searchUrl));
+        if (!htmlRes.ok) continue;
+        const html = await htmlRes.text();
+
+        const vqdRegex = /vqd=['"]([^'"]+)['"]/;
+        const match = html.match(vqdRegex);
+        if (!match) continue;
+        const vqd = match[1];
+
+        const apiUrl = `https://duckduckgo.com/i.js?q=${fullQuery}&vqd=${vqd}&o=json`;
+        const apiRes = await fetch(proxyFn(apiUrl));
+        if (!apiRes.ok) continue;
+        const data = await apiRes.json();
+
+        if (data.results && data.results.length > 0) {
+          const results = data.results.slice(0, 15).map(item => ({
+            url: item.image,
+            thumbnail: item.thumbnail,
+            title: item.title
+          }));
+          setImageResults(results);
+          setSearchingImages(false);
+          return;
+        }
+      } catch (e) {
+        console.error("Proxy query failed, trying next fallback...", e);
+      }
+    }
+
+    setSearchingImages(false);
   };
 
   const handleDeleteProduct = (id) => {
@@ -1244,6 +1303,7 @@ export default function Admin() {
                         <th>Produto</th>
                         <th>Categoria</th>
                         <th>Preço Unitário</th>
+                        <th>Preço Atacado</th>
                         <th>Estoque Atual</th>
                         <th>Ações</th>
                       </tr>
@@ -1260,7 +1320,26 @@ export default function Admin() {
                               </div>
                             </div>
                           </td>
-                          <td>{p.category}</td>
+                          <td>
+                            <select
+                              value={p.category}
+                              onChange={e => handleInlineProductChange(p.id, 'category', e.target.value)}
+                              style={{
+                                padding: '4px 6px',
+                                borderRadius: '6px',
+                                border: '1px solid var(--border-color)',
+                                fontSize: '13px',
+                                backgroundColor: 'var(--card-bg)',
+                                color: 'var(--text-primary)',
+                                outline: 'none',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              {['Bebidas', 'Hortifruti', 'Mercearia', 'Biscoitos', 'Laticínios', 'Limpeza', 'Higiene'].map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                              ))}
+                            </select>
+                          </td>
                           <td>
                              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>R$</span>
@@ -1281,6 +1360,48 @@ export default function Admin() {
                                    outline: 'none'
                                  }}
                                />
+                             </div>
+                           </td>
+                           <td>
+                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                 <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>R$</span>
+                                 <input 
+                                   type="number"
+                                   step="0.01"
+                                   value={p.packagePrice || 0}
+                                   onChange={e => handleInlineProductChange(p.id, 'packagePrice', parseFloat(e.target.value) || 0)}
+                                   style={{
+                                     width: '70px',
+                                     padding: '4px 6px',
+                                     borderRadius: '6px',
+                                     border: '1px solid var(--border-color)',
+                                     fontSize: '12px',
+                                     fontWeight: 700,
+                                     backgroundColor: 'var(--card-bg)',
+                                     color: 'var(--text-primary)',
+                                     outline: 'none'
+                                   }}
+                                 />
+                               </div>
+                               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                 <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Cx c/</span>
+                                 <input 
+                                   type="number"
+                                   value={p.packageItems || 1}
+                                   onChange={e => handleInlineProductChange(p.id, 'packageItems', parseInt(e.target.value) || 1)}
+                                   style={{
+                                     width: '45px',
+                                     padding: '2px 4px',
+                                     borderRadius: '6px',
+                                     border: '1px solid var(--border-color)',
+                                     fontSize: '11px',
+                                     backgroundColor: 'var(--card-bg)',
+                                     color: 'var(--text-primary)',
+                                     outline: 'none'
+                                   }}
+                                 />
+                               </div>
                              </div>
                            </td>
                            <td>
@@ -1416,13 +1537,30 @@ export default function Admin() {
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
-                    <label className="form-label">URL da Foto</label>
-                    <input 
-                      type="text" className="form-input" placeholder="https://..."
-                      value={newProduct.imageUrl}
-                      onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
-                    />
-                  </div>
+                    <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                       <span>URL da Foto</span>
+                       <button
+                         type="button"
+                         onClick={() => handleSearchProductImage(newProduct.description)}
+                         style={{
+                           fontSize: '11px',
+                           color: 'var(--primary-color)',
+                           background: 'none',
+                           border: 'none',
+                           cursor: 'pointer',
+                           fontWeight: 700,
+                           padding: 0
+                         }}
+                       >
+                         🔍 Buscar no Google
+                       </button>
+                     </label>
+                     <input 
+                       type="text" className="form-input" placeholder="https://..."
+                       value={newProduct.imageUrl}
+                       onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
+                     />
+                   </div>
 
                   <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                     <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
@@ -1939,6 +2077,137 @@ export default function Admin() {
             </div>
             <div style={{ borderTop: '1px solid black', width: '200px', textAlign: 'center', paddingTop: '5px' }}>
               Assinatura do Cliente
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Google Image Search Modal */}
+      {showImageSearchModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '16px'
+        }}>
+          <div className="card" style={{
+            backgroundColor: 'var(--card-bg)',
+            borderRadius: '24px',
+            border: '1px solid var(--border-color)',
+            maxWidth: '500px',
+            width: '100%',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            maxHeight: '90vh',
+            textAlign: 'left'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderBottom: '1px solid var(--border-color)',
+              paddingBottom: '12px',
+              marginBottom: '16px'
+            }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+                🔍 Imagens do Google (PNG)
+              </h3>
+              <button 
+                onClick={() => setShowImageSearchModal(false)}
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--bg-color)',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+              <input
+                type="text"
+                value={imageSearchQuery}
+                onChange={e => setImageSearchQuery(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && searchGoogleImages(imageSearchQuery)}
+                className="form-input"
+                style={{ flex: 1, margin: 0 }}
+                placeholder="Palavra-chave do produto..."
+              />
+              <button
+                type="button"
+                onClick={() => searchGoogleImages(imageSearchQuery)}
+                disabled={searchingImages}
+                className="btn btn-primary"
+                style={{ padding: '0 16px', margin: 0, backgroundColor: company.primaryColor }}
+              >
+                {searchingImages ? '⏳' : 'Buscar'}
+              </button>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', minHeight: '240px', padding: '4px' }}>
+              {searchingImages ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '240px', gap: '12px', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px' }}>⏳</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600 }}>Buscando imagens PNG com fundo branco...</div>
+                </div>
+              ) : imageResults.length === 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '240px', color: 'var(--text-light)', textAlign: 'center' }}>
+                  <span style={{ fontSize: '32px' }}>🖼️</span>
+                  <span style={{ fontSize: '13px', marginTop: '8px' }}>Nenhuma imagem encontrada.</span>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                  {imageResults.map((item, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setNewProduct(prev => ({ ...prev, imageUrl: item.url }));
+                        setShowImageSearchModal(false);
+                      }}
+                      style={{
+                        position: 'relative',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        backgroundColor: '#ffffff',
+                        padding: '6px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        aspectRatio: '1',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <img
+                        src={item.thumbnail || item.url}
+                        alt=""
+                        style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+                        onError={(e) => { e.target.src = 'https://placehold.co/100?text=Indisponivel' }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div style={{ fontSize: '10px', color: 'var(--text-light)', textAlign: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '10px', marginTop: '16px' }}>
+              Buscas focadas em arquivos PNG de alta qualidade com fundo branco para etiquetas e PDV.
             </div>
           </div>
         </div>
