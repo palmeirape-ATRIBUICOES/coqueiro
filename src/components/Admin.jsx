@@ -130,6 +130,7 @@ export default function Admin() {
     }
   };
   const prevOrdersCountRef = useRef(0);
+  const prevMessagesCountRef = useRef(0);
   const [notificationPermission, setNotificationPermission] = useState('Notification' in window ? Notification.permission : 'denied');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [successMsg, setSuccessMsg] = useState('');
@@ -359,9 +360,25 @@ export default function Admin() {
         }
         prevOrdersCountRef.current = nextOrders.length;
         setOrders(nextOrders);
+
+        // Check for new chat messages from clients
+        const nextMessages = getMessages();
+        const companyMessages = nextMessages.filter(m => currentUser.companyId ? m.companyId === currentUser.companyId : true);
+        const prevMessagesCount = prevMessagesCountRef.current;
+        if (prevMessagesCount > 0 && companyMessages.length > prevMessagesCount) {
+          const newMsgs = companyMessages.slice(prevMessagesCount).filter(m => m.sender === 'cliente');
+          if (newMsgs.length > 0) {
+            const latestMsg = newMsgs[newMsgs.length - 1];
+            addToast(`Nova mensagem de ${latestMsg.senderName}: "${latestMsg.text}"`);
+            showNativeNotification(`Nova mensagem de ${latestMsg.senderName}! 💬`, latestMsg.text, `msg-${latestMsg.id}`);
+            playAlertChime();
+          }
+        }
+        prevMessagesCountRef.current = companyMessages.length;
+        setMessages(nextMessages);
+
         setUsers(getUsers());
         setProducts(getProducts());
-        setMessages(getMessages());
       });
     }, 5000);
 
@@ -419,9 +436,15 @@ export default function Admin() {
     setCompanies(allCompanies);
     setUsers(getUsers());
     setProducts(getProducts());
+    
     const initialOrders = getOrders();
     prevOrdersCountRef.current = initialOrders.length;
     setOrders(initialOrders);
+
+    const initialMessages = getMessages();
+    const companyMessages = initialMessages.filter(m => user.companyId ? m.companyId === user.companyId : true);
+    prevMessagesCountRef.current = companyMessages.length;
+    setMessages(initialMessages);
 
     // 2.1. Sync from Firebase in background and reload state
     syncFromCloud().then(() => {
