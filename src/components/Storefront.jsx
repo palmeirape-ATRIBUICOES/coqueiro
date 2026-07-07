@@ -515,30 +515,6 @@ export default function Storefront() {
         )}
       </header>
 
-      {/* 2. Hero Banner (Only on catalog and when no search/filters active) */}
-      {activeTab === 'catalog' && search === '' && activeCategory === 'Todos' && (
-        <div 
-          className="w-full text-white py-8 px-6 flex items-center justify-between"
-          style={{ 
-            backgroundColor: company.primaryColor,
-            minHeight: isMobile ? '120px' : '180px'
-          }}
-        >
-          <div className="max-w-xl text-left">
-            <h2 className="font-extrabold text-xl sm:text-3xl leading-tight">
-              Abasteça seu comércio com a {company.name}
-            </h2>
-            <p className="text-xs sm:text-sm text-white/80 mt-2">
-              Preços direto da distribuidora e entrega rápida. Reponha seu estoque em 1-click!
-            </p>
-          </div>
-          {!isMobile && (
-            <div className="text-5xl opacity-80 mr-8 select-none">
-              🏪🛒
-            </div>
-          )}
-        </div>
-      )}
 
       {/* 3. Main content */}
       <main className="container" style={{ flex: 1, padding: isMobile ? '16px' : '24px 16px' }}>
