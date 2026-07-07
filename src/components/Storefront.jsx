@@ -464,7 +464,7 @@ export default function Storefront() {
 
               {/* Chat Button */}
               <button
-                onClick={() => alert('Suporte via WhatsApp em breve!')}
+                onClick={() => setIsChatOpen(true)}
                 style={{
                   width: '36px',
                   height: '36px',
@@ -1105,6 +1105,94 @@ export default function Storefront() {
               to { transform: translateX(0); }
             }
           `}</style>
+        </div>
+      )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      {isMobile && (
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '64px',
+          backgroundColor: '#ffffff',
+          borderTop: '1px solid var(--border-color)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          zIndex: 999,
+          boxShadow: '0 -4px 16px rgba(0,0,0,0.04)'
+        }}>
+          {/* Tab: Catalog */}
+          <button
+            onClick={() => {
+              setActiveTab('catalog');
+              localStorage.setItem('coqueiro_client_active_tab', 'catalog');
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              color: activeTab === 'catalog' ? company.primaryColor : '#94a3b8',
+              cursor: 'pointer',
+              flex: 1,
+              height: '100%'
+            }}
+          >
+            <ShoppingBag size={20} style={{ color: activeTab === 'catalog' ? company.primaryColor : '#94a3b8' }} />
+            <span style={{ fontSize: '10px', fontWeight: activeTab === 'catalog' ? 700 : 500 }}>Catálogo</span>
+          </button>
+
+          {/* Tab: Orders (Seu Orçamento) */}
+          <button
+            onClick={() => {
+              setActiveTab('orders');
+              localStorage.setItem('coqueiro_client_active_tab', 'orders');
+              handleRefreshOrders();
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              color: activeTab === 'orders' ? company.primaryColor : '#94a3b8',
+              cursor: 'pointer',
+              flex: 1,
+              height: '100%'
+            }}
+          >
+            <ClipboardList size={20} style={{ color: activeTab === 'orders' ? company.primaryColor : '#94a3b8' }} />
+            <span style={{ fontSize: '10px', fontWeight: activeTab === 'orders' ? 700 : 500 }}>Seu Orçamento</span>
+          </button>
+
+          {/* Tab: Support Chat */}
+          <button
+            onClick={() => setIsChatOpen(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              color: isChatOpen ? company.primaryColor : '#94a3b8',
+              cursor: 'pointer',
+              flex: 1,
+              height: '100%'
+            }}
+          >
+            <span style={{ fontSize: '20px', lineHeight: 1, filter: isChatOpen ? 'none' : 'grayscale(100%)' }}>💬</span>
+            <span style={{ fontSize: '10px', fontWeight: isChatOpen ? 700 : 500 }}>Chat</span>
+          </button>
         </div>
       )}
 
