@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function Toast({ message, onClose }) {
+export default function Toast({ message, onClose, type }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -8,21 +8,22 @@ export default function Toast({ message, onClose }) {
     return () => clearTimeout(timer);
   }, [onClose]);
 
+  const isGreen = type === 'success-green';
+
   return (
     <div style={{
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
-      backgroundColor: 'var(--bg-color)',
-      color: 'var(--text-primary)',
-      border: '1px solid var(--border-color)',
-      borderRadius: '8px',
-      padding: '12px 20px',
-      boxShadow: 'var(--shadow-lg)',
-      zIndex: 1000,
+      backgroundColor: isGreen ? '#10b981' : 'var(--card-bg, #ffffff)',
+      color: isGreen ? '#ffffff' : 'var(--text-primary, #0f172a)',
+      border: isGreen ? '1px solid #059669' : '1px solid var(--border-color, #e2e8f0)',
+      borderRadius: '12px',
+      padding: '14px 24px',
+      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
       display: 'flex',
       alignItems: 'center',
-      gap: '12px'
+      gap: '12px',
+      minWidth: '280px',
+      fontWeight: 600,
+      fontSize: '13px'
     }}>
       <span>{message}</span>
     </div>

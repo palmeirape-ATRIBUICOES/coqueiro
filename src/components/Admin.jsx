@@ -21,8 +21,8 @@ export default function Admin() {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [toasts, setToasts] = useState([]);
-  const addToast = (msg) => {
-    setToasts(prev => [...prev, { id: Date.now(), message: msg }]);
+  const addToast = (msg, type) => {
+    setToasts(prev => [...prev, { id: Date.now(), message: msg, type }]);
   };
   const removeToast = (id) => {
     setToasts(prev => prev.filter(t => t.id !== id));
@@ -369,7 +369,7 @@ export default function Admin() {
           const newMsgs = companyMessages.slice(prevMessagesCount).filter(m => m.sender === 'cliente');
           if (newMsgs.length > 0) {
             const latestMsg = newMsgs[newMsgs.length - 1];
-            addToast(`Nova mensagem de ${latestMsg.senderName}: "${latestMsg.text}"`);
+            addToast(`Nova mensagem de ${latestMsg.senderName}: "${latestMsg.text}"`, 'success-green');
             showNativeNotification(`Nova mensagem de ${latestMsg.senderName}! 💬`, latestMsg.text, `msg-${latestMsg.id}`);
             playAlertChime();
           }
@@ -384,6 +384,26 @@ export default function Admin() {
 
     return () => clearInterval(interval);
   }, [currentUser]);
+
+  // Mark messages as read when vendor views client chat
+  useEffect(() => {
+    if (selectedChatClient && messages.length > 0) {
+      const clientCode = selectedChatClient.code || selectedChatClient; // handle object vs string code formats
+      const clientMsgs = messages.filter(m => m.clientCode === clientCode && m.sender === 'cliente');
+      const unreadMsgs = clientMsgs.filter(m => m.read !== true);
+      
+      if (unreadMsgs.length > 0) {
+        const updatedMessages = messages.map(m => {
+          if (m.clientCode === clientCode && m.sender === 'cliente' && m.read !== true) {
+            return { ...m, read: true };
+          }
+          return m;
+        });
+        saveMessages(updatedMessages);
+        setMessages(updatedMessages);
+      }
+    }
+  }, [selectedChatClient, messages]);
 
   // Reset pagination limit when switching tabs or searching
   useEffect(() => {
@@ -977,7 +997,9 @@ export default function Admin() {
       badge: tenantOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Aprovação').length
     },
     { key: 'messages', icon: '💬', label: 'Mensagens',
-      gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+      gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      badge: messages.filter(m => currentUser.companyId ? m.companyId === currentUser.companyId : true)
+                     .filter(m => m.sender === 'cliente' && m.read !== true).length
     },
     ...((currentUser.role === 'store-admin' || currentUser.permissions?.produtos) ? [{
       key: 'products', icon: '📦', label: 'Produtos',
@@ -1005,7 +1027,7 @@ export default function Admin() {
       {/* Toast notifications */}
       <div className="print-hide" style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {toasts.map(toast => (
-          <Toast key={toast.id} message={toast.message} onClose={() => removeToast(toast.id)} />
+          <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
         ))}
       </div>
 
