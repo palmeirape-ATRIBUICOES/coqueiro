@@ -74,6 +74,7 @@ export default function Admin() {
 
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
+  const [visibleProductsCount, setVisibleProductsCount] = useState(30);
 
   // Load database
   const loadDbData = () => {
@@ -98,6 +99,27 @@ export default function Admin() {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Reset pagination limit when switching tabs
+  useEffect(() => {
+    setVisibleProductsCount(30);
+  }, [activeTab]);
+
+  // Infinite scroll listener for products table list
+  useEffect(() => {
+    const handleScroll = () => {
+      if (activeTab === 'products') {
+        const threshold = 350;
+        const position = window.innerHeight + window.scrollY;
+        const height = document.documentElement.scrollHeight;
+        if (position >= height - threshold) {
+          setVisibleProductsCount(prev => prev + 30);
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeTab]);
 
   useEffect(() => {
     // 1. Authenticate user
@@ -1313,7 +1335,7 @@ export default function Admin() {
                       </tr>
                     </thead>
                     <tbody>
-                      {tenantProducts.map(p => (
+                      {tenantProducts.slice(0, visibleProductsCount).map(p => (
                         <tr key={p.id}>
                           <td>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

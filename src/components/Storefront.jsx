@@ -36,6 +36,7 @@ export default function Storefront() {
   const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' or 'orders'
   const [clientOrders, setClientOrders] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
+  const [visibleCount, setVisibleCount] = useState(30);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
@@ -163,6 +164,25 @@ export default function Storefront() {
       }
     }
   };
+
+  // Reset pagination limit on search query or category change to keep UI instant
+  useEffect(() => {
+    setVisibleCount(30);
+  }, [search, activeCategory]);
+
+  // Infinite Scroll scroll listener
+  useEffect(() => {
+    const handleScroll = () => {
+      const threshold = 350; // trigger distance in px from bottom
+      const position = window.innerHeight + window.scrollY;
+      const height = document.documentElement.scrollHeight;
+      if (position >= height - threshold) {
+        setVisibleCount(prev => prev + 30);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sync cart
   useEffect(() => {
@@ -654,7 +674,7 @@ export default function Storefront() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 w-full">
-                  {filteredProducts.map(p => {
+                  {filteredProducts.slice(0, visibleCount).map(p => {
                     return (
                       <ProductCard 
                         key={p.id} 
