@@ -674,160 +674,133 @@ export default function Admin() {
   });
   const lowStockProducts = tenantProducts.filter(p => p.stock < 20);
 
+  // Build module list for non-master home screen
+  const homeModules = !isMaster ? [
+    ...((currentUser.role === 'store-admin' || currentUser.permissions?.financeiro || currentUser.permissions?.relatorios) ? [{
+      key: 'dashboard', icon: '📊', label: 'Indicadores',
+      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
+    }] : []),
+    { key: 'orders', icon: '📋', label: 'Orçamentos',
+      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      badge: tenantOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Aprovação').length
+    },
+    ...((currentUser.role === 'store-admin' || currentUser.permissions?.produtos) ? [{
+      key: 'products', icon: '📦', label: 'Produtos',
+      gradient: 'linear-gradient(135deg, #f97316 0%, #dc2626 100%)',
+      badge: lowStockProducts.length
+    }] : []),
+    ...((currentUser.role === 'store-admin' || currentUser.permissions?.clientes) ? [{
+      key: 'clients', icon: '👥', label: 'Clientes',
+      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+      badge: tenantClients.filter(c => c.status === 'Pendente').length
+    }] : []),
+    ...((currentUser.role === 'store-admin' || currentUser.permissions?.funcionarios) ? [{
+      key: 'staff', icon: '🛡️', label: 'Equipe',
+      gradient: 'linear-gradient(135deg, #06b6d4 0%, #0284c7 100%)',
+      badge: tenantStaff.length
+    }] : []),
+    ...((currentUser.role === 'store-admin' || currentUser.permissions?.visualConfig) ? [{
+      key: 'settings', icon: '⚙️', label: 'Configurações',
+      gradient: 'linear-gradient(135deg, #64748b 0%, #334155 100%)'
+    }] : []),
+  ] : [];
+
   return (
     <div className="admin-container">
-      {/* Admin header */}
-      <div className="admin-header print-hide">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button 
-            onClick={() => navigate('/')}
-            className="btn btn-outline"
-            style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
-          >
-            <ArrowLeft size={16} /> Voltar ao Catálogo
-          </button>
-          <div style={{ textAlign: 'left' }}>
-            <h1 style={{ fontSize: '20px', fontWeight: 800, margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--text-primary)' }}>
-              Painel Administrativo
-            </h1>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-              {isMaster ? 'Visão Geral Mercado Online Facilitadora (Master)' : `Abastecimento • ${company.name}`}
-            </p>
-          </div>
-        </div>
 
-        {/* Action Info / Profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ textAlign: 'right', fontSize: '13px' }}>
-            <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{currentUser.name}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-              Cargo: <strong style={{ color: 'var(--primary-color)' }}>{currentUser.role.toUpperCase()}</strong> • Código: {currentUser.code}
+      {/* ===================== NON-MASTER HOME SCREEN ===================== */}
+      {!isMaster && activeTab === 'home' && (
+        <div className="missoes-home-page">
+          {/* iOS-style header */}
+          <header className="missoes-header print-hide">
+            <div className="missoes-header-left">
+              <div className="missoes-logo-circle" style={{ background: `linear-gradient(135deg, ${company.primaryColor}, ${company.secondaryColor})` }}>
+                🏪
+              </div>
+              <div>
+                <div className="missoes-header-title">Painel do Administrador</div>
+                <div className="missoes-header-sub">{company.tradeName || company.name}</div>
+              </div>
             </div>
-          </div>
-          
-          <button 
-            onClick={handleLogout}
-            className="btn btn-outline"
-            style={{ padding: '6px 12px', fontSize: '12px', color: 'var(--danger)', borderColor: 'var(--border-color)' }}
-          >
-            Sair
-          </button>
-        </div>
-      </div>
+            <div className="missoes-header-right">
+              <div className="missoes-header-user">
+                <span style={{ fontSize: '16px' }}>👑</span> {currentUser.name}
+              </div>
+              <div className="missoes-header-date">{new Date().toLocaleDateString('pt-BR')}</div>
+              <button onClick={handleLogout} className="missoes-sair-btn">Sair</button>
+            </div>
+          </header>
 
-      {/* Message banners */}
-      {successMsg && (
-        <div className="print-hide" style={{
-          backgroundColor: '#ecfdf5', borderBottom: '1px solid #d1fae5', color: '#065f46',
-          padding: '12px', fontSize: '14px', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
-        }}>
-          <span>✅</span> {successMsg}
+          {/* Message banners */}
+          {successMsg && (<div style={{ backgroundColor: '#ecfdf5', borderBottom: '1px solid #d1fae5', color: '#065f46', padding: '10px', fontSize: '13px', fontWeight: 600, textAlign: 'center' }}>✅ {successMsg}</div>)}
+          {errorMsg && (<div style={{ backgroundColor: '#fef2f2', borderBottom: '1px solid #fee2e2', color: '#991b1b', padding: '10px', fontSize: '13px', fontWeight: 600, textAlign: 'center' }}>⚠️ {errorMsg}</div>)}
+
+          <main className="missoes-main">
+            {/* Stats cards row */}
+            <div className="missoes-stats-row">
+              <div className="missoes-stat-card">
+                <div className="missoes-stat-label">ORÇAMENTOS</div>
+                <div className="missoes-stat-value">{tenantOrders.length}</div>
+                <div className="missoes-stat-sub">{tenantOrders.filter(o => o.status === 'Pendente').length} pendentes</div>
+              </div>
+              <div className="missoes-stat-card">
+                <div className="missoes-stat-label">CLIENTES B2B</div>
+                <div className="missoes-stat-value" style={{ color: company.primaryColor }}>{tenantClients.length}</div>
+                <div className="missoes-stat-sub">cadastrados</div>
+              </div>
+              <div className="missoes-stat-card">
+                <div className="missoes-stat-label">PRODUTOS</div>
+                <div className="missoes-stat-value">{tenantProducts.length}</div>
+                <div className="missoes-stat-sub">no catálogo</div>
+              </div>
+              <div className="missoes-stat-card">
+                <div className="missoes-stat-label">ESTOQUE CRÍTICO</div>
+                <div className="missoes-stat-value" style={{ color: lowStockProducts.length > 0 ? '#ef4444' : company.primaryColor }}>
+                  {lowStockProducts.length}
+                </div>
+                <div className="missoes-stat-sub">abaixo de 20un</div>
+              </div>
+            </div>
+
+            {/* Modules grid */}
+            <div className="missoes-section-label">MÓDULOS</div>
+            <div className="missoes-modules-grid">
+              {homeModules.map(mod => (
+                <button key={mod.key} className="missoes-module-card" onClick={() => setActiveTab(mod.key)}>
+                  {mod.badge > 0 && (
+                    <span className="missoes-module-badge">{mod.badge > 99 ? '99+' : mod.badge}</span>
+                  )}
+                  <div className="missoes-module-icon" style={{ background: mod.gradient }}>
+                    <span>{mod.icon}</span>
+                  </div>
+                  <div className="missoes-module-label">{mod.label}</div>
+                </button>
+              ))}
+            </div>
+          </main>
         </div>
       )}
-      {errorMsg && (
-        <div className="print-hide" style={{
-          backgroundColor: '#fef2f2', borderBottom: '1px solid #fee2e2', color: '#991b1b',
-          padding: '12px', fontSize: '14px', fontWeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
-        }}>
-          <span>⚠️</span> {errorMsg}
-        </div>
-      )}
 
-      {/* Main layout */}
-      <div className="admin-layout">
-        
-        {/* SIDEBAR NAVIGATION */}
-        <aside className="admin-sidebar print-hide">
-          {/* Master Tabs */}
-          {isMaster ? (
-            <>
-              <button 
-                onClick={() => setActiveTab('dashboard-master')}
-                className={`admin-tab-btn ${activeTab === 'dashboard-master' ? 'active' : ''}`}
-              >
-                <BarChart3 size={18} /> Painel Global
-              </button>
-              <button 
-                onClick={() => setActiveTab('companies')}
-                className={`admin-tab-btn ${activeTab === 'companies' ? 'active' : ''}`}
-              >
-                <Store size={18} /> Gestão de Lojas
-              </button>
-              <button 
-                onClick={() => setActiveTab('global-users')}
-                className={`admin-tab-btn ${activeTab === 'global-users' ? 'active' : ''}`}
-              >
-                <Shield size={18} /> Usuários Globais
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Store specific tabs */}
-              <button 
-                onClick={() => setActiveTab('home')}
-                className={`admin-tab-btn ${activeTab === 'home' ? 'active' : ''}`}
-              >
-                🏠 Início
-              </button>
+      {/* ===================== NON-MASTER MODULE SCREENS ===================== */}
+      {!isMaster && activeTab !== 'home' && (
+        <div className="missoes-module-page">
+          {/* Slim sub-header with back button */}
+          <header className="missoes-module-header print-hide">
+            <button className="missoes-back-btn" onClick={() => setActiveTab('home')}>
+              <ArrowLeft size={16} /> Voltar
+            </button>
+            <div className="missoes-module-header-title">
+              {homeModules.find(m => m.key === activeTab)?.icon || '📄'} {homeModules.find(m => m.key === activeTab)?.label || activeTab}
+            </div>
+            <button onClick={handleLogout} className="missoes-sair-btn">Sair</button>
+          </header>
 
-              {(currentUser.role === 'store-admin' || currentUser.permissions?.financeiro || currentUser.permissions?.relatorios) && (
-                <button 
-                  onClick={() => setActiveTab('dashboard')}
-                  className={`admin-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
-                >
-                  <BarChart3 size={18} /> Indicadores Gerais
-                </button>
-              )}
-              
-              <button 
-                onClick={() => setActiveTab('orders')}
-                className={`admin-tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
-              >
-                <ClipboardList size={18} /> Gestão de Orçamentos
-              </button>
+          {/* Message banners */}
+          {successMsg && (<div className="print-hide" style={{ backgroundColor: '#ecfdf5', borderBottom: '1px solid #d1fae5', color: '#065f46', padding: '10px', fontSize: '13px', fontWeight: 600, textAlign: 'center' }}>✅ {successMsg}</div>)}
+          {errorMsg && (<div className="print-hide" style={{ backgroundColor: '#fef2f2', borderBottom: '1px solid #fee2e2', color: '#991b1b', padding: '10px', fontSize: '13px', fontWeight: 600, textAlign: 'center' }}>⚠️ {errorMsg}</div>)}
 
-              {(currentUser.role === 'store-admin' || currentUser.permissions?.produtos) && (
-                <button 
-                  onClick={() => setActiveTab('products')}
-                  className={`admin-tab-btn ${activeTab === 'products' ? 'active' : ''}`}
-                >
-                  <ShoppingBag size={18} /> Catálogo de Produtos
-                </button>
-              )}
-
-              {(currentUser.role === 'store-admin' || currentUser.permissions?.clientes) && (
-                <button 
-                  onClick={() => setActiveTab('clients')}
-                  className={`admin-tab-btn ${activeTab === 'clients' ? 'active' : ''}`}
-                >
-                  <Users size={18} /> Clientes Cadastrados
-                </button>
-              )}
-
-              {(currentUser.role === 'store-admin' || currentUser.permissions?.funcionarios) && (
-                <button 
-                  onClick={() => setActiveTab('staff')}
-                  className={`admin-tab-btn ${activeTab === 'staff' ? 'active' : ''}`}
-                >
-                  <Shield size={18} /> Equipe & Permissões
-                </button>
-              )}
-
-              {(currentUser.role === 'store-admin' || currentUser.permissions?.visualConfig) && (
-                <button 
-                  onClick={() => setActiveTab('settings')}
-                  className={`admin-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
-                >
-                  <Settings size={18} /> Configuração Visual
-                </button>
-              )}
-            </>
-          )}
-        </aside>
-
-        {/* RIGHT PANEL CONTENT */}
-        <main className="admin-content" style={{ textAlign: 'left' }}>
-          
+          <main className="admin-content" style={{ textAlign: 'left', maxWidth: '1200px', margin: '0 auto' }}>
+            
           {/* ========================================= */}
           {/* TAB: GLOBAL DASHBOARD (MASTER) */}
           {activeTab === 'dashboard-master' && isMaster && (
@@ -1150,143 +1123,6 @@ export default function Admin() {
               </div>
             </div>
           )}
-
-          {/* ========================================= */}
-          {/* TAB: HOME CARD DASHBOARD */}
-          {activeTab === 'home' && !isMaster && (() => {
-            const homeModules = [
-              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.financeiro || currentUser?.permissions?.relatorios) ? [{
-                key: 'dashboard', icon: '📊', label: 'Indicadores', sub: 'Faturamento e métricas',
-                gradient: 'linear-gradient(135deg, #0ea5e9, #6366f1)'
-              }] : []),
-              { key: 'orders', icon: '📋', label: 'Orçamentos', sub: 'Gestão e separação',
-                gradient: 'linear-gradient(135deg, #10b981, #059669)',
-                badge: tenantOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Aprovação').length
-              },
-              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.produtos) ? [{
-                key: 'products', icon: '📦', label: 'Produtos', sub: 'Catálogo e estoque',
-                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                badge: tenantProducts.filter(p => (p.stock ?? 0) < 20).length > 0 ? tenantProducts.filter(p => (p.stock ?? 0) < 20).length : 0
-              }] : []),
-              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.clientes) ? [{
-                key: 'clients', icon: '👥', label: 'Clientes', sub: 'Base B2B cadastrada',
-                gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
-                badge: tenantClients.filter(c => c.status === 'Pendente').length
-              }] : []),
-              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.funcionarios) ? [{
-                key: 'staff', icon: '🛡️', label: 'Equipe', sub: 'Permissões e acessos',
-                gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)'
-              }] : []),
-              ...((currentUser?.role === 'store-admin' || currentUser?.permissions?.visualConfig) ? [{
-                key: 'settings', icon: '⚙️', label: 'Configurações', sub: 'Identidade visual',
-                gradient: 'linear-gradient(135deg, #64748b, #475569)'
-              }] : []),
-            ];
-            return (
-              <div>
-                {/* Welcome header */}
-                <div style={{
-                  background: `linear-gradient(135deg, ${company.primaryColor}22, ${company.secondaryColor}11)`,
-                  border: `1px solid ${company.primaryColor}33`,
-                  borderRadius: '20px',
-                  padding: '28px 32px',
-                  marginBottom: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '20px'
-                }}>
-                  <div style={{
-                    width: '60px', height: '60px', borderRadius: '18px',
-                    background: `linear-gradient(135deg, ${company.primaryColor}, ${company.secondaryColor})`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '28px', flexShrink: 0, boxShadow: `0 8px 24px ${company.primaryColor}44`
-                  }}>🏪</div>
-                  <div>
-                    <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>
-                      Olá, {currentUser?.name?.split(' ')[0]}! 👋
-                    </div>
-                    <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                      {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })} — Painel {company.tradeName || company.name}
-                    </div>
-                  </div>
-                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Orçamentos Pendentes</div>
-                    <div style={{ fontSize: '36px', fontWeight: 900, color: tenantOrders.filter(o => o.status === 'Pendente').length > 0 ? 'var(--danger)' : company.primaryColor, lineHeight: 1, marginTop: '4px' }}>
-                      {tenantOrders.filter(o => o.status === 'Pendente').length}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stats row */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '32px' }}>
-                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
-                    <div style={{ fontSize: '28px', fontWeight: 900, color: company.primaryColor }}>{tenantOrders.length}</div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total de Orçamentos</div>
-                  </div>
-                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
-                    <div style={{ fontSize: '28px', fontWeight: 900, color: company.primaryColor }}>{tenantClients.length}</div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Clientes B2B</div>
-                  </div>
-                  <div className="card" style={{ textAlign: 'center', padding: '20px' }}>
-                    <div style={{ fontSize: '28px', fontWeight: 900, color: tenantProducts.filter(p => (p.stock ?? 0) < 20).length > 0 ? 'var(--danger)' : company.primaryColor }}>
-                      {tenantProducts.filter(p => (p.stock ?? 0) < 20).length}
-                    </div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Estoque Crítico</div>
-                  </div>
-                </div>
-
-                {/* Module cards grid */}
-                <div style={{ marginBottom: '8px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Módulos do Sistema</div>
-                  <div className="admin-home-cards-grid">
-                    {homeModules.map(mod => (
-                      <button
-                        key={mod.key}
-                        onClick={() => setActiveTab(mod.key)}
-                        className="admin-home-card"
-                      >
-                        <div className="admin-home-card-icon" style={{ background: mod.gradient }}>
-                          <span style={{ fontSize: '28px' }}>{mod.icon}</span>
-                        </div>
-                        <div className="admin-home-card-label">{mod.label}</div>
-                        <div className="admin-home-card-sub">{mod.sub}</div>
-                        {mod.badge > 0 && (
-                          <span className="admin-home-card-badge">
-                            {mod.badge > 99 ? '99+' : mod.badge}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Recent orders quick view */}
-                {tenantOrders.length > 0 && (
-                  <div className="card" style={{ marginTop: '32px', padding: 0, overflow: 'hidden' }}>
-                    <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ fontWeight: 700, fontSize: '15px' }}>📋 Últimos Orçamentos</div>
-                      <button onClick={() => setActiveTab('orders')} style={{ fontSize: '12px', color: company.primaryColor, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>Ver todos →</button>
-                    </div>
-                    <div style={{ overflowX: 'auto' }}>
-                      <table className="admin-table">
-                        <thead><tr><th>Código</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead>
-                        <tbody>
-                          {tenantOrders.slice(0, 5).map(o => (
-                            <tr key={o.id}>
-                              <td style={{ fontWeight: 700 }}>{o.id}</td>
-                              <td>{o.clientName}</td>
-                              <td style={{ fontWeight: 600 }}>R$ {o.total.toFixed(2)}</td>
-                              <td><span className={`badge badge-${o.status.toLowerCase().replace(/\s+/g, '-')}`}>{o.status}</span></td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
 
           {/* ========================================= */}
           {/* TAB: STORE GENERAL DASHBOARD INDICATORS */}
@@ -2194,9 +2030,11 @@ export default function Admin() {
           )}
 
         </main>
-      </div>
+        </div>
+      )}
 
       {/* HIDDEN PRINT LAYOUT: DESIGNED FOR PAPER A4 PRINTS */}
+
       {activePrintOrder && (
         <div className="print-invoice-sheet" style={{ color: 'black', backgroundColor: 'white', padding: '20px' }}>
           <div style={{ textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '10px', marginBottom: '20px' }}>
