@@ -2605,11 +2605,10 @@ export const initDb = () => {
     localStorage.removeItem("facilitadora_products");
     localStorage.removeItem("facilitadora_companies");
   }
-  // Force update only if new Coqueiro products are missing
+  // Force update only if new Coqueiro products are missing or old categories are active
   const existingProducts = localStorage.getItem("facilitadora_products");
-  if (existingProducts && !existingProducts.includes("coq-prod_agua_sanitaria")) {
+  if (existingProducts && (!existingProducts.includes("coq-prod_agua_sanitaria") || !existingProducts.includes("Higiene"))) {
     localStorage.removeItem("facilitadora_products");
-    localStorage.removeItem("facilitadora_companies");
   }
 
   // Force update only if new CLUBB user is missing
