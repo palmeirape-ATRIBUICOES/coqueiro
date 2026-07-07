@@ -36042,7 +36042,38 @@ const INITIAL_ORDERS = [
   }
 ];
 
+const INITIAL_MESSAGES = [
+  {
+    id: "msg-1",
+    companyId: "coqueiro",
+    clientCode: "CLI01",
+    clientName: "Restaurante Tempero Bom (Cliente)",
+    sender: "cliente",
+    senderName: "Restaurante Tempero Bom",
+    text: "Olá! Gostaria de saber se o orçamento ORD-5192 já foi aprovado.",
+    timestamp: "2026-06-23T15:30:00Z"
+  },
+  {
+    id: "msg-2",
+    companyId: "coqueiro",
+    clientCode: "CLI01",
+    clientName: "Restaurante Tempero Bom (Cliente)",
+    sender: "vendedor",
+    senderName: "Carlos Silva (Vendedor)",
+    text: "Olá! Sim, seu orçamento já está em separação.",
+    timestamp: "2026-06-23T15:32:00Z"
+  }
+];
+
 export const initDb = () => {
+  try {
+    const localProdStr = localStorage.getItem("facilitadora_products");
+    if (localProdStr && (localProdStr.includes("Cerveja Pilsen") || localProdStr.includes("Refrigerante 2L"))) {
+      console.log("Cleaning up legacy fake products from localStorage...");
+      localStorage.removeItem("facilitadora_products");
+    }
+  } catch (e) {}
+
   if (!localStorage.getItem("facilitadora_companies")) {
     localStorage.setItem("facilitadora_companies", JSON.stringify(INITIAL_COMPANIES));
   }
@@ -36054,6 +36085,9 @@ export const initDb = () => {
   }
   if (!localStorage.getItem("facilitadora_orders")) {
     localStorage.setItem("facilitadora_orders", JSON.stringify(INITIAL_ORDERS));
+  }
+  if (!localStorage.getItem("facilitadora_messages")) {
+    localStorage.setItem("facilitadora_messages", JSON.stringify(INITIAL_MESSAGES));
   }
 };
 
@@ -36082,7 +36116,7 @@ export const syncFromCloud = async () => {
   const baseUrl = getFirebaseUrl();
   if (!baseUrl) return;
   try {
-    const keys = ["companies", "users", "products", "orders"];
+    const keys = ["companies", "users", "products", "orders", "messages"];
     for (const key of keys) {
       const res = await fetch(`${baseUrl}/${key}.json`);
       if (res.ok) {
@@ -36172,6 +36206,23 @@ export const saveOrders = (orders) => {
   syncToCloud("orders", orders);
 };
 
+// Messages Methods
+export const getMessages = (companyId = null) => {
+  initDb();
+  let all = JSON.parse(localStorage.getItem("facilitadora_messages"));
+  if (!all) return [];
+  if (!Array.isArray(all)) {
+    all = Object.values(all);
+  }
+  if (!companyId) return all.filter(Boolean);
+  return all.filter(m => m && m.companyId === companyId);
+};
+
+export const saveMessages = (messages) => {
+  localStorage.setItem("facilitadora_messages", JSON.stringify(messages));
+  syncToCloud("messages", messages);
+};
+
 // Fallback image maps and sanitization helper
 const CATEGORY_FALLBACK_IMAGES = {
   "Bebidas": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=60",
@@ -36254,8 +36305,12 @@ const itemImageMap = {
 };
 
 export const sanitizeProductsList = (productsList) => {
-  if (!Array.isArray(productsList)) return [];
-  return productsList.map(p => {
+  let list = productsList;
+  if (!list) return [];
+  if (!Array.isArray(list)) {
+    list = Object.values(list);
+  }
+  return list.map(p => {
     if (!p) return p;
     const hasPlaceholder = !p.imageUrl || 
                            p.imageUrl.trim() === '' || 

@@ -6,6 +6,7 @@ import {
   getUsers, saveUsers, 
   getProducts, saveProducts, 
   getOrders, saveOrders,
+  getMessages, saveMessages,
   syncFromCloud
 } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
@@ -84,6 +85,9 @@ export default function Admin() {
   const [users, setUsers] = useState({});
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [selectedChatClient, setSelectedChatClient] = useState(null);
+  const [adminNewMessage, setAdminNewMessage] = useState('');
 
   // Admin Master specific form states
   const [newCompany, setNewCompany] = useState({
@@ -810,6 +814,9 @@ export default function Admin() {
     { key: 'orders', icon: '📋', label: 'Orçamentos',
       gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       badge: tenantOrders.filter(o => o.status === 'Pendente' || o.status === 'Em Aprovação').length
+    },
+    { key: 'messages', icon: '💬', label: 'Mensagens',
+      gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
     },
     ...((currentUser.role === 'store-admin' || currentUser.permissions?.produtos) ? [{
       key: 'products', icon: '📦', label: 'Produtos',
