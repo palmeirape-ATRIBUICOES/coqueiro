@@ -211,6 +211,8 @@ export default function Admin() {
 
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printFormat, setPrintFormat] = useState('A4'); // 'A4', '80mm', '60mm'
   const [newOrderAlert, setNewOrderAlert] = useState(null);
   const [visibleProductsCount, setVisibleProductsCount] = useState(30);
   const [productSearch, setProductSearch] = useState('');
@@ -478,10 +480,7 @@ export default function Admin() {
       return;
     }
     setActivePrintOrder(ord);
-    // Give react time to render print container before opening print dialog
-    setTimeout(() => {
-      window.print();
-    }, 150);
+    setShowPrintModal(true);
   };
 
   // Product actions
@@ -2754,72 +2753,147 @@ export default function Admin() {
       {/* HIDDEN PRINT LAYOUT: DESIGNED FOR PAPER A4 PRINTS */}
 
       {activePrintOrder && (
-        <div className="print-invoice-sheet" style={{ color: 'black', backgroundColor: 'white', padding: '20px' }}>
-          <div style={{ textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '10px', marginBottom: '20px' }}>
-            <h1 style={{ fontSize: '20pt', fontWeight: 'bold', margin: '0 0 5px 0' }}>{company.name}</h1>
-            <p style={{ margin: '2px 0', fontSize: '10pt' }}>{company.tradeName || ''}</p>
-            <p style={{ margin: '2px 0', fontSize: '10pt' }}>{company.address}</p>
-            <p style={{ margin: '2px 0', fontSize: '10pt' }}>Tel: {company.phone} | WhatsApp: {company.whatsapp}</p>
-          </div>
+        <div 
+          className={`print-invoice-sheet format-${printFormat}`} 
+          style={{ 
+            color: 'black', 
+            backgroundColor: 'white', 
+            padding: printFormat === 'A4' ? '20px' : '5px',
+            fontFamily: printFormat === 'A4' ? 'inherit' : "'Courier New', Courier, monospace",
+            width: printFormat === 'A4' ? '100%' : printFormat === '80mm' ? '76mm' : '56mm',
+            margin: '0 auto'
+          }}
+        >
+          {printFormat === 'A4' ? (
+            <>
+              <div style={{ textAlign: 'center', borderBottom: '2px solid black', paddingBottom: '10px', marginBottom: '20px' }}>
+                <h1 style={{ fontSize: '20pt', fontWeight: 'bold', margin: '0 0 5px 0' }}>{company.name}</h1>
+                <p style={{ margin: '2px 0', fontSize: '10pt' }}>{company.tradeName || ''}</p>
+                <p style={{ margin: '2px 0', fontSize: '10pt' }}>{company.address}</p>
+                <p style={{ margin: '2px 0', fontSize: '10pt' }}>Tel: {company.phone} | WhatsApp: {company.whatsapp}</p>
+              </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px', fontSize: '11pt' }}>
-            <div>
-              <p><strong>CÓD ORÇAMENTO:</strong> {activePrintOrder.id}</p>
-              <p><strong>DATA DE CRIAÇÃO:</strong> {new Date(activePrintOrder.date).toLocaleString('pt-BR')}</p>
-              <p><strong>TIPO DO DOCUMENTO:</strong> Orçamento de Separação B2B</p>
-            </div>
-            <div>
-              <p><strong>CLIENTE:</strong> {activePrintOrder.clientName}</p>
-              <p><strong>CÓD ACESSO:</strong> {activePrintOrder.clientCode}</p>
-              <p><strong>ENTREGA / RETIRADA:</strong> {activePrintOrder.deliveryAddress || 'Retirada presencial na loja'}</p>
-            </div>
-          </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px', fontSize: '11pt' }}>
+                <div>
+                  <p><strong>CÓD ORÇAMENTO:</strong> {activePrintOrder.id}</p>
+                  <p><strong>DATA DE CRIAÇÃO:</strong> {new Date(activePrintOrder.date).toLocaleString('pt-BR')}</p>
+                  <p><strong>TIPO DO DOCUMENTO:</strong> Orçamento de Separação B2B</p>
+                </div>
+                <div>
+                  <p><strong>CLIENTE:</strong> {activePrintOrder.clientName}</p>
+                  <p><strong>CÓD ACESSO:</strong> {activePrintOrder.clientCode}</p>
+                  <p><strong>ENTREGA / RETIRADA:</strong> {activePrintOrder.deliveryAddress || 'Retirada presencial na loja'}</p>
+                </div>
+              </div>
 
-          {activePrintOrder.notes && (
-            <div style={{ border: '1px solid black', padding: '8px', marginBottom: '20px', fontSize: '10pt' }}>
-              <strong>INSTRUÇÕES DO CLIENTE:</strong> {activePrintOrder.notes}
+              {activePrintOrder.notes && (
+                <div style={{ border: '1px solid black', padding: '8px', marginBottom: '20px', fontSize: '10pt' }}>
+                  <strong>INSTRUÇÕES DO CLIENTE:</strong> {activePrintOrder.notes}
+                </div>
+              )}
+
+              <table className="print-invoice-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+                <thead>
+                  <tr>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'left' }}>Item Cód</th>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'left' }}>Descrição do Produto</th>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>Qtd</th>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>Unidade</th>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>Preço Unitário</th>
+                    <th style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activePrintOrder.items.map((item, idx) => (
+                    <tr key={idx}>
+                      <td style={{ border: '1px solid black', padding: '6px' }}>{item.id}</td>
+                      <td style={{ border: '1px solid black', padding: '6px' }}>{item.description}</td>
+                      <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</td>
+                      <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>{item.unit}</td>
+                      <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number(item.price || 0).toFixed(2)}</td>
+                      <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number((item.price * item.qty) || 0).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div style={{ marginTop: '30px', textAlign: 'right', borderTop: '2px solid black', paddingTop: '10px' }}>
+                <span style={{ fontSize: '14pt', fontWeight: 'bold' }}>
+                  VALOR TOTAL ESTIMADO: R$ {activePrintOrder.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+
+              <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', fontSize: '10pt' }}>
+                <div style={{ borderTop: '1px solid black', width: '200px', textAlign: 'center', paddingTop: '5px' }}>
+                  Separado por (Almoxarifado)
+                </div>
+                <div style={{ borderTop: '1px solid black', width: '200px', textAlign: 'center', paddingTop: '5px' }}>
+                  Assinatura do Cliente
+                </div>
+              </div>
+            </>
+          ) : (
+            <div style={{ fontSize: printFormat === '80mm' ? '12px' : '10px', textAlign: 'left', lineHeight: 1.3 }}>
+              {/* Header */}
+              <div style={{ textAlign: 'center', borderBottom: '1px dashed black', paddingBottom: '8px', marginBottom: '8px' }}>
+                <strong style={{ fontSize: printFormat === '80mm' ? '16px' : '13px' }}>{company.name}</strong>
+                {company.tradeName && <div style={{ fontSize: '10px' }}>{company.tradeName}</div>}
+                <div style={{ fontSize: '9px' }}>{company.address}</div>
+                <div style={{ fontSize: '9px' }}>Tel: {company.phone}</div>
+              </div>
+
+              {/* Order Info */}
+              <div style={{ borderBottom: '1px dashed black', paddingBottom: '6px', marginBottom: '6px' }}>
+                <div><strong>ORÇAMENTO:</strong> {activePrintOrder.id}</div>
+                <div><strong>DATA:</strong> {new Date(activePrintOrder.date).toLocaleString('pt-BR')}</div>
+                <div><strong>CLIENTE:</strong> {activePrintOrder.clientName}</div>
+                <div><strong>CÓD ACESSO:</strong> {activePrintOrder.clientCode}</div>
+                <div><strong>ENTREGA:</strong> {activePrintOrder.deliveryAddress || 'Retirada'}</div>
+              </div>
+
+              {/* Items List */}
+              <div style={{ borderBottom: '1px dashed black', paddingBottom: '6px', marginBottom: '6px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 60px', fontWeight: 'bold', borderBottom: '1px solid black', paddingBottom: '2px', marginBottom: '4px' }}>
+                  <span>Qtd</span>
+                  <span>Descrição</span>
+                  <span style={{ textAlign: 'right' }}>Total</span>
+                </div>
+                {activePrintOrder.items.map((item, idx) => (
+                  <div key={idx} style={{ marginBottom: '6px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 60px' }}>
+                      <span style={{ fontWeight: 'bold' }}>{item.qty} {item.unit}</span>
+                      <span style={{ wordBreak: 'break-word' }}>{item.description}</span>
+                      <span style={{ textAlign: 'right' }}>R${Number(item.price * item.qty).toFixed(2)}</span>
+                    </div>
+                    <div style={{ fontSize: '9px', color: '#666', paddingLeft: '40px' }}>
+                      P. Unit: R${Number(item.price).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Total & Instructions */}
+              {activePrintOrder.notes && (
+                <div style={{ borderBottom: '1px dashed black', paddingBottom: '6px', marginBottom: '6px', fontStyle: 'italic' }}>
+                  <strong>Obs:</strong> {activePrintOrder.notes}
+                </div>
+              )}
+
+              <div style={{ textAlign: 'right', fontSize: printFormat === '80mm' ? '14px' : '11px', fontWeight: 'bold', marginBottom: '15px' }}>
+                TOTAL ESTIMADO: R$ {activePrintOrder.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              </div>
+
+              {/* Signature lines */}
+              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center', fontSize: '9px', textAlign: 'center' }}>
+                <div style={{ borderTop: '1px solid black', width: '80%', paddingTop: '3px' }}>
+                  Assinatura do Separador
+                </div>
+                <div style={{ borderTop: '1px solid black', width: '80%', paddingTop: '3px' }}>
+                  Assinatura do Cliente
+                </div>
+              </div>
             </div>
           )}
-
-          <table className="print-invoice-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
-            <thead>
-              <tr>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'left' }}>Item Cód</th>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'left' }}>Descrição do Produto</th>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>Qtd</th>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>Unidade</th>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>Preço Unitário</th>
-                <th style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activePrintOrder.items.map((item, idx) => (
-                <tr key={idx}>
-                  <td style={{ border: '1px solid black', padding: '6px' }}>{item.id}</td>
-                  <td style={{ border: '1px solid black', padding: '6px' }}>{item.description}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center', fontWeight: 'bold' }}>{item.qty}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'center' }}>{item.unit}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number(item.price || 0).toFixed(2)}</td>
-                  <td style={{ border: '1px solid black', padding: '6px', textAlign: 'right' }}>R$ {Number((item.price * item.qty) || 0).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div style={{ marginTop: '30px', textAlign: 'right', borderTop: '2px solid black', paddingTop: '10px' }}>
-            <span style={{ fontSize: '14pt', fontWeight: 'bold' }}>
-              VALOR TOTAL ESTIMADO: R$ {activePrintOrder.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </span>
-          </div>
-
-          <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', fontSize: '10pt' }}>
-            <div style={{ borderTop: '1px solid black', width: '200px', textAlign: 'center', paddingTop: '5px' }}>
-              Separado por (Almoxarifado)
-            </div>
-            <div style={{ borderTop: '1px solid black', width: '200px', textAlign: 'center', paddingTop: '5px' }}>
-              Assinatura do Cliente
-            </div>
-          </div>
         </div>
       )}
       {/* Google Image Search Modal */}
@@ -3028,6 +3102,95 @@ export default function Admin() {
             >
               Fechar
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Print Format Selection Modal */}
+      {showPrintModal && activePrintOrder && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 10500,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '16px'
+        }}>
+          <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid var(--border-color)', boxShadow: '0 8px 30px rgba(0,0,0,0.12)', textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Outfit', sans-serif" }}>Formato de Impressão</h3>
+              <button 
+                onClick={() => {
+                  setShowPrintModal(false);
+                  setActivePrintOrder(null);
+                }}
+                style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '18px', cursor: 'pointer', fontWeight: 900 }}
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)' }}>
+              Selecione o tamanho do papel ideal para a sua impressora de separação:
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {[
+                { value: 'A4', label: '📄 Folha A4 (Padrão Escritório)' },
+                { value: '80mm', label: '🧾 Cupom 80mm (Bobina Térmica Larga)' },
+                { value: '60mm', label: '🧾 Cupom 60mm (Mini Impressora)' }
+              ].map(opt => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setPrintFormat(opt.value)}
+                  style={{
+                    padding: '12px 16px',
+                    borderRadius: '10px',
+                    border: printFormat === opt.value ? '2px solid var(--primary-color)' : '1px solid var(--border-color)',
+                    backgroundColor: printFormat === opt.value ? `${company.primaryColor}08` : '#ffffff',
+                    color: printFormat === opt.value ? 'var(--primary-color)' : 'var(--text-primary)',
+                    fontWeight: printFormat === opt.value ? 700 : 500,
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPrintModal(false);
+                  setTimeout(() => {
+                    window.print();
+                  }, 150);
+                }}
+                className="btn btn-primary"
+                style={{ flex: 1, fontWeight: 700, backgroundColor: company.primaryColor, border: 'none' }}
+              >
+                Confirmar e Imprimir
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPrintModal(false);
+                  setActivePrintOrder(null);
+                }}
+                className="btn btn-outline"
+                style={{ fontWeight: 600 }}
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}
