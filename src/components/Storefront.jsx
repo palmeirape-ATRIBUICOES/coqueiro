@@ -514,43 +514,28 @@ export default function Storefront() {
         )}
       </header>
 
-      {/* 2. Banner Slider (Only on catalog and when no filters active) */}
-      {activeTab === 'catalog' && search === '' && activeCategory === 'Todos' && company.banners && company.banners.length > 0 && (
-        <div style={{ position: 'relative', width: '100%', height: isMobile ? '130px' : '200px', overflow: 'hidden', backgroundColor: 'var(--border-color)' }}>
-          {company.banners.map((url, idx) => (
-            <div 
-              key={idx}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage: `linear-gradient(to right, rgba(15, 23, 42, 0.7) 30%, transparent 80%), url(${url})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                opacity: idx === activeBanner ? 1 : 0,
-                transition: 'opacity 0.8s ease',
-                display: 'flex',
-                alignItems: 'center',
-                padding: isMobile ? '0 16px' : '0 48px'
-              }}
-            >
-              <div className="container" style={{ width: '100%', textAlign: 'left', color: 'white' }}>
-                <div style={{ maxWidth: '440px' }}>
-                  <h2 style={{
-                    fontFamily: "'Outfit', sans-serif",
-                    fontSize: isMobile ? '18px' : '26px',
-                    fontWeight: 800,
-                    color: 'white',
-                    lineHeight: '1.2'
-                  }}>
-                    Abasteça seu comércio com a {company.name}
-                  </h2>
-                  <p style={{ fontSize: isMobile ? '11px' : '13px', color: '#cbd5e1', marginTop: '4px' }}>
-                    Preços direto da distribuidora e entrega rápida. Reponha seu estoque em 1-click!
-                  </p>
-                </div>
-              </div>
+      {/* 2. Hero Banner (Only on catalog and when no search/filters active) */}
+      {activeTab === 'catalog' && search === '' && activeCategory === 'Todos' && (
+        <div 
+          className="w-full text-white py-8 px-6 flex items-center justify-between"
+          style={{ 
+            backgroundColor: company.primaryColor,
+            minHeight: isMobile ? '120px' : '180px'
+          }}
+        >
+          <div className="max-w-xl text-left">
+            <h2 className="font-extrabold text-xl sm:text-3xl leading-tight">
+              Abasteça seu comércio com a {company.name}
+            </h2>
+            <p className="text-xs sm:text-sm text-white/80 mt-2">
+              Preços direto da distribuidora e entrega rápida. Reponha seu estoque em 1-click!
+            </p>
+          </div>
+          {!isMobile && (
+            <div className="text-5xl opacity-80 mr-8 select-none">
+              🏪🛒
             </div>
-          ))}
+          )}
         </div>
       )}
 
