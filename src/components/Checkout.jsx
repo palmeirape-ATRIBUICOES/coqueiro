@@ -284,7 +284,10 @@ export default function Checkout() {
           </div>
 
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+              localStorage.setItem('coqueiro_client_active_tab', 'orders');
+              navigate('/');
+            }}
             className="btn btn-primary"
             style={{
               padding: '12px 32px',
@@ -293,10 +296,33 @@ export default function Checkout() {
               backgroundColor: company.primaryColor,
               border: 'none',
               color: 'white',
-              fontWeight: 700
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginBottom: '10px',
+              width: '100%'
             }}
           >
-            Voltar para o Catálogo
+            Acompanhar seu Orçamento
+          </button>
+          
+          <button
+            onClick={() => {
+              localStorage.setItem('coqueiro_client_active_tab', 'catalog');
+              navigate('/');
+            }}
+            className="btn btn-outline"
+            style={{
+              padding: '12px 32px',
+              fontSize: '15px',
+              borderRadius: '10px',
+              borderColor: 'var(--border-color)',
+              color: 'var(--text-secondary)',
+              fontWeight: 700,
+              cursor: 'pointer',
+              width: '100%'
+            }}
+          >
+            Voltar ao Catálogo
           </button>
         </div>
       </div>

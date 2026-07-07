@@ -34,7 +34,10 @@ export default function Storefront() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeBanner, setActiveBanner] = useState(0);
-  const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' or 'orders'
+  const [activeTab, setActiveTab] = useState(() => {
+    const saved = localStorage.getItem('coqueiro_client_active_tab');
+    return saved === 'orders' ? 'orders' : 'catalog';
+  }); // 'catalog' or 'orders'
   const [clientOrders, setClientOrders] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
   const [visibleCount, setVisibleCount] = useState(30);
@@ -548,7 +551,10 @@ export default function Storefront() {
                 marginRight: '12px'
               }}>
                 <button
-                  onClick={() => setActiveTab('catalog')}
+                  onClick={() => {
+                    setActiveTab('catalog');
+                    localStorage.setItem('coqueiro_client_active_tab', 'catalog');
+                  }}
                   style={{
                     padding: '6px 12px',
                     fontSize: '13px',
@@ -567,7 +573,11 @@ export default function Storefront() {
                   <ShoppingBag size={14} /> Catálogo
                 </button>
                 <button
-                  onClick={() => { setActiveTab('orders'); handleRefreshOrders(); }}
+                  onClick={() => {
+                    setActiveTab('orders');
+                    localStorage.setItem('coqueiro_client_active_tab', 'orders');
+                    handleRefreshOrders();
+                  }}
                   style={{
                     padding: '6px 12px',
                     fontSize: '13px',
@@ -583,7 +593,7 @@ export default function Storefront() {
                     boxShadow: activeTab === 'orders' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
                   }}
                 >
-                  <ClipboardList size={14} /> Meus Pedidos
+                  <ClipboardList size={14} /> Seu Orçamento
                 </button>
               </div>
 
@@ -803,7 +813,7 @@ export default function Storefront() {
         {activeTab === 'orders' && (
           <div style={{ textAlign: 'left' }}>
             <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '18px', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)' }}>
-              Acompanhamento de Orçamentos
+              Seu Orçamento
             </h2>
 
             {clientOrders.length === 0 ? (
