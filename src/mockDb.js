@@ -36071,6 +36071,7 @@ export const initDb = () => {
     if (localProdStr && (localProdStr.includes("Cerveja Pilsen") || localProdStr.includes("Refrigerante 2L"))) {
       console.log("Cleaning up legacy fake products from localStorage...");
       localStorage.removeItem("facilitadora_products");
+    localStorage.removeItem("facilitadora_companies");
     }
   } catch (e) {}
 
