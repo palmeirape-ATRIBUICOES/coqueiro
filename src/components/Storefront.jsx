@@ -62,6 +62,15 @@ export default function Storefront() {
   };
 
   useEffect(() => {
+    if (merchant && navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SET_USER_SESSION',
+        user: { code: merchant.code, role: merchant.role, companyId: merchant.companyId }
+      });
+    }
+  }, [merchant]);
+
+  useEffect(() => {
     // 1. Authenticate Client
     const storedUser = localStorage.getItem('coqueiro_active_merchant');
     if (!storedUser) {

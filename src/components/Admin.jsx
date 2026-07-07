@@ -211,6 +211,7 @@ export default function Admin() {
 
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
+  const [newOrderAlert, setNewOrderAlert] = useState(null);
   const [visibleProductsCount, setVisibleProductsCount] = useState(30);
   const [productSearch, setProductSearch] = useState('');
 
@@ -223,10 +224,42 @@ export default function Admin() {
     setMessages(getMessages());
   };
 
+  const playAlertChime = () => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const playTone = (freq, start, duration) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime + start);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + start + duration);
+        osc.start(audioCtx.currentTime + start);
+        osc.stop(audioCtx.currentTime + start + duration);
+      };
+      playTone(523.25, 0, 0.3); // C5
+      playTone(659.25, 0.12, 0.3); // E5
+      playTone(783.99, 0.24, 0.4); // G5
+    } catch (e) {
+      console.warn("AudioContext tone playback failed:", e);
+    }
+  };
+
   useEffect(() => {
     const currentOrders = getOrders();
     prevOrdersCountRef.current = currentOrders.length;
   }, []);
+
+  useEffect(() => {
+    if (currentUser && navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SET_USER_SESSION',
+        user: { code: currentUser.code, role: currentUser.role, companyId: currentUser.companyId }
+      });
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const handleStorageChange = (e) => {
@@ -260,6 +293,12 @@ export default function Admin() {
           const diff = nextOrders.length - prevOrdersCountRef.current;
           addToast(`Você recebeu ${diff} novo(s) orçamento(s)!`);
           showNativeNotification('Novo Orçamento! 📥', `Você recebeu ${diff} novo(s) orçamento(s) de clientes.`, 'new-order');
+          
+          const latestOrder = nextOrders[nextOrders.length - 1];
+          if (latestOrder) {
+            setNewOrderAlert(latestOrder);
+            playAlertChime();
+          }
         }
         prevOrdersCountRef.current = nextOrders.length;
         setOrders(nextOrders);
@@ -2838,6 +2877,84 @@ export default function Admin() {
             <div style={{ fontSize: '10px', color: 'var(--text-light)', textAlign: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '10px', marginTop: '16px' }}>
               Buscas focadas em arquivos PNG de alta qualidade com fundo branco para etiquetas e PDV.
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Order Alert Modal (Forced On-Screen Notification) */}
+      {newOrderAlert && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 11000,
+          width: '90%',
+          maxWidth: '500px',
+          backgroundColor: '#ffffff',
+          borderRadius: '16px',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+          borderLeft: '8px solid #059669',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          animation: 'slide-down 0.4s ease-out'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', textAlign: 'left' }}>
+              <span style={{ fontSize: '28px' }}>📥</span>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>Novo Orçamento Recebido!</h3>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Cliente: <strong>{newOrderAlert.clientName}</strong></span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setNewOrderAlert(null)}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '18px', cursor: 'pointer', fontWeight: 900 }}
+            >
+              ✕
+            </button>
+          </div>
+          <div style={{ fontSize: '13px', color: 'var(--text-secondary)', textAlign: 'left', backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '8px' }}>
+            <div><strong>Código:</strong> {newOrderAlert.id}</div>
+            <div><strong>Valor Total:</strong> R$ {newOrderAlert.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+            <button
+              onClick={() => {
+                setActiveTab('orders');
+                setNewOrderAlert(null);
+              }}
+              style={{
+                flex: 1,
+                padding: '10px',
+                backgroundColor: '#059669',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}
+            >
+              Ver Orçamentos
+            </button>
+            <button
+              onClick={() => setNewOrderAlert(null)}
+              style={{
+                padding: '10px 16px',
+                backgroundColor: '#f1f5f9',
+                color: 'var(--text-primary)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '8px',
+                fontWeight: 600,
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}
+            >
+              Fechar
+            </button>
           </div>
         </div>
       )}

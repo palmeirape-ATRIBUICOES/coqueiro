@@ -110,3 +110,141 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+
+// Active User Session for background polling
+let activeUser = null;
+let lastOrders = null;
+let lastMessagesCount = null;
+let pollingInterval = null;
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SET_USER_SESSION') {
+    activeUser = event.data.user;
+    lastOrders = null;
+    lastMessagesCount = null;
+    
+    // Start background sync polling loop
+    startBackgroundSync();
+  }
+});
+
+function startBackgroundSync() {
+  if (pollingInterval) clearInterval(pollingInterval);
+  
+  // Poll every 15 seconds
+  pollingInterval = setInterval(() => {
+    if (!activeUser) return;
+    performBackgroundChecks();
+  }, 15000);
+  
+  // Trigger immediately
+  performBackgroundChecks();
+}
+
+async function performBackgroundChecks() {
+  if (!activeUser) return;
+  const dbUrl = "https://coqueiro-a586e-default-rtdb.firebaseio.com";
+  
+  try {
+    // 1. Check Orders
+    const ordersRes = await fetch(`${dbUrl}/orders.json`);
+    if (ordersRes.ok) {
+      const allOrdersObj = await ordersRes.json();
+      if (allOrdersObj) {
+        const allOrders = Array.isArray(allOrdersObj) ? allOrdersObj : Object.values(allOrdersObj);
+        const tenantOrders = allOrders.filter(o => o && o.companyId === activeUser.companyId);
+        
+        if (activeUser.role === 'cliente') {
+          // Client: Check for status changes on their orders
+          const myOrders = tenantOrders.filter(o => o.clientCode === activeUser.code);
+          if (lastOrders) {
+            myOrders.forEach(newOrd => {
+              const oldOrd = lastOrders.find(o => o.id === newOrd.id);
+              if (oldOrd && oldOrd.status !== newOrd.status) {
+                showSwNotification(
+                  `Orçamento Atualizado! 🛍️`,
+                  `O status do orçamento #${newOrd.id} mudou para: ${newOrd.status}`,
+                  `order-${newOrd.id}`
+                );
+              }
+            });
+          }
+          lastOrders = myOrders;
+        } else {
+          // Seller / Admin: Check for new incoming orders
+          if (lastOrders && tenantOrders.length > lastOrders.length) {
+            const diff = tenantOrders.length - lastOrders.length;
+            showSwNotification(
+              `Novo Orçamento! 📥`,
+              `Você recebeu ${diff} novo(s) orçamento(s) de clientes.`,
+              'new-order'
+            );
+          }
+          lastOrders = tenantOrders;
+        }
+      }
+    }
+    
+    // 2. Check Messages / Support Chat
+    const msgsRes = await fetch(`${dbUrl}/messages.json`);
+    if (msgsRes.ok) {
+      const allMsgsObj = await msgsRes.json();
+      if (allMsgsObj) {
+        const allMsgs = Array.isArray(allMsgsObj) ? allMsgsObj : Object.values(allMsgsObj);
+        const tenantMsgs = allMsgs.filter(m => m && m.companyId === activeUser.companyId);
+        
+        let myMsgs = [];
+        if (activeUser.role === 'cliente') {
+          // Client messages
+          myMsgs = tenantMsgs.filter(m => m.clientCode === activeUser.code);
+        } else {
+          // Seller sees all messages
+          myMsgs = tenantMsgs;
+        }
+        
+        if (lastMessagesCount !== null && myMsgs.length > lastMessagesCount) {
+          const lastMsg = myMsgs[myMsgs.length - 1];
+          // Only notify if message was sent by the opposite side
+          const shouldNotify = (activeUser.role === 'cliente' && lastMsg.sender === 'vendedor') ||
+                               (activeUser.role !== 'cliente' && lastMsg.sender === 'cliente');
+                               
+          if (shouldNotify) {
+            showSwNotification(
+              `Nova Mensagem! 💬`,
+              `${lastMsg.senderName}: ${lastMsg.text}`,
+              `msg-${lastMsg.id}`
+            );
+          }
+        }
+        lastMessagesCount = myMsgs.length;
+      }
+    }
+  } catch (e) {
+    console.warn('[SW Background Check Error]:', e);
+  }
+}
+
+function showSwNotification(title, body, tag) {
+  let isIOS = false;
+  try {
+    const ua = (self.navigator && self.navigator.userAgent) || '';
+    isIOS = /iPad|iPhone|iPod/.test(ua) || 
+            (ua.includes('Macintosh') && self.navigator && self.navigator.maxTouchPoints > 0);
+  } catch (e) {}
+
+  const options = {
+    body,
+    tag,
+    data: { url: './' }
+  };
+
+  if (!isIOS) {
+    options.icon = './logo.png';
+    options.badge = './logo.png';
+    options.vibrate = [200, 100, 200];
+  }
+
+  self.registration.showNotification(title, options).catch(err => {
+    console.warn('[SW Background Notification failed]:', err);
+  });
+}
