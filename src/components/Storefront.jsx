@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProducts, getOrders, syncFromCloud } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
+import logoImg from '../assets/logo.png';
 import CartDrawer from './CartDrawer';
 import ProductCard from './ProductCard';
 import { Search, ShoppingCart, LogOut, ClipboardList, ShoppingBag, Calendar, Clock } from 'lucide-react';
@@ -330,7 +331,7 @@ export default function Storefront() {
                   fontSize: '18px'
                 }}>
                   <img 
-                  src="logo.png" 
+                  src={logoImg} 
                   alt="" 
                   onError={(e) => { e.target.style.display = 'none'; }}
                   style={{
@@ -455,7 +456,7 @@ export default function Storefront() {
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <img 
-                  src="logo.png" 
+                  src={logoImg} 
                   alt="" 
                   onError={(e) => { e.target.style.display = 'none'; }}
                   style={{
