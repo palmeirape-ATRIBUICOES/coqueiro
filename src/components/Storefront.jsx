@@ -165,7 +165,8 @@ export default function Storefront() {
     const matchesSearch = p.description.toLowerCase().includes(search.toLowerCase()) || 
                           p.category.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = activeCategory === 'Todos' || p.category === activeCategory;
-    return matchesSearch && matchesCategory;
+    const inStock = p.stock !== undefined ? Number(p.stock) > 0 : true;
+    return matchesSearch && matchesCategory && inStock;
   });
 
   const categories = ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
@@ -213,11 +214,11 @@ export default function Storefront() {
       <header style={{
         position: 'sticky',
         top: 0,
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid var(--border-color)',
+        backgroundColor: company.primaryColor,
+        borderBottom: 'none',
         zIndex: 100,
-        boxShadow: 'var(--shadow-sm)',
-        color: '#0f172a'
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        color: '#ffffff'
       }}>
         {isMobile ? (
           /* Mobile Header - screenshot replica */
@@ -226,7 +227,7 @@ export default function Storefront() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            backgroundColor: '#ffffff'
+            backgroundColor: 'transparent'
           }}>
             {/* Left side: store name and greeting */}
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
@@ -235,7 +236,7 @@ export default function Storefront() {
                   width: '32px',
                   height: '32px',
                   borderRadius: '8px',
-                  backgroundColor: `${company.primaryColor}15`,
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -246,7 +247,7 @@ export default function Storefront() {
                 <span style={{
                   fontSize: '18px',
                   fontWeight: 900,
-                  color: '#0f172a',
+                  color: '#ffffff',
                   fontFamily: "'Inter', sans-serif"
                 }}>
                   {company.name}
@@ -254,7 +255,7 @@ export default function Storefront() {
               </div>
               <span style={{
                 fontSize: '13px',
-                color: '#64748b',
+                color: 'rgba(255, 255, 255, 0.8)',
                 marginTop: '4px',
                 fontWeight: 500
               }}>
@@ -271,13 +272,13 @@ export default function Storefront() {
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#475569',
+                  color: '#ffffff',
                   position: 'relative'
                 }}
               >
@@ -287,13 +288,13 @@ export default function Storefront() {
                     position: 'absolute',
                     top: '-4px',
                     right: '-4px',
-                    backgroundColor: company.primaryColor,
-                    color: 'white',
+                    backgroundColor: '#ffffff',
+                    color: company.primaryColor,
                     borderRadius: '50%',
                     minWidth: '16px',
                     height: '16px',
                     fontSize: '9px',
-                    fontWeight: 800,
+                    fontWeight: 900,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -310,13 +311,13 @@ export default function Storefront() {
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#475569'
+                  color: '#ffffff'
                 }}
               >
                 <span style={{ fontSize: '16px' }}>💬</span>
@@ -328,11 +329,11 @@ export default function Storefront() {
                 style={{
                   padding: '6px 14px',
                   borderRadius: '999px',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   fontSize: '12px',
                   fontWeight: 700,
-                  color: '#475569',
+                  color: '#ffffff',
                   cursor: 'pointer',
                   minHeight: '36px'
                 }}
@@ -348,7 +349,7 @@ export default function Storefront() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            backgroundColor: '#ffffff'
+            backgroundColor: 'transparent'
           }}>
             {/* Left side: store name and greeting */}
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
@@ -357,7 +358,7 @@ export default function Storefront() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '10px',
-                  backgroundColor: `${company.primaryColor}15`,
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -368,7 +369,7 @@ export default function Storefront() {
                 <span style={{
                   fontSize: '22px',
                   fontWeight: 900,
-                  color: '#0f172a',
+                  color: '#ffffff',
                   fontFamily: "'Inter', sans-serif"
                 }}>
                   {company.name}
@@ -376,7 +377,7 @@ export default function Storefront() {
               </div>
               <span style={{
                 fontSize: '14px',
-                color: '#64748b',
+                color: 'rgba(255, 255, 255, 0.8)',
                 marginTop: '4px',
                 fontWeight: 500
               }}>
@@ -389,10 +390,10 @@ export default function Storefront() {
               {/* Tab selector on desktop */}
               <div style={{
                 display: 'flex',
-                backgroundColor: '#f1f5f9',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
                 padding: '4px',
                 borderRadius: '8px',
-                border: '1px solid var(--border-color)',
+                border: 'none',
                 marginRight: '12px'
               }}>
                 <button
@@ -404,7 +405,7 @@ export default function Storefront() {
                     borderRadius: '6px',
                     border: 'none',
                     background: activeTab === 'catalog' ? '#ffffff' : 'transparent',
-                    color: activeTab === 'catalog' ? company.primaryColor : '#64748b',
+                    color: activeTab === 'catalog' ? company.primaryColor : '#ffffff',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -423,7 +424,7 @@ export default function Storefront() {
                     borderRadius: '6px',
                     border: 'none',
                     background: activeTab === 'orders' ? '#ffffff' : 'transparent',
-                    color: activeTab === 'orders' ? company.primaryColor : '#64748b',
+                    color: activeTab === 'orders' ? company.primaryColor : '#ffffff',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -442,13 +443,13 @@ export default function Storefront() {
                   height: '40px',
                   padding: '0 16px',
                   borderRadius: '20px',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   cursor: 'pointer',
-                  color: '#475569',
+                  color: '#ffffff',
                   fontWeight: 700,
                   fontSize: '13px'
                 }}
@@ -457,13 +458,13 @@ export default function Storefront() {
                 <span>R$ {cartTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                 {cartCount > 0 && (
                   <span style={{
-                    backgroundColor: company.primaryColor,
-                    color: 'white',
+                    backgroundColor: '#ffffff',
+                    color: company.primaryColor,
                     borderRadius: '50%',
                     minWidth: '20px',
                     height: '20px',
                     fontSize: '10px',
-                    fontWeight: 800,
+                    fontWeight: 900,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -480,13 +481,13 @@ export default function Storefront() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#475569'
+                  color: '#ffffff'
                 }}
               >
                 <span style={{ fontSize: '18px' }}>💬</span>
@@ -498,11 +499,11 @@ export default function Storefront() {
                 style={{
                   padding: '0 16px',
                   borderRadius: '20px',
-                  backgroundColor: '#f1f5f9',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   border: 'none',
                   fontSize: '13px',
                   fontWeight: 700,
-                  color: '#475569',
+                  color: '#ffffff',
                   cursor: 'pointer',
                   height: '40px'
                 }}
