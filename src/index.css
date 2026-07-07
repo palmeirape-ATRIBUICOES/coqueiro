@@ -997,9 +997,11 @@ input:checked + .slider:before {
     display: none !important;
   }
   
-  /* Reset container blocks for printing */
-  #root, .admin-layout {
+  /* Reset container blocks for printing to prevent extra page heights */
+  #root, .admin-container, .admin-layout, .missoes-module-page, .missoes-home-page {
     display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;

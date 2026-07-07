@@ -921,7 +921,7 @@ export default function Admin() {
   return (
     <div className="admin-container">
       {/* Toast notifications */}
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="print-hide" style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {toasts.map(toast => (
           <Toast key={toast.id} message={toast.message} onClose={() => removeToast(toast.id)} />
         ))}
@@ -3030,7 +3030,7 @@ export default function Admin() {
 
       {/* New Order Alert Modal (Forced On-Screen Notification) */}
       {newOrderAlert && (
-        <div style={{
+        <div className="print-hide" style={{
           position: 'fixed',
           top: '20px',
           left: '50%',
@@ -3108,7 +3108,7 @@ export default function Admin() {
 
       {/* Print Format Selection Modal */}
       {showPrintModal && activePrintOrder && (
-        <div style={{
+        <div className="print-hide" style={{
           position: 'fixed',
           inset: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
