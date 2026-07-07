@@ -220,6 +220,7 @@ export default function Admin() {
     setUsers(getUsers());
     setProducts(getProducts());
     setOrders(getOrders());
+    setMessages(getMessages());
   };
 
   useEffect(() => {
@@ -264,6 +265,7 @@ export default function Admin() {
         setOrders(nextOrders);
         setUsers(getUsers());
         setProducts(getProducts());
+        setMessages(getMessages());
       });
     }, 5000);
 
@@ -1582,6 +1584,191 @@ export default function Admin() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================= */}
+          {/* TAB: MESSAGES / CHAT PANEL */}
+          {activeTab === 'messages' && !isMaster && (
+            <div>
+              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
+                Central de Mensagens e Suporte
+              </h2>
+
+              <div className="card" style={{ padding: 0, overflow: 'hidden', display: 'flex', minHeight: '550px', backgroundColor: '#ffffff', border: '1px solid var(--border-color)', borderRadius: '16px' }}>
+                {/* Sidebar: list of client chats */}
+                <div style={{ width: '300px', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
+                  <div style={{ padding: '16px', borderBottom: '1px solid var(--border-color)', backgroundColor: '#ffffff' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Conversas Ativas</h3>
+                  </div>
+                  <div style={{ flex: 1, overflowY: 'auto', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    {tenantClients.map(client => {
+                      const clientMsgs = messages.filter(m => m.clientCode === client.code);
+                      const lastMsg = clientMsgs[clientMsgs.length - 1];
+                      const isSelected = selectedChatClient?.code === client.code;
+                      
+                      return (
+                        <div
+                          key={client.code}
+                          onClick={() => setSelectedChatClient(client)}
+                          style={{
+                            padding: '12px',
+                            borderRadius: '10px',
+                            cursor: 'pointer',
+                            backgroundColor: isSelected ? '#ecfdf5' : 'transparent',
+                            border: isSelected ? '1px solid #d1fae5' : '1px solid transparent',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '4px'
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <strong style={{ fontSize: '13px', color: isSelected ? '#065f46' : 'var(--text-primary)' }}>{client.name}</strong>
+                            <span style={{ fontSize: '10px', color: 'var(--text-light)', fontFamily: 'monospace', fontWeight: 700 }}>{client.code}</span>
+                          </div>
+                          {lastMsg ? (
+                            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {lastMsg.sender === 'vendedor' ? 'Você: ' : ''}{lastMsg.text}
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '11px', color: 'var(--text-light)', fontStyle: 'italic' }}>Nenhuma mensagem</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Main chat area */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff' }}>
+                  {selectedChatClient ? (
+                    <>
+                      {/* Chat Header */}
+                      <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{selectedChatClient.name}</h3>
+                          <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Cliente Código: {selectedChatClient.code}</span>
+                        </div>
+                        {selectedChatClient.phone && (
+                          <a
+                            href={`https://wa.me/55${selectedChatClient.phone.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline"
+                            style={{
+                              padding: '6px 12px',
+                              fontSize: '12px',
+                              borderRadius: '8px',
+                              color: '#25D366',
+                              borderColor: '#25D366',
+                              backgroundColor: 'transparent',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              textDecoration: 'none',
+                              fontWeight: 700
+                            }}
+                          >
+                            <span>WhatsApp</span>
+                          </a>
+                        )}
+                      </div>
+
+                      {/* Message History */}
+                      <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#f1f5f9' }}>
+                        {messages.filter(m => m.clientCode === selectedChatClient.code).length === 0 ? (
+                          <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '13px' }}>
+                            Envie uma mensagem para iniciar o atendimento.
+                          </div>
+                        ) : (
+                          messages.filter(m => m.clientCode === selectedChatClient.code).map(m => {
+                            const isMe = m.sender === 'vendedor';
+                            return (
+                              <div
+                                key={m.id}
+                                style={{
+                                  alignSelf: isMe ? 'flex-end' : 'flex-start',
+                                  maxWidth: '70%',
+                                  padding: '12px 16px',
+                                  borderRadius: '16px',
+                                  borderTopRightRadius: isMe ? '4px' : '16px',
+                                  borderTopLeftRadius: !isMe ? '4px' : '16px',
+                                  backgroundColor: isMe ? '#059669' : '#ffffff',
+                                  color: isMe ? '#ffffff' : 'var(--text-primary)',
+                                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '4px'
+                                }}
+                              >
+                                <span style={{ fontSize: '13px', lineHeight: 1.4, wordBreak: 'break-word', textAlign: 'left' }}>{m.text}</span>
+                                <span style={{ fontSize: '9px', opacity: 0.7, alignSelf: 'flex-end' }}>
+                                  {new Date(m.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+
+                      {/* Chat Input */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          if (!adminNewMessage.trim()) return;
+                          
+                          const newMsg = {
+                            id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+                            companyId: currentUser.companyId,
+                            clientCode: selectedChatClient.code,
+                            clientName: selectedChatClient.name,
+                            sender: 'vendedor',
+                            senderName: currentUser.name,
+                            text: adminNewMessage.trim(),
+                            timestamp: new Date().toISOString()
+                          };
+                          
+                          const nextMessages = [...messages, newMsg];
+                          saveMessages(nextMessages);
+                          setMessages(nextMessages);
+                          setAdminNewMessage('');
+                        }}
+                        style={{ padding: '16px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '12px' }}
+                      >
+                        <input
+                          type="text"
+                          placeholder="Digite sua resposta..."
+                          className="form-input"
+                          value={adminNewMessage}
+                          onChange={(e) => setAdminNewMessage(e.target.value)}
+                          style={{ flex: 1, borderRadius: '12px', height: '44px' }}
+                        />
+                        <button
+                          type="submit"
+                          className="btn btn-primary"
+                          style={{
+                            backgroundColor: '#059669',
+                            border: 'none',
+                            color: 'white',
+                            borderRadius: '12px',
+                            padding: '0 24px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Enviar
+                        </button>
+                      </form>
+                    </>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-light)', gap: '12px' }}>
+                      <span style={{ fontSize: '48px' }}>💬</span>
+                      <strong style={{ fontSize: '15px' }}>Selecione um cliente para começar a conversar</strong>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

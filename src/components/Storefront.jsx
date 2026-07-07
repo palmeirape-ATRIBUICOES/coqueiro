@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProducts, getOrders, syncFromCloud } from '../mockDb';
+import { getProducts, getOrders, syncFromCloud, getMessages, saveMessages } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
 import logoImg from '../assets/logo.png';
 import CartDrawer from './CartDrawer';
@@ -42,6 +42,9 @@ export default function Storefront() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
   const [visibleCount, setVisibleCount] = useState(30);
   const [notificationPermission, setNotificationPermission] = useState('Notification' in window ? Notification.permission : 'denied');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [clientNewMessage, setClientNewMessage] = useState('');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
@@ -88,10 +91,12 @@ export default function Storefront() {
 
     // 3. Load past orders placed by this specific client (offline cache first)
     setClientOrders(getOrders(user.companyId).filter(o => o.clientCode === user.code));
+    setMessages(getMessages(user.companyId).filter(m => m.clientCode === user.code));
 
     // 3.1. Sync from Firebase in background and reload state
     syncFromCloud().then(() => {
       setProducts(getProducts(user.companyId));
+      setMessages(getMessages(user.companyId).filter(m => m.clientCode === user.code));
       
       const newOrders = getOrders(user.companyId).filter(o => o.clientCode === user.code);
       // Compare status for push notifications
@@ -120,6 +125,7 @@ export default function Storefront() {
     // 5. Setup periodic background syncing for real-time order status tracking
     const interval = setInterval(() => {
       syncFromCloud().then(() => {
+        setMessages(getMessages(user.companyId).filter(m => m.clientCode === user.code));
         const newOrders = getOrders(user.companyId).filter(o => o.clientCode === user.code);
         setClientOrders(prevOrders => {
           newOrders.forEach(newOrder => {
@@ -637,7 +643,7 @@ export default function Storefront() {
 
               {/* Support chat */}
               <button
-                onClick={() => alert('Suporte via WhatsApp em breve!')}
+                onClick={() => setIsChatOpen(true)}
                 style={{
                   width: '40px',
                   height: '40px',
@@ -909,6 +915,198 @@ export default function Storefront() {
         removeProduct={removeProductFromCart}
         merchant={merchant}
       />
+
+      {/* Support Chat Drawer */}
+      {isChatOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          zIndex: 10000,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backdropFilter: 'blur(4px)'
+        }}>
+          {/* Backdrop Click */}
+          <div 
+            onClick={() => setIsChatOpen(false)} 
+            style={{ flex: 1 }} 
+          />
+          
+          {/* Drawer Panel */}
+          <div style={{
+            width: isMobile ? '100%' : '420px',
+            backgroundColor: '#ffffff',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.15)',
+            animation: 'slide-left 0.3s ease-out'
+          }}>
+            {/* Header */}
+            <div style={{
+              padding: '20px 24px',
+              borderBottom: '1px solid var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: company.primaryColor,
+              color: '#ffffff'
+            }}>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800 }}>Atendimento Facilitadora</h3>
+                <span style={{ fontSize: '11px', opacity: 0.9 }}>Fale com nosso vendedor pelo app</span>
+              </div>
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontWeight: 900
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Message History */}
+            <div style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              backgroundColor: '#f8fafc'
+            }}>
+              {messages.length === 0 ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                  color: 'var(--text-secondary)',
+                  gap: '8px'
+                }}>
+                  <span style={{ fontSize: '32px' }}>💬</span>
+                  <p style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Olá! Como podemos te ajudar hoje?</p>
+                  <p style={{ margin: 0, fontSize: '11px', opacity: 0.8, textAlign: 'center', padding: '0 20px' }}>
+                    Envie uma mensagem abaixo e nosso time comercial responderá direto no seu app.
+                  </p>
+                </div>
+              ) : (
+                messages.map(m => {
+                  const isMe = m.sender === 'cliente';
+                  return (
+                    <div
+                      key={m.id}
+                      style={{
+                        alignSelf: isMe ? 'flex-end' : 'flex-start',
+                        maxWidth: '75%',
+                        padding: '12px 16px',
+                        borderRadius: '16px',
+                        borderTopRightRadius: isMe ? '4px' : '16px',
+                        borderTopLeftRadius: !isMe ? '4px' : '16px',
+                        backgroundColor: isMe ? company.primaryColor : '#ffffff',
+                        color: isMe ? '#ffffff' : 'var(--text-primary)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px'
+                      }}
+                    >
+                      <span style={{ fontSize: '13px', lineHeight: 1.4, wordBreak: 'break-word', textAlign: 'left' }}>{m.text}</span>
+                      <span style={{ fontSize: '9px', opacity: 0.7, alignSelf: 'flex-end' }}>
+                        {new Date(m.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Chat Input */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!clientNewMessage.trim()) return;
+
+                const newMsg = {
+                  id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+                  companyId: merchant.companyId,
+                  clientCode: merchant.code,
+                  clientName: merchant.name,
+                  sender: 'cliente',
+                  senderName: merchant.name,
+                  text: clientNewMessage.trim(),
+                  timestamp: new Date().toISOString()
+                };
+
+                const nextMessages = [...messages, newMsg];
+                saveMessages(nextMessages);
+                setMessages(nextMessages);
+                setClientNewMessage('');
+              }}
+              style={{
+                padding: '16px 20px',
+                borderTop: '1px solid var(--border-color)',
+                display: 'flex',
+                gap: '10px',
+                backgroundColor: '#ffffff'
+              }}
+            >
+              <input
+                type="text"
+                placeholder="Escreva sua mensagem..."
+                className="form-input"
+                value={clientNewMessage}
+                onChange={(e) => setClientNewMessage(e.target.value)}
+                style={{
+                  flex: 1,
+                  borderRadius: '12px',
+                  height: '42px',
+                  fontSize: '13px'
+                }}
+              />
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: company.primaryColor,
+                  border: 'none',
+                  color: 'white',
+                  borderRadius: '12px',
+                  padding: '0 20px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontSize: '13px'
+                }}
+              >
+                Enviar
+              </button>
+            </form>
+          </div>
+          
+          <style>{`
+            @keyframes slide-left {
+              from { transform: translateX(100%); }
+              to { transform: translateX(0); }
+            }
+          `}</style>
+        </div>
+      )}
 
     </div>
   );
