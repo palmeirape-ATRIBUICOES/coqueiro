@@ -75,6 +75,7 @@ export default function Admin() {
   // Print Order data state
   const [activePrintOrder, setActivePrintOrder] = useState(null);
   const [visibleProductsCount, setVisibleProductsCount] = useState(30);
+  const [productSearch, setProductSearch] = useState('');
 
   // Load database
   const loadDbData = () => {
@@ -100,10 +101,10 @@ export default function Admin() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Reset pagination limit when switching tabs
+  // Reset pagination limit when switching tabs or searching
   useEffect(() => {
     setVisibleProductsCount(30);
-  }, [activeTab]);
+  }, [activeTab, productSearch]);
 
   // Infinite scroll listener for products table list
   useEffect(() => {
@@ -665,6 +666,13 @@ export default function Admin() {
   const storeRevenue = tenantOrders.filter(o => o.status !== 'Cancelado').reduce((sum, o) => sum + o.total, 0);
 
   // Render variables
+  const filteredTenantProducts = tenantProducts.filter(p => {
+    if (!productSearch) return true;
+    const q = productSearch.toLowerCase();
+    return p.description.toLowerCase().includes(q) ||
+           p.code.toLowerCase().includes(q) ||
+           p.category.toLowerCase().includes(q);
+  });
   const lowStockProducts = tenantProducts.filter(p => p.stock < 20);
 
   return (
@@ -1320,6 +1328,18 @@ export default function Admin() {
                 Catálogo da Loja
               </h2>
 
+              {/* Search bar */}
+              <div className="mb-6" style={{ maxWidth: '400px' }}>
+                <input 
+                  type="text"
+                  placeholder="🔍 Buscar produto por nome, código ou prateleira..."
+                  value={productSearch}
+                  onChange={e => setProductSearch(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--border-color)', outline: 'none' }}
+                />
+              </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px' }}>
                 {/* List */}
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
@@ -1335,7 +1355,7 @@ export default function Admin() {
                       </tr>
                     </thead>
                     <tbody>
-                      {tenantProducts.slice(0, visibleProductsCount).map(p => (
+                      {filteredTenantProducts.slice(0, visibleProductsCount).map(p => (
                         <tr key={p.id}>
                           <td>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
