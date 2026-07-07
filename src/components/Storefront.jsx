@@ -330,7 +330,7 @@ export default function Storefront() {
                   fontSize: '18px'
                 }}>
                   <img 
-                  src="/coqueiro/logo.png" 
+                  src="logo.png" 
                   alt="" 
                   onError={(e) => { e.target.style.display = 'none'; }}
                   style={{
@@ -455,7 +455,7 @@ export default function Storefront() {
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <img 
-                  src="/coqueiro/logo.png" 
+                  src="logo.png" 
                   alt="" 
                   onError={(e) => { e.target.style.display = 'none'; }}
                   style={{
