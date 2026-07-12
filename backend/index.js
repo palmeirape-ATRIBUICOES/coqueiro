@@ -94,19 +94,48 @@ const sendPushToUser = async (userCode, payload) => {
   }
 };
 
-// Start Date offset to prevent notifying on historical items during startup connection
-const gatewayStartTime = Date.now();
+// Startup Cache bootstrap to prevent redundant notifications on server boot
+const existingOrderIds = new Set();
+const existingMessageIds = new Set();
+let isStartupComplete = false;
+
+// Bootstrap existing IDs from database on startup
+const bootstrapCaches = async () => {
+  console.log('Bootstrapping existing orders and messages from database...');
+  try {
+    const ordersSnap = await get(ref(db, 'orders'));
+    if (ordersSnap.exists()) {
+      const val = ordersSnap.val();
+      Object.keys(val).forEach(key => existingOrderIds.add(key));
+    }
+    const messagesSnap = await get(ref(db, 'messages'));
+    if (messagesSnap.exists()) {
+      const val = messagesSnap.val();
+      Object.keys(val).forEach(key => existingMessageIds.add(key));
+    }
+    console.log(`Bootstrap successful. Cached ${existingOrderIds.size} orders and ${existingMessageIds.size} messages.`);
+  } catch (err) {
+    console.error('Error during database bootstrap:', err);
+  }
+  isStartupComplete = true;
+};
+
+bootstrapCaches();
 
 // 1. Listen to New Orders
 onChildAdded(ref(db, 'orders'), async (snapshot) => {
-  const order = snapshot.val();
-  if (!order) return;
-
-  // Skip orders created before the gateway started or older than 5 minutes
-  const orderDate = new Date(order.date).getTime();
-  if (orderDate < gatewayStartTime - 2 * 60 * 1000) {
+  const orderId = snapshot.key;
+  if (!isStartupComplete) {
+    existingOrderIds.add(orderId);
     return;
   }
+  if (existingOrderIds.has(orderId)) {
+    return;
+  }
+  existingOrderIds.add(orderId);
+
+  const order = snapshot.val();
+  if (!order) return;
 
   console.log(`[New Order] Detected: ${order.id} for company ${order.companyId}`);
 
@@ -167,14 +196,18 @@ onChildChanged(ref(db, 'orders'), async (snapshot) => {
 
 // 3. Listen to New Messages (In-App Support Chat)
 onChildAdded(ref(db, 'messages'), async (snapshot) => {
-  const message = snapshot.val();
-  if (!message) return;
-
-  // Skip messages sent before gateway startup or older than 5 minutes
-  const msgTime = new Date(message.timestamp).getTime();
-  if (isNaN(msgTime) || msgTime < gatewayStartTime - 2 * 60 * 1000) {
+  const messageId = snapshot.key;
+  if (!isStartupComplete) {
+    existingMessageIds.add(messageId);
     return;
   }
+  if (existingMessageIds.has(messageId)) {
+    return;
+  }
+  existingMessageIds.add(messageId);
+
+  const message = snapshot.val();
+  if (!message) return;
 
   console.log(`[New Message] Detected: from ${message.senderName} (${message.sender}) for client: ${message.clientCode}`);
 
