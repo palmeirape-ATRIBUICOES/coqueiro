@@ -1,0 +1,14 @@
+name: Keep Alive Render Server
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Executa a cada 10 minutos
+  workflow_dispatch:      # Permite execução manual pelo painel do GitHub
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Health Check
+        run: |
+          curl -I -s https://coqueiro.onrender.com/health
