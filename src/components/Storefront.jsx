@@ -4,8 +4,8 @@ import { getProducts, getOrders, syncFromCloud, getMessages, saveMessages } from
 import { useWhitelabel } from '../WhitelabelContext';
 import logoImg from '../assets/logo.png';
 import CartDrawer from './CartDrawer';
-import ProductCard from './ProductCard';
-import { Search, ShoppingCart, LogOut, ClipboardList, ShoppingBag, Calendar, Clock } from 'lucide-react';
+import BarcodeScannerModal from './BarcodeScannerModal';
+import { Search, ShoppingCart, LogOut, ClipboardList, ShoppingBag, Calendar, Clock, RotateCcw, MessageCircle, Smartphone, X, Camera } from 'lucide-react';
 
 const categoryEmojiMap = {
   'Todos': '🛍️',
@@ -45,6 +45,47 @@ export default function Storefront() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [clientNewMessage, setClientNewMessage] = useState('');
+
+  const [isIOS] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const ua = window.navigator.userAgent || '';
+    return /iPad|iPhone|iPod/.test(ua) || (ua.includes('Macintosh') && navigator.maxTouchPoints > 0);
+  });
+  const [isStandalone] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+  });
+  const [showIOSBanner, setShowIOSBanner] = useState(true);
+  const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
+
+  const handleReorder = (ord) => {
+    if (!ord || !ord.items || ord.items.length === 0) return;
+    const newCart = ord.items.map(item => ({
+      cartItemId: `${item.id}-${item.unit?.includes('Cx') ? 'atacado' : 'unit'}`,
+      id: item.id,
+      description: item.description,
+      qty: item.qty,
+      price: item.price,
+      unit: item.unit || 'un'
+    }));
+    setCart(newCart);
+    if (merchant) {
+      localStorage.setItem(`cart_${merchant.code}`, JSON.stringify(newCart));
+    }
+    setIsCartOpen(true);
+  };
+
+  const handleShareWhatsApp = (ord) => {
+    if (!ord) return;
+    const itemsText = ord.items.map(i => `• ${i.description} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`).join('\n');
+    const text = `*Orçamento #${ord.id} - Casa Coqueiro*\n\n` +
+      `*Cliente:* ${ord.clientName}\n` +
+      `*Data:* ${new Date(ord.date).toLocaleDateString('pt-BR')}\n\n` +
+      `*Itens:*\n${itemsText}\n\n` +
+      `*Total:* R$ ${Number(ord.total || 0).toFixed(2)}\n` +
+      `*Status:* ${ord.status}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent));
@@ -794,6 +835,40 @@ export default function Storefront() {
             </button>
           </div>
         )}
+
+        {/* iOS PWA Installation Guide Banner */}
+        {isIOS && !isStandalone && showIOSBanner && (
+          <div style={{
+            backgroundColor: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            borderRadius: '16px',
+            padding: '16px',
+            marginBottom: '20px',
+            position: 'relative',
+            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.12)',
+            textAlign: 'left'
+          }}>
+            <button 
+              onClick={() => setShowIOSBanner(false)}
+              style={{
+                position: 'absolute', top: '12px', right: '12px',
+                border: 'none', background: 'transparent', cursor: 'pointer',
+                color: '#60a5fa', display: 'flex', alignItems: 'center'
+              }}
+            >
+              <X size={16} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, fontSize: '13px', color: '#1e40af', marginBottom: '8px' }}>
+              <Smartphone size={18} />
+              <span>Instale a Casa Coqueiro no seu iPhone!</span>
+            </div>
+            <div style={{ fontSize: '12px', lineHeight: 1.6, color: '#1e3a8a' }}>
+              1. Toque no ícone de <strong>Compartilhar</strong> <span style={{ fontSize: '14px' }}>⎋</span> na barra inferior do Safari.<br/>
+              2. Role para baixo e selecione <strong>"Adicionar à Tela de Início"</strong> ➕.<br/>
+              3. Abra o app direto do seu celular com notificações nativas ativas!
+            </div>
+          </div>
+        )}
         
         {/* CATALOG VIEW */}
         {activeTab === 'catalog' && (
@@ -849,6 +924,30 @@ export default function Storefront() {
                   color: '#94a3b8'
                 }}
               />
+              <button
+                type="button"
+                onClick={() => setIsBarcodeScannerOpen(true)}
+                title="Escanear Código de Barras pela Câmera"
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  border: 'none',
+                  backgroundColor: `${company.primaryColor}15`,
+                  color: company.primaryColor,
+                  borderRadius: '12px',
+                  padding: '6px 12px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: 700
+                }}
+              >
+                <Camera size={16} /> <span style={{ display: isMobile ? 'none' : 'inline' }}>Escanear</span>
+              </button>
             </div>
 
             {/* Products grid */}
@@ -941,11 +1040,53 @@ export default function Storefront() {
                       </div>
                     )}
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '6px' }}>
-                      
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '8px' }}>
                       <strong style={{ fontSize: '15px', color: company.primaryColor }}>
                         Total: R$ {ord.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </strong>
+
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => handleReorder(ord)}
+                          className="btn"
+                          title="Carregar itens novamente no carrinho"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '6px 12px',
+                            fontSize: '11px',
+                            borderRadius: '8px',
+                            backgroundColor: `${company.primaryColor}15`,
+                            color: company.primaryColor,
+                            border: `1px solid ${company.primaryColor}30`,
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <RotateCcw size={13} /> Repetir Pedido
+                        </button>
+                        <button
+                          onClick={() => handleShareWhatsApp(ord)}
+                          className="btn"
+                          title="Enviar resumo formatado via WhatsApp"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '6px 12px',
+                            fontSize: '11px',
+                            borderRadius: '8px',
+                            backgroundColor: '#25D366',
+                            color: '#ffffff',
+                            border: 'none',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <MessageCircle size={13} /> WhatsApp
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1266,6 +1407,15 @@ export default function Storefront() {
         </div>
       )}
 
+      {/* Barcode Scanner Modal */}
+      <BarcodeScannerModal
+        isOpen={isBarcodeScannerOpen}
+        onClose={() => setIsBarcodeScannerOpen(false)}
+        onScan={(scannedCode) => {
+          setSearch(scannedCode);
+          setActiveCategory('Todos');
+        }}
+      />
     </div>
   );
 }

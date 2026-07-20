@@ -10,9 +10,10 @@ import {
   syncFromCloud
 } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
+import BarcodeScannerModal from './BarcodeScannerModal';
 import { 
   Settings, Users, ShoppingBag, ClipboardList, Plus, Trash2, Edit2, ArrowLeft, 
-  Save, AlertCircle, Printer, Shield, BarChart3, Store 
+  Save, AlertCircle, Printer, Shield, BarChart3, Store, Download, TrendingUp, CheckSquare, Layers, Filter, Camera
 } from 'lucide-react';
 
 export default function Admin() {
@@ -144,6 +145,77 @@ export default function Admin() {
   const [messages, setMessages] = useState([]);
   const [selectedChatClient, setSelectedChatClient] = useState(null);
   const [adminNewMessage, setAdminNewMessage] = useState('');
+
+  // Auto-Print & Orders separation pipeline states
+  const [autoPrintEnabled, setAutoPrintEnabled] = useState(() => localStorage.getItem('coqueiro_auto_print') === 'true');
+  const [orderStatusFilter, setOrderStatusFilter] = useState('Todos');
+  const [orderSearch, setOrderSearch] = useState('');
+  const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
+
+  const toggleAutoPrint = (val) => {
+    setAutoPrintEnabled(val);
+    localStorage.setItem('coqueiro_auto_print', String(val));
+    addToast(val ? 'Impressão Automática ATIVADA!' : 'Impressão Automática DESATIVADA.');
+  };
+
+  const exportToCSV = (filename, headers, rows) => {
+    const csvLines = [
+      headers.join(';'),
+      ...rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(';'))
+    ].join('\n');
+    const blob = new Blob(['\uFEFF' + csvLines], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${filename}_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportOrdersToCSV = () => {
+    const headers = ['ID Orçamento', 'Data', 'Cliente', 'Código Cliente', 'Total (R$)', 'Status', 'Forma Pagamento', 'Itens'];
+    const rows = tenantOrders.map(o => [
+      o.id,
+      new Date(o.date).toLocaleDateString('pt-BR') + ' ' + new Date(o.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      o.clientName,
+      o.clientCode,
+      Number(o.total || 0).toFixed(2),
+      o.status,
+      o.paymentMethod || 'pix',
+      (o.items || []).map(i => `${i.description} (${i.qty}x)`).join(' | ')
+    ]);
+    exportToCSV(`orcamentos_${company.id || 'loja'}`, headers, rows);
+    addToast('Relatório de Orçamentos baixado com sucesso!');
+  };
+
+  const exportProductsToCSV = () => {
+    const headers = ['Código', 'Descrição', 'Categoria', 'Marca', 'Preço Unitário (R$)', 'Preço Atacado (R$)', 'Qtd Caixa', 'Estoque'];
+    const rows = tenantProducts.map(p => [
+      p.code,
+      p.description,
+      p.category,
+      p.brand || '',
+      Number(p.price || 0).toFixed(2),
+      Number(p.packagePrice || 0).toFixed(2),
+      p.packageItems || 1,
+      p.stock
+    ]);
+    exportToCSV(`produtos_${company.id || 'loja'}`, headers, rows);
+    addToast('Relatório de Produtos baixado com sucesso!');
+  };
+
+  const exportClientsToCSV = () => {
+    const headers = ['Código Acesso', 'Nome Comercial', 'Telefone', 'Status'];
+    const rows = tenantClients.map(c => [
+      c.code,
+      c.name,
+      c.phone || '',
+      c.status || 'Ativo'
+    ]);
+    exportToCSV(`clientes_${company.id || 'loja'}`, headers, rows);
+    addToast('Relatório de Clientes baixado com sucesso!');
+  };
 
   // Admin Master specific form states
   const [newCompany, setNewCompany] = useState({
@@ -356,6 +428,9 @@ export default function Admin() {
           if (latestOrder) {
             setNewOrderAlert(latestOrder);
             playAlertChime();
+            if (localStorage.getItem('coqueiro_auto_print') === 'true') {
+              triggerPrintOrder(latestOrder);
+            }
           }
         }
         prevOrdersCountRef.current = nextOrders.length;
@@ -1735,6 +1810,84 @@ export default function Admin() {
                 </div>
               )}
 
+              {/* BI Analytics Ranking Cards */}
+              {(() => {
+                const productSales = {};
+                const clientSpend = {};
+
+                tenantOrders.forEach(ord => {
+                  if (ord.status === 'Cancelado') return;
+                  const cName = ord.clientName || 'Cliente';
+                  if (!clientSpend[cName]) clientSpend[cName] = { name: cName, count: 0, total: 0 };
+                  clientSpend[cName].count += 1;
+                  clientSpend[cName].total += Number(ord.total || 0);
+
+                  (ord.items || []).forEach(item => {
+                    const desc = item.description || 'Produto';
+                    if (!productSales[desc]) productSales[desc] = { description: desc, qty: 0, total: 0 };
+                    productSales[desc].qty += Number(item.qty || 0);
+                    productSales[desc].total += Number(item.price || 0) * Number(item.qty || 0);
+                  });
+                });
+
+                const topProducts = Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5);
+                const topClients = Object.values(clientSpend).sort((a, b) => b.total - a.total).slice(0, 5);
+                const maxQty = topProducts[0]?.qty || 1;
+                const maxTotal = topClients[0]?.total || 1;
+
+                return (
+                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+                    {/* Top 5 Products */}
+                    <div className="card" style={{ padding: '20px' }}>
+                      <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                        <TrendingUp size={18} style={{ color: company.primaryColor }} /> Top 5 Produtos Mais Vendidos
+                      </h3>
+                      {topProducts.length === 0 ? (
+                        <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Sem histórico de vendas suficiente.</div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {topProducts.map((p, idx) => (
+                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700 }}>
+                                <span style={{ color: 'var(--text-primary)' }}>{idx + 1}. {p.description}</span>
+                                <span style={{ color: company.primaryColor }}>{p.qty} un (R$ {p.total.toFixed(2)})</span>
+                              </div>
+                              <div style={{ width: '100%', height: '6px', backgroundColor: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
+                                <div style={{ width: `${(p.qty / maxQty) * 100}%`, height: '100%', backgroundColor: company.primaryColor, borderRadius: '3px' }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Top 5 Clients */}
+                    <div className="card" style={{ padding: '20px' }}>
+                      <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                        <Users size={18} style={{ color: company.primaryColor }} /> Top 5 Clientes em Volume
+                      </h3>
+                      {topClients.length === 0 ? (
+                        <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Sem histórico de pedidos suficiente.</div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {topClients.map((c, idx) => (
+                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700 }}>
+                                <span style={{ color: 'var(--text-primary)' }}>{idx + 1}. {c.name}</span>
+                                <span style={{ color: '#059669' }}>R$ {c.total.toFixed(2)} ({c.count} ped)</span>
+                              </div>
+                              <div style={{ width: '100%', height: '6px', backgroundColor: '#f1f5f9', borderRadius: '3px', overflow: 'hidden' }}>
+                                <div style={{ width: `${(c.total / maxTotal) * 100}%`, height: '100%', backgroundColor: '#059669', borderRadius: '3px' }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Quick info list */}
               <div className="card">
                 <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Fluxo Recente de Orçamentos</h3>
@@ -1959,112 +2112,207 @@ export default function Admin() {
           {/* TAB: ORDERS & INVOICES PRINT PANEL */}
           {activeTab === 'orders' && !isMaster && (
             <div>
-              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
-                Gestão e Separação de Orçamentos
-              </h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+                <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+                  Gestão e Separação de Orçamentos
+                </h2>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  {/* Auto-Print Toggle */}
+                  <label style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                    backgroundColor: autoPrintEnabled ? '#ecfdf5' : '#f1f5f9',
+                    color: autoPrintEnabled ? '#047857' : '#64748b',
+                    padding: '8px 14px', borderRadius: '10px', border: `1px solid ${autoPrintEnabled ? '#a7f3d0' : '#cbd5e1'}`
+                  }}>
+                    <input 
+                      type="checkbox" 
+                      checked={autoPrintEnabled} 
+                      onChange={e => toggleAutoPrint(e.target.checked)}
+                      style={{ cursor: 'pointer', accentColor: company.primaryColor }}
+                    />
+                    <span>📠 Impressão Automática</span>
+                  </label>
+
+                  {/* Export CSV */}
+                  <button
+                    onClick={exportOrdersToCSV}
+                    className="btn btn-outline"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', fontSize: '12px', fontWeight: 700, borderRadius: '10px' }}
+                  >
+                    <Download size={14} /> Exportar CSV
+                  </button>
+                </div>
+              </div>
+
+              {/* Status Filter Tabs (Esteira Kanban) */}
+              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '16px' }}>
+                {['Todos', 'Recebido', 'Em Separação', 'Separado', 'Retirado', 'Cancelado'].map(st => {
+                  const count = st === 'Todos' ? tenantOrders.length : tenantOrders.filter(o => o.status === st || (st === 'Separado' && o.status?.includes('Separado')) || (st === 'Retirado' && o.status?.includes('Retirado'))).length;
+                  const isActive = orderStatusFilter === st;
+                  return (
+                    <button
+                      key={st}
+                      onClick={() => setOrderStatusFilter(st)}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        border: '1px solid var(--border-color)',
+                        backgroundColor: isActive ? company.primaryColor : '#ffffff',
+                        color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      <span>{st}</span>
+                      <span style={{
+                        backgroundColor: isActive ? 'rgba(255,255,255,0.25)' : '#f1f5f9',
+                        color: isActive ? '#ffffff' : '#64748b',
+                        fontSize: '10px',
+                        padding: '1px 6px',
+                        borderRadius: '10px',
+                        fontWeight: 800
+                      }}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search Bar */}
+              <div style={{ marginBottom: '16px', maxWidth: '360px' }}>
+                <input
+                  type="text"
+                  placeholder="🔍 Filtrar orçamento por código ou cliente..."
+                  value={orderSearch}
+                  onChange={e => setOrderSearch(e.target.value)}
+                  className="form-input"
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '13px', outline: 'none' }}
+                />
+              </div>
 
               <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                {tenantOrders.length === 0 ? (
-                  <div style={{ padding: '40px', color: 'var(--text-light)', textAlign: 'center' }}>
-                    Nenhum orçamento solicitado para a loja.
-                  </div>
-                ) : (
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>Cód Orçamento</th>
-                        <th>Cliente</th>
-                        <th>Lista de Produtos</th>
-                        <th>Valor Total</th>
-                        <th>Status do Pedido</th>
-                        <th>Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tenantOrders.map(ord => (
-                        <tr key={ord.id}>
-                          <td style={{ fontWeight: 800 }}>{ord.id}</td>
-                          <td>
-                            <div style={{ fontWeight: 600 }}>{ord.clientName}</div>
-                            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Acesso: {ord.clientCode}</div>
-                          </td>
-                          <td style={{ maxWidth: '300px' }}>
-                            <div style={{ fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                              {ord.items.map((item, idx) => (
-                                <div key={idx} style={{ color: 'var(--text-secondary)' }}>
-                                  • {item.description} ({item.qty} un)
-                                </div>
-                              ))}
-                            </div>
-                            {ord.notes && (
-                              <div style={{
-                                marginTop: '6px', fontSize: '11px', color: 'var(--text-light)', 
-                                fontStyle: 'italic', backgroundColor: 'var(--bg-color)', padding: '4px 8px', borderRadius: '4px'
-                              }}>
-                                Obs: {ord.notes}
+                {(() => {
+                  const filteredOrders = tenantOrders.filter(ord => {
+                    const q = orderSearch.toLowerCase();
+                    const matchesSearch = !orderSearch || ord.id.toLowerCase().includes(q) || ord.clientName.toLowerCase().includes(q);
+                    const matchesStatus = orderStatusFilter === 'Todos' || ord.status === orderStatusFilter || (orderStatusFilter === 'Separado' && ord.status?.includes('Separado')) || (orderStatusFilter === 'Retirado' && ord.status?.includes('Retirado'));
+                    return matchesSearch && matchesStatus;
+                  });
+
+                  if (filteredOrders.length === 0) {
+                    return (
+                      <div style={{ padding: '40px', color: 'var(--text-light)', textAlign: 'center' }}>
+                        Nenhum orçamento encontrado nesta categoria.
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <table className="admin-table">
+                      <thead>
+                        <tr>
+                          <th>Cód Orçamento</th>
+                          <th>Cliente</th>
+                          <th>Lista de Produtos</th>
+                          <th>Valor Total</th>
+                          <th>Status do Pedido</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredOrders.map(ord => (
+                          <tr key={ord.id}>
+                            <td style={{ fontWeight: 800 }}>{ord.id}</td>
+                            <td>
+                              <div style={{ fontWeight: 600 }}>{ord.clientName}</div>
+                              <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Acesso: {ord.clientCode}</div>
+                            </td>
+                            <td style={{ maxWidth: '300px' }}>
+                              <div style={{ fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                                {ord.items.map((item, idx) => (
+                                  <div key={idx} style={{ color: 'var(--text-secondary)' }}>
+                                    • {item.description} ({item.qty} un)
+                                  </div>
+                                ))}
                               </div>
-                            )}
-                          </td>
-                          <td style={{ fontWeight: 700, fontSize: '15px', color: company.primaryColor }}>
-                            R$ {ord.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                          </td>
-                          <td>
-                            <select
-                              value={ord.status}
-                              onChange={(e) => handleUpdateOrderStatus(ord.id, e.target.value)}
-                              style={{
-                                padding: '6px 12px',
-                                borderRadius: '6px',
-                                border: '1.5px solid var(--border-color)',
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                backgroundColor: 'var(--card-bg)',
-                                color: 'var(--text-primary)',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              <option value="Recebido">Recebido</option>
-                              <option value="Em Separação">Em Separação</option>
-                              <option value="Separado">Separado (Pronto)</option>
-                              <option value="Aguardando Retirada">Aguardando Retirada</option>
-                              <option value="Retirado">Retirado / Entregue</option>
-                              <option value="Cancelado">Cancelado</option>
-                            </select>
-                          </td>
-                          <td>
-                            <div style={{ display: 'flex', gap: '6px' }}>
-                              <button
-                                onClick={() => triggerPrintOrder(ord)}
-                                className="btn btn-outline"
-                                title="Imprimir Folha A4 para Separação"
-                                style={{ padding: '6px 10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                              >
-                                <Printer size={14} /> Separar
-                              </button>
-                              <button
-                                onClick={() => handleDeleteOrder(ord.id)}
-                                className="btn btn-outline"
-                                title="Excluir Orçamento"
-                                style={{ 
-                                  padding: '6px 10px', 
-                                  fontSize: '12px', 
-                                  display: 'inline-flex', 
-                                  alignItems: 'center', 
-                                  gap: '4px',
-                                  color: '#ef4444',
-                                  borderColor: 'rgba(239, 68, 68, 0.2)',
-                                  backgroundColor: 'transparent'
+                              {ord.notes && (
+                                <div style={{
+                                  marginTop: '6px', fontSize: '11px', color: 'var(--text-light)', 
+                                  fontStyle: 'italic', backgroundColor: 'var(--bg-color)', padding: '4px 8px', borderRadius: '4px'
+                                }}>
+                                  Obs: {ord.notes}
+                                </div>
+                              )}
+                            </td>
+                            <td style={{ fontWeight: 700, fontSize: '15px', color: company.primaryColor }}>
+                              R$ {ord.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </td>
+                            <td>
+                              <select
+                                value={ord.status}
+                                onChange={(e) => handleUpdateOrderStatus(ord.id, e.target.value)}
+                                style={{
+                                  padding: '6px 12px',
+                                  borderRadius: '6px',
+                                  border: '1.5px solid var(--border-color)',
+                                  fontSize: '12px',
+                                  fontWeight: 700,
+                                  backgroundColor: 'var(--card-bg)',
+                                  color: 'var(--text-primary)',
+                                  cursor: 'pointer'
                                 }}
                               >
-                                <Trash2 size={14} /> Excluir
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+                                <option value="Recebido">Recebido</option>
+                                <option value="Em Separação">Em Separação</option>
+                                <option value="Separado">Separado (Pronto)</option>
+                                <option value="Aguardando Retirada">Aguardando Retirada</option>
+                                <option value="Retirado">Retirado / Entregue</option>
+                                <option value="Cancelado">Cancelado</option>
+                              </select>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '6px' }}>
+                                <button
+                                  onClick={() => triggerPrintOrder(ord)}
+                                  className="btn btn-outline"
+                                  title="Imprimir Folha A4 para Separação"
+                                  style={{ padding: '6px 10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                                >
+                                  <Printer size={14} /> Separar
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteOrder(ord.id)}
+                                  className="btn btn-outline"
+                                  title="Excluir Orçamento"
+                                  style={{ 
+                                    padding: '6px 10px', 
+                                    fontSize: '12px', 
+                                    display: 'inline-flex', 
+                                    alignItems: 'center', 
+                                    gap: '4px',
+                                    color: '#ef4444',
+                                    borderColor: 'rgba(239, 68, 68, 0.2)',
+                                    backgroundColor: 'transparent'
+                                  }}
+                                >
+                                  <Trash2 size={14} /> Excluir
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  );
+                })()}
               </div>
             </div>
           )}
@@ -2073,20 +2321,38 @@ export default function Admin() {
           {/* TAB: PRODUCTS CATALOG CRUD */}
           {activeTab === 'products' && !isMaster && (
             <div>
-              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
-                Catálogo da Loja
-              </h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+                <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+                  Catálogo da Loja
+                </h2>
+                <button
+                  onClick={exportProductsToCSV}
+                  className="btn btn-outline"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', fontSize: '12px', fontWeight: 700, borderRadius: '10px' }}
+                >
+                  <Download size={14} /> Exportar Produtos (CSV)
+                </button>
+              </div>
 
               {/* Search bar */}
-              <div className="mb-6" style={{ maxWidth: '400px' }}>
+              <div className="mb-6" style={{ maxWidth: '440px', display: 'flex', gap: '8px' }}>
                 <input 
                   type="text"
                   placeholder="🔍 Buscar produto por nome, código ou prateleira..."
                   value={productSearch}
                   onChange={e => setProductSearch(e.target.value)}
                   className="form-input"
-                  style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--border-color)', outline: 'none' }}
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--border-color)', outline: 'none' }}
                 />
+                <button
+                  type="button"
+                  onClick={() => setIsBarcodeScannerOpen(true)}
+                  className="btn btn-outline"
+                  title="Escanear Código de Barras pela Câmera"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0 14px', borderRadius: '12px', fontSize: '12px', fontWeight: 700 }}
+                >
+                  <Camera size={16} /> Escanear
+                </button>
               </div>
 
               <div className="admin-grid-layout">
@@ -2379,9 +2645,18 @@ export default function Admin() {
           {/* TAB: CLIENTS DIRECTORY */}
           {activeTab === 'clients' && !isMaster && (
             <div>
-              <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, marginBottom: '24px', color: 'var(--text-primary)' }}>
-                Gestão de Clientes B2B
-              </h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+                <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+                  Gestão de Clientes B2B
+                </h2>
+                <button
+                  onClick={exportClientsToCSV}
+                  className="btn btn-outline"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', fontSize: '12px', fontWeight: 700, borderRadius: '10px' }}
+                >
+                  <Download size={14} /> Exportar Clientes (CSV)
+                </button>
+              </div>
 
               <div className="admin-grid-layout">
                 <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
@@ -3298,6 +3573,15 @@ export default function Admin() {
           </div>
         </div>
       )}
+
+      {/* Barcode Scanner Modal */}
+      <BarcodeScannerModal
+        isOpen={isBarcodeScannerOpen}
+        onClose={() => setIsBarcodeScannerOpen(false)}
+        onScan={(scannedCode) => {
+          setProductSearch(scannedCode);
+        }}
+      />
     </div>
   );
 }

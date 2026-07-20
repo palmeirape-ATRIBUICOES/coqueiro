@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrders, saveOrders } from '../mockDb';
 import { useWhitelabel } from '../WhitelabelContext';
-import { ArrowLeft, CheckCircle, FileText, Calendar, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, CheckCircle, FileText, Calendar, ShoppingBag, MessageCircle } from 'lucide-react';
 import Toast from './Toast';
 
 export default function Checkout() {
@@ -282,6 +282,38 @@ export default function Checkout() {
               </div>
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              const itemsText = cart.map(i => `• ${i.description} (${i.qty}x) - R$ ${(i.price * i.qty).toFixed(2)}`).join('\n');
+              const text = `*Novo Orçamento #${orderId} - Casa Coqueiro*\n\n` +
+                `*Cliente:* ${client.name}\n` +
+                `*Data:* ${new Date().toLocaleDateString('pt-BR')}\n\n` +
+                `*Itens:*\n${itemsText}\n\n` +
+                `*Total:* R$ ${Number(subtotal || 0).toFixed(2)}\n\n` +
+                `*Forma de Pagamento:* ${paymentMethod.toUpperCase()}`;
+              window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+            }}
+            className="btn"
+            style={{
+              padding: '12px 32px',
+              fontSize: '15px',
+              borderRadius: '10px',
+              backgroundColor: '#25D366',
+              border: 'none',
+              color: 'white',
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginBottom: '10px',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
+            }}
+          >
+            <MessageCircle size={18} /> Enviar Orçamento pelo WhatsApp
+          </button>
 
           <button
             onClick={() => {
